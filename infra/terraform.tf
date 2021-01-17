@@ -29,11 +29,11 @@ resource "aws_s3_bucket" "statistics-bucket" {
   }
 }
 
-
 locals {
   frontend_files = {
     "index.html" = "text/html",
     "app.js" = "application/javascript"
+    "style.css" = "text/css"
   }
 }
 
@@ -139,13 +139,19 @@ resource "aws_lambda_function" "lambda-function" {
   }
 }
 
+resource "aws_lambda_permission" "allow-cloudwatch" {
+  function_name = aws_lambda_function.lambda-function.function_name
+  principal = "events.amazonaws.com"
+  action = "lambda:InvokeFunction"
+}
+
 resource "aws_cloudwatch_event_rule" "lambda_triggers" {
   schedule_expression = "rate(30 minutes)"
   name_prefix = "lambda-cron-"
 }
 
 resource "aws_cloudwatch_event_target" "lambda-target" {
-  rule = aws_cloudwatch_event_rule.lambda_triggers.name
+  rule = aws_cloudwatch_event_rule.lambda_triggers.id
   arn = aws_lambda_function.lambda-function.arn
   target_id = "lambda"
 }

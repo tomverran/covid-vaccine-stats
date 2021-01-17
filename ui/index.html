@@ -3,28 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link href="style.css" rel="stylesheet">
   <title>UK COVID-19 Vaccine</title>
 </head>
-  <body>
-
-    <div class="container mt-4">
-      <div class="alert alert-success text-center" id="up-to-date" role="alert"></div>
-
-      <h1 class="display-3 mt-4 text-center">
-        <span class="today"></span> 
-        people newly vaccinated on
-        <span class="date-today"></span>
-      </h1>
-
-      <h2 class="display-5 mt-4 text-center">
-        <span class="difference-updown"></span>
-        <span class="difference-percent"></span>%
-        on the day before (<span class="difference-value"></span> vaccines)</h2>
+<body>
+  <div class="container mt-4 mb-2  p-0">
+    <h1 class="mb-2 mx-auto px-2 py-2">UK COVID-19 Vaccine Statistics</h1>
+    <h6 class="px-2 mb-4 text-muted">
+      Data obtained from the
+      <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/">NHS statistics
+        website</a>.
+      This site is in no way affiliated with the NHS or UK Government!
+      Source code on <a href="https://github.com/tomverran/covid-vaccine-stats">GitHub</a>.
+    </h6>
+    <div class="row">
+      <div class="col-sm mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title mb-3"><span class="today"></span></h1>
+            <h6 class="card-subtitle mb-1 text-muted">People newly vaccinated on <span
+              class="date-today"></span></h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title mb-3"><span class="difference-updown"></span> <span
+              class="difference-percent"></span>
+            </h1>
+            <h6 class="card-subtitle mb-1 text-muted">
+              <span class="difference-value"></span>
+              <span class="difference-gtlt"></span>
+              vaccines than the day before.
+            </h6>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-sm mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title mb-3"><span class="cumulative-total"></span></h1>
+            <h6 class="card-subtitle mb-1 text-muted">People in total have had at least one dose.</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm mb-3">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title mb-3">1 in <span class="one-in-x"></span> people</h1>
+            <h6 class="card-subtitle mb-1 text-muted">Assuming a UK population of 68M people.</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script src="app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
-  </body>
+  <div class="container border shadow-sm p-4 bg-white">
+    <h5 class="text-center mb-4">Vaccinations given per day</h5>
+    <div id="chart-per-day"></div>
+  </div>
+
+  <div class="container mt-4 border shadow-sm p-4 bg-white mb-4">
+    <h5 class="text-center mb-4">People vaccinated over time</h5>
+    <div id="chart-total"></div>
+  </div>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>
