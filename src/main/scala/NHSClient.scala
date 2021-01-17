@@ -10,10 +10,12 @@ import org.http4s.{Headers, Request, Uri}
 
 import java.io.InputStream
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import cats.syntax.functor._
+
+import java.time.format.DateTimeFormatter.ofPattern
 
 trait NHSClient[F[_]] {
-  def vaccineTotals(date: LocalDate): F[Option[DoseTotals]]
+  def vaccineTotals(publishedOn: LocalDate): F[Option[DoseTotals]]
 }
 
 object NHSClient {
@@ -24,11 +26,14 @@ object NHSClient {
   private val headers: Headers =
     Headers.of(`User-Agent`(AgentProduct("vaccine-stats-app")))
 
-  private val fileName: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("yyyy/MM/'COVID-19-daily-announced-vaccinations-'dd-MMMM-yyyy'.xlsx'")
+  private def fileName(date: LocalDate): String =
+    date.toString match {
+      case "2021-01-17" => "2021/01/COVID-19-Daily-announced-vaccinations-17-January-2021-1.xlsx" // !!!
+      case _ => ofPattern("yyyy/MM/'COVID-19-daily-announced-vaccinations-'dd-MMMM-yyyy'.xlsx'").format(date)
+    }
 
   private def fileUrl(date: LocalDate): Uri =
-    unsafeFromString(s"$host/statistics/wp-content/uploads/sites/2/${fileName.format(date)}")
+    unsafeFromString(s"$host/statistics/wp-content/uploads/sites/2/${fileName(date)}")
 
   /**
    * Extremely safe and resilient code to pull totals out of the NHS doc
@@ -50,6 +55,6 @@ object NHSClient {
         case r if r.status.isSuccess =>
           r.body.through(toInputStream).evalMap(parseWorkbook[F]).compile.last
         case _ =>
-          F.pure(None)
+          F.delay(println(s"Got 404 for ${fileUrl(date)}")).as(None)
       }
 }

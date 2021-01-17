@@ -24,7 +24,7 @@ function populateHeadings(statistics) {
   setText(".date-today", dateFns.format(new Date(statistics[0].date), 'Do MMM'));
   setText(".today", today.firstDose.toLocaleString("en-GB"));
 
-  setText(".difference-value", difference.toLocaleString("en-GB"));
+  setText(".difference-value", Math.abs(difference).toLocaleString("en-GB"));
   setText(".difference-percent", Math.abs(percentChange) + "%");
 
   addClass(".difference-updown, .difference-percent", isUp ? "text-success" : "text-danger");
@@ -81,7 +81,6 @@ function totalVaccinations(statistics) {
       })
     )
   )
-
 
   const chart = new google.charts.Line(document.querySelector('#chart-total'));
   chart.draw(data, google.charts.Line.convertOptions({ height: 400 }));

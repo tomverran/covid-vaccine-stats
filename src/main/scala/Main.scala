@@ -43,9 +43,10 @@ object Main extends IOApp {
   def runForDay(nhs: NHSClient[IO], stats: StatisticsClient[IO])(date: LocalDate): IO[Unit] =
     (
       for {
-        today <- OptionT(nhs.vaccineTotals(date))
-        history <- OptionT.liftF(stats.fetchStatistics).filterNot(_.exists(_.date == date))
-        _ <- OptionT.liftF(stats.putStatistics(addDay(date, today)(history)))
+        totals <- OptionT(nhs.vaccineTotals(date))
+        day = date.minusDays(1) // the stats are for the previous day
+        history <- OptionT.liftF(stats.fetchStatistics).filterNot(_.exists(_.date == day))
+        _ <- OptionT.liftF(stats.putStatistics(addDay(day, totals)(history)))
       } yield ()
     )
     .flatTapNone(log("No statistics saved"))
