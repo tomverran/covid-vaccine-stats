@@ -4,6 +4,7 @@ An app to provide hopefully cheering statistics regarding the progress of the UK
 
 This app was made on a Sunday afternoon so please judge its quality accordingly.
 
+Until I get a working `.uk` domain you can see the stats [here](http://vaccine-statistics-20210117140726225700000002.s3-website-eu-west-1.amazonaws.com/).
 
 ### Lambda
 
