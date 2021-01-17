@@ -71,7 +71,7 @@ function vaccinationsPerDay(statistics) {
 function totalVaccinations(statistics) {
 
   const data = new google.visualization.arrayToDataTable(
-    [['Date', 'One Dose', 'Two Doses']].concat(
+    [['Date', 'First Dose', 'Second Dose']].concat(
       [...statistics].reverse().slice(1).map(day => {
         return [
           dateFns.format(new Date(day.date), 'Do MMM'),
