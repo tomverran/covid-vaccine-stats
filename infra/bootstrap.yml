@@ -1,0 +1,40 @@
+Resources:
+  StateS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  TerraformUser:
+    Type: AWS::IAM::User
+    Properties:
+      Policies:
+        - PolicyName: allow-infra-management
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:*
+                  - acm:*
+                  - route53:*
+                  - lambda:*
+                  - cloudwatch:*
+                  - events:*
+                  - ecs:*
+                  - iam:*
+                  - ssm:*
+                  - logs:*
+                  - s3:*
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - s3:get*
+                  - s3:list*
+                  - s3:put*
+                Resource:
+                  - !GetAtt StateS3Bucket.Arn
+                  - !Sub "${StateS3Bucket.Arn}/*"
