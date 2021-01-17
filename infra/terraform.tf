@@ -14,6 +14,37 @@ provider "aws" {
 resource "aws_s3_bucket" "statistics-bucket" {
   bucket_prefix = "vaccine-statistics-"
   acl = "public-read"
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html" // no errors here
+  }
+}
+
+
+locals {
+  frontend_files = {
+    "index.html" = "text/html",
+    "app.js" = "application/javascript"
+  }
+}
+
+resource "aws_s3_bucket_object" "frontend" {
+  for_each = local.frontend_files
+  bucket = aws_s3_bucket.statistics-bucket.id
+  etag = filemd5("../ui/${each.key}")
+  source =  "../ui/${each.key}"
+  content_type = each.value
+  acl = "public-read"
+  key = each.key
 }
 
 data aws_caller_identity "current" {}
