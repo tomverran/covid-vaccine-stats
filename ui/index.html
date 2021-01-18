@@ -9,26 +9,28 @@
   <title>UK COVID-19 Vaccine</title>
 </head>
 <body>
-  <div class="container mt-4 mb-2  p-0">
+  <div class="container mt-4 p-0">
     <h1 class="mb-2 mx-auto px-2 py-2">UK COVID-19 Vaccine Statistics</h1>
-    <h6 class="px-2 mb-4 text-muted">
+    <h6 class="px-2 mb-3 text-muted">
       Data obtained from the
       <a href="https://coronavirus.data.gov.uk/">GOV.UK API</a>.
       This site is in no way affiliated with the NHS or UK Government!
       Source code on <a href="https://github.com/tomverran/covid-vaccine-stats">GitHub</a>.
     </h6>
-    <div class="row">
-      <div class="col-sm mb-3">
-        <div class="card shadow-sm">
+    <div class="row g-0">
+      <div class="col-sm">
+        <div class="card shadow-sm me-sm-1 mb-2">
           <div class="card-body">
             <h1 class="card-title mb-3"><span class="today"></span></h1>
-            <h6 class="card-subtitle mb-1 text-muted">First doses given on <span
-              class="date-today"></span></h6>
+            <h6 class="card-subtitle mb-1 text-muted">
+              First doses of any COVID vaccine given on
+              <span class="date-today"></span>
+            </h6>
           </div>
         </div>
       </div>
-      <div class="col-sm mb-3">
-        <div class="card shadow-sm">
+      <div class="col-sm">
+        <div class="card shadow-sm ms-sm-1 mb-2">
           <div class="card-body">
             <h1 class="card-title mb-3"><span class="difference-updown"></span> <span
               class="difference-percent"></span>
@@ -36,23 +38,23 @@
             <h6 class="card-subtitle mb-1 text-muted">
               <span class="difference-value"></span>
               <span class="difference-gtlt"></span>
-              first does given than the day before.
+              first doses given than the day before.
             </h6>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm mb-3">
-        <div class="card shadow-sm">
+    <div class="row g-0">
+      <div class="col-sm">
+        <div class="card shadow-sm me-sm-1 mb-2">
           <div class="card-body">
             <h1 class="card-title mb-3"><span class="cumulative-total"></span></h1>
             <h6 class="card-subtitle mb-1 text-muted">People in total have had at least one dose.</h6>
           </div>
         </div>
       </div>
-      <div class="col-sm mb-3">
-        <div class="card shadow-sm">
+      <div class="col-sm">
+        <div class="card shadow-sm ms-sm-1 mb-2">
           <div class="card-body">
             <h1 class="card-title mb-3">1 in <span class="one-in-x"></span> people</h1>
             <h6 class="card-subtitle mb-1 text-muted">Assuming a UK population of 68M people.</h6>
@@ -62,12 +64,12 @@
     </div>
   </div>
 
-  <div class="container border shadow-sm p-4 bg-white">
+  <div class="container border shadow-sm p-4 bg-white mb-2">
     <h5 class="text-center mb-4">Vaccinations given per day</h5>
     <canvas id="chart-per-day"></canvas>
   </div>
 
-  <div class="container mt-4 border shadow-sm p-4 bg-white mb-4">
+  <div class="container border shadow-sm p-4 bg-white mb-2">
     <h5 class="text-center mb-4">Cumulative vaccinations over time</h5>
     <canvas id="chart-total"></canvas>
   </div>
