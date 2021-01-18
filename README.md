@@ -8,8 +8,8 @@ Until I get a working `.uk` domain you can see the stats [here](http://vaccine-s
 
 ### Lambda
 
-The data powering the app is obtained from https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/
-with a Scala lambda that pulls the cumulative total vaccinations out of the provided XLSX files and uploads them to S3.
+The data powering the app is obtained from https://api.coronavirus.data.gov.uk with a Scala lambda that polls the API and relays the data to S3. 
+The frontend could talk directly to the API but I have plans to post updates to twitter, hence the lambda.
 
 ### Frontend
 
