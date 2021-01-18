@@ -155,3 +155,90 @@ resource "aws_cloudwatch_event_target" "lambda-target" {
   arn = aws_lambda_function.lambda-function.arn
   target_id = "lambda"
 }
+
+resource "aws_route53_zone" "app-zone" {
+  name = "covid-vaccine-stats.uk"
+}
+
+provider "aws" {
+  alias = "us-east-1"
+  region = "us-east-1"
+}
+
+resource "aws_acm_certificate" "cert" {
+  domain_name = aws_route53_zone.app-zone.name
+  validation_method = "DNS"
+  provider = aws.us-east-1
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "cert-validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name    = each.value.name
+  type    = each.value.type
+  records = [each.value.record]
+  zone_id = aws_route53_zone.app-zone.zone_id
+  ttl     = 60
+}
+
+resource "aws_acm_certificate_validation" "cert-valid" {
+  certificate_arn = aws_acm_certificate.cert.arn
+  provider = aws.us-east-1
+}
+
+resource "aws_cloudfront_distribution" "frontend-cloudfront" {
+  aliases = [trimsuffix(aws_route53_zone.app-zone.name, ".")]
+  default_root_object = "index.html"
+  enabled = true
+
+  default_cache_behavior {
+    cached_methods = ["HEAD", "GET"]
+    allowed_methods = ["HEAD", "GET"]
+    viewer_protocol_policy = "redirect-to-https"
+    target_origin_id = aws_s3_bucket.statistics-bucket.bucket
+
+    forwarded_values {
+      query_string = false
+      cookies { forward = "none" }
+    }
+  }
+
+  origin {
+    domain_name = aws_s3_bucket.statistics-bucket.bucket_regional_domain_name
+    origin_id = aws_s3_bucket.statistics-bucket.bucket
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn = aws_acm_certificate_validation.cert-valid.certificate_arn
+    minimum_protocol_version = "TLSv1.2_2018"
+    ssl_support_method = "sni-only"
+  }
+}
+
+resource "aws_route53_record" "cloudfront-record" {
+  zone_id = aws_route53_zone.app-zone.zone_id
+  name = aws_route53_zone.app-zone.name
+  type = "A"
+
+  alias {
+    evaluate_target_health = true
+    name = aws_cloudfront_distribution.frontend-cloudfront.domain_name
+    zone_id = aws_cloudfront_distribution.frontend-cloudfront.hosted_zone_id
+  }
+}
+

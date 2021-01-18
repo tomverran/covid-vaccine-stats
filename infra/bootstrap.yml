@@ -23,6 +23,7 @@ Resources:
                   - route53:*
                   - lambda:*
                   - cloudwatch:*
+                  - cloudfront:*
                   - events:*
                   - ecs:*
                   - iam:*

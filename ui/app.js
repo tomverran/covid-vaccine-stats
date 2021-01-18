@@ -10,6 +10,10 @@ function addClass(selector, className) {
   document.querySelectorAll(selector).forEach(e => e.classList.add(className));
 }
 
+function formatDateStr(str) {
+  return dateFns.format(new Date(str), 'Do MMM');
+}
+
 /**
  * Fill in the headings with the daily total
  * and the percent / absolute change since the day before
@@ -21,7 +25,7 @@ function populateHeadings(statistics) {
   const percentChange = Math.round(difference / yesterday.firstDose * 100)
   const isUp = percentChange > 0
 
-  setText(".date-today", dateFns.format(new Date(statistics[0].date), 'Do MMM'));
+  setText(".date-today", formatDateStr(statistics[0].date));
   setText(".today", today.firstDose.toLocaleString("en-GB"));
 
   setText(".difference-value", Math.abs(difference).toLocaleString("en-GB"));
@@ -45,45 +49,34 @@ function populateDetails(statistics) {
 }
 
 /**
- * Graph the number of vaccines given per day
+ * Abominable abstraction across drawing both graphs
+ * accessor is a fn from DailyTotal => DoseTotal 
  */
-function vaccinationsPerDay(statistics) {
+function graph(statistics, selector, accessor) {
 
-  const data = new google.visualization.arrayToDataTable(
-    [['Date', 'First Dose', 'Second Dose']].concat(
-      [...statistics.reverse()].slice(1).map(day => {
-        return [
-          dateFns.format(new Date(day.date), 'Do MMM'),
-          day.today.firstDose,
-          day.today.secondDose
-        ]
-      })
-    )
-  )
+  const data = [...statistics].reverse().slice(1)
+  const ctx = document.querySelector(selector).getContext('2d');
 
-  const chart = new google.charts.Line(document.querySelector('#chart-per-day'));
-  chart.draw(data, google.charts.Line.convertOptions({ height: 400 }));
-}
-
-/**
- * Graph the cumulative number of vaccines over time
- */
-function totalVaccinations(statistics) {
-
-  const data = new google.visualization.arrayToDataTable(
-    [['Date', 'First Dose', 'Second Dose']].concat(
-      [...statistics].reverse().slice(1).map(day => {
-        return [
-          dateFns.format(new Date(day.date), 'Do MMM'),
-          day.total.firstDose,
-          day.total.secondDose,
-        ]
-      })
-    )
-  )
-
-  const chart = new google.charts.Line(document.querySelector('#chart-total'));
-  chart.draw(data, google.charts.Line.convertOptions({ height: 400 }));
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => formatDateStr(d.date)),
+      datasets: [
+        { 
+          label: 'First Dose', 
+          data: data.map(d => accessor(d).firstDose ), 
+          backgroundColor: 'transparent',
+          borderColor: '#17a2b8'
+        },
+        { 
+          label: 'Second Dose', 
+          data: data.map(d => accessor(d).secondDose ), 
+          backgroundColor: 'transparent',
+          borderColor: '#28a745'
+        }
+      ]
+    }
+  });  
 }
 
 /**
@@ -96,8 +89,9 @@ function totalVaccinations(statistics) {
     let resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/statistics.json");
     let statistics = await resp.json();
 
-    google.charts.load('current', {'packages':['line']});
-    google.charts.setOnLoadCallback(() => { totalVaccinations(statistics); vaccinationsPerDay(statistics)});
+    graph(statistics, '#chart-per-day', d => d.today);
+    graph(statistics, '#chart-total', d => d.total);
+
     populateHeadings(statistics);
     populateDetails(statistics);
   }
