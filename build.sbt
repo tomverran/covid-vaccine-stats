@@ -41,6 +41,5 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
   "software.amazon.awssdk" % "s3" % awsSdkVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "org.apache.poi" % "poi-ooxml" % "4.1.2",
   "is.cir" %% "ciris" % "1.2.1"
 )

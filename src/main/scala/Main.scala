@@ -1,10 +1,11 @@
 package io.tvc.vaccines
 
-import DailyTotals.addDay
-
 import cats.data.OptionT
+import cats.effect.ExitCode.Success
 import cats.effect.{Blocker, ExitCode, IO, IOApp, Resource}
 import cats.syntax.apply._
+import cats.syntax.flatMap._
+import cats.syntax.traverse._
 import ciris.env
 import org.http4s.client.Client
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -15,9 +16,6 @@ import scala.concurrent.ExecutionContext.global
 
 object Main extends IOApp {
 
-  /**
-   * Extremely advanced pure functional logging library
-   */
   def log(what: String): IO[Unit] =
     IO.delay(println(what))
 
@@ -30,8 +28,8 @@ object Main extends IOApp {
   val s3Client: Resource[IO, S3AsyncClient] =
     Resource.make(IO.delay(S3AsyncClient.create))(c => IO.delay(c.close()))
 
-  val nhs: Resource[IO, NHSClient[IO]] =
-    http.map(NHSClient[IO])
+  val nhs: Resource[IO, VaccineClient[IO]] =
+    http.map(VaccineClient[IO])
 
   val statistics: Resource[IO, StatisticsClient[IO]] =
     (
@@ -40,25 +38,43 @@ object Main extends IOApp {
       Resource.liftF(bucketName)
     ).mapN(StatisticsClient[IO])
 
-  def runForDay(nhs: NHSClient[IO], stats: StatisticsClient[IO])(date: LocalDate): IO[Unit] =
+  /**
+   * Fetch one day of vaccination data from the Vaccine Client and store it in S3.
+   * If we already have the day in S3 then we skip calling the API.
+   */
+  def runForDay(nhs: VaccineClient[IO], stats: StatisticsClient[IO])(date: LocalDate): IO[Unit] =
     (
       for {
+        history <- OptionT.liftF(stats.fetchStatistics).filterNot(_.exists(_.date == date))
         totals <- OptionT(nhs.vaccineTotals(date))
-        day = date.minusDays(1) // the stats are for the previous day
-        history <- OptionT.liftF(stats.fetchStatistics).filterNot(_.exists(_.date == day))
-        _ <- OptionT.liftF(stats.putStatistics(addDay(day, totals)(history)))
+        _ <- OptionT.liftF(stats.putStatistics(totals :: history))
       } yield ()
     )
     .flatTapNone(log("No statistics saved"))
     .semiflatTap(_ => log("Saved statistics"))
     .getOrElse(())
 
-    def run(args: List[String]): IO[ExitCode] =
+  /**
+   * This can be run if the data needs to be entirely reingested
+   * but it is comically inefficient since it does it day-by-day
+   */
+  def backfill(nhs: VaccineClient[IO], stats: StatisticsClient[IO]): IO[Unit] =
+    stats.putStatistics(List.empty) >>
+      (11 to 16).toList
+        .map(LocalDate.of(2021, 1, _))
+        .traverse(runForDay(nhs, stats))
+        .void
+
+  /**
+   * Entrypoint into the app,
+   * tries to pull one day of stats for yesterday
+   */
+  def run(args: List[String]): IO[ExitCode] =
       (
         nhs,
         statistics,
         Resource.liftF(IO(LocalDate.now))
       ).tupled.use { case (nhs, stats, today) =>
-        runForDay(nhs, stats)(today).as(ExitCode.Success)
+        runForDay(nhs, stats)(today.minusDays(1)).as(Success)
       }
 }
