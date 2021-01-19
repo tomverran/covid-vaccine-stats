@@ -190,6 +190,14 @@ resource "aws_route53_record" "cert-validation" {
   ttl     = 60
 }
 
+resource "aws_route53_record" "google-domain-validation" {
+  records = ["google-site-verification=pnP-srQ7EWoJtccK6nohOmTUrgQyojXbG2G9q-mkzsM"]
+  zone_id = aws_route53_zone.app-zone.zone_id
+  name = aws_route53_zone.app-zone.name
+  type = "TXT"
+  ttl  = 60
+}
+
 resource "aws_acm_certificate_validation" "cert-valid" {
   certificate_arn = aws_acm_certificate.cert.arn
   provider = aws.us-east-1
