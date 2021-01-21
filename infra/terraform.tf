@@ -166,8 +166,12 @@ resource "aws_lambda_permission" "allow-cloudwatch" {
 }
 
 resource "aws_cloudwatch_event_rule" "lambda_triggers" {
-  schedule_expression = "rate(30 minutes)"
+  schedule_expression = "cron(0/5 16-23 * * ? *)"
   name_prefix = "lambda-cron-"
+
+  lifecycle {
+    ignore_changes = [schedule_expression]
+  }
 }
 
 resource "aws_cloudwatch_event_target" "lambda-target" {

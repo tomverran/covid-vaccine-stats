@@ -63,8 +63,8 @@ object Tweet {
       f"""
       |UK #covid19 #vaccine statistics for ${formatDate(dailyTotals.head.date)} 💉
       |
-      |  🔹 ${dailyTotals.head.today.firstDose}%,d first doses given today. ${changeText(dailyTotals)}
-      |  🔹 ${dailyTotals.head.total.firstDose}%,d total first doses given.
+      | 🔹 ${dailyTotals.head.today.firstDose}%,d first doses given. ${changeText(dailyTotals)}
+      | 🔹 ${dailyTotals.head.total.firstDose}%,d total first doses given so far.
       |
       |More statistics available at https://covid-vaccine-stats.uk
       |""".stripMargin

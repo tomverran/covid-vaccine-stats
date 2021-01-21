@@ -1,3 +1,13 @@
 body {
   background-color: #f8f8f8;
+  overflow-y: scroll
+}
+
+.loading {
+  opacity: 0;
+}
+
+.card-body {
+  transition: opacity 1s;
+  -webkit-transition: opacity 1s;
 }

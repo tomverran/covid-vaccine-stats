@@ -92,7 +92,8 @@ function graph(statistics, selector, accessor) {
     graph(statistics, '#chart-per-day', d => d.today);
     graph(statistics, '#chart-total', d => d.total);
 
-    populateHeadings(statistics);
     populateDetails(statistics);
+    populateHeadings(statistics);
+    document.querySelectorAll('.loading').forEach(e => e.classList.remove('loading'));
   }
 )()
