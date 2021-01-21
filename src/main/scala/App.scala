@@ -38,7 +38,7 @@ object App {
       vaccineClient = VaccineClient(http),
       statisticsClient = StatisticsClient(block, s3, config.statistics),
       scheduler = Scheduler(eventBridge, config.scheduler),
-      date = today
+      date = today.minusDays(1)
     )
 
   type Operation[F[_], A] = Kleisli[OptionT[F, *], Dependencies[F], A]

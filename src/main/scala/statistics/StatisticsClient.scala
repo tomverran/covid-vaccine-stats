@@ -41,6 +41,7 @@ object StatisticsClient {
           .builder
           .bucket(config.bucketName)
           .key("statistics.json")
+          .cacheControl("no-cache")
           .acl("public-read")
           .build
 
