@@ -30,7 +30,7 @@ object App {
       block       <- Blocker[F]
       s3          <- AWS.s3Client
       eventBridge <- AWS.eventBridgeClient
-      config      <- Resource.liftF(Config.load[F])
+      config      <- Resource.liftF(Config.load[F](block))
       http        <- BlazeClientBuilder[F](global).withDefaultSslContext.resource
       today       <- Resource.liftF(Sync[F].delay(LocalDate.now)) // bit OTT maybe
     } yield Dependencies[F](

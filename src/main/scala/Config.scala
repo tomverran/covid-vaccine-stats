@@ -4,10 +4,12 @@ import scheduler.Scheduler
 import statistics.StatisticsClient
 import twitter.{Config => TwitterConfig}
 
-import cats.effect.{Async, ContextShift}
+import cats.effect.{Async, Blocker, ContextShift}
 import cats.syntax.apply._
 import ciris.{ConfigValue, env}
+import ciris.aws.ssm.{Param, params}
 import org.http4s.client.oauth1.{Consumer, Token}
+import software.amazon.awssdk.regions.Region.EU_WEST_1
 
 case class Config(
   statistics: StatisticsClient.Config,
@@ -17,22 +19,24 @@ case class Config(
 
 object Config {
 
-  def consumer: ConfigValue[Consumer] =
+  def consumer(param: Param): ConfigValue[Consumer] =
     (
-      env("TWITTER_CONSUMER_KEY").redacted,
-      env("TWITTER_CONSUMER_SECRET").redacted,
+      param("/vaccines/TWITTER_CONSUMER_KEY").redacted,
+      param("/vaccines/TWITTER_CONSUMER_SECRET").redacted,
     ).mapN(Consumer)
 
-  def token: ConfigValue[Token] =
+  def token(param: Param): ConfigValue[Token] =
     (
-      env("TWITTER_ACCESS_TOKEN").redacted,
-      env("TWITTER_TOKEN_SECRET").redacted
+      param("/vaccines/TWITTER_ACCESS_TOKEN").redacted,
+      param("/vaccines/TWITTER_TOKEN_SECRET").redacted
     ).mapN(Token)
 
-  def load[F[_]: ContextShift: Async]: F[Config] =
-    (
-      env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config),
-      env("SCHEDULER_RULE_NAME").map(Scheduler.Config),
-      (consumer, token).mapN(twitter.Config)
-    ).mapN(Config.apply).load[F]
+  def load[F[_]: ContextShift: Async](blocker: Blocker): F[Config] =
+    params(blocker, EU_WEST_1).flatMap { param =>
+      (
+        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config),
+        env("SCHEDULER_RULE_NAME").map(Scheduler.Config),
+        (consumer(param), token(param)).mapN(twitter.Config)
+      ).mapN(Config.apply)
+    }.load[F]
 }

@@ -10,6 +10,8 @@ idePackagePrefix := Some("io.tvc.vaccines")
 
 assemblyJarName in assembly := "vaccine-stats.jar"
 
+resolvers += Resolver.bintrayRepo("ovotech", "maven")
+
 assemblyMergeStrategy in assembly := {
   case PathList(p @ _*) if p.exists(_.contains("codegen-resources")) => MergeStrategy.discard
   case PathList(p @ _*) if p.last.endsWith("io.netty.versions.properties") => MergeStrategy.discard
@@ -42,7 +44,9 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "eventbridge" % awsSdkVersion,
   "software.amazon.awssdk" % "s3" % awsSdkVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "is.cir" %% "ciris" % "1.2.1"
+
+  "is.cir" %% "ciris" % "1.2.1",
+  "com.ovoenergy" %% "ciris-aws-ssm" % "2.0.0"
 )
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full)
