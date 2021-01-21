@@ -77,6 +77,15 @@ data "aws_iam_policy_document" "lambda-policy-document" {
   statement {
     effect = "Allow"
     actions = [
+      "events:PutRule"
+    ]
+    resources = [
+      aws_cloudwatch_event_rule.lambda_triggers.arn
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
       "s3:PutObjectAcl",
       "s3:PutObject",
       "s3:GetObject"
@@ -91,6 +100,7 @@ data "aws_iam_policy_document" "lambda-policy-document" {
 resource "aws_iam_role" "lambda-role" {
   assume_role_policy = data.aws_iam_policy_document.lambda-assume-role-policy.json
   name_prefix = "stats-lambda-"
+  max_session_duration = 28800
 }
 
 resource "aws_iam_role_policy" "lambda-role-policy" {
@@ -135,6 +145,7 @@ resource "aws_lambda_function" "lambda-function" {
   environment {
     variables = {
       STATISTICS_BUCKET_NAME = aws_s3_bucket.statistics-bucket.bucket
+      SCHEDULER_RULE_NAME = aws_cloudwatch_event_rule.lambda_triggers.name
     }
   }
 }

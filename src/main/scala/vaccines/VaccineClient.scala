@@ -1,8 +1,8 @@
 package io.tvc.vaccines
+package vaccines
 
 import cats.effect.Sync
 import cats.syntax.apply._
-import cats.syntax.functor._
 import io.circe.Decoder
 import io.circe.syntax._
 import org.http4s.Method.GET
@@ -10,8 +10,9 @@ import org.http4s.Status.NoContent
 import org.http4s.circe.CirceEntityCodec._
 import org.http4s.client.middleware.GZip
 import org.http4s.client.{Client, UnexpectedStatus}
+import org.http4s.headers.{AgentProduct, `User-Agent`}
 import org.http4s.syntax.literals._
-import org.http4s.{Request, Uri}
+import org.http4s.{Headers, Request, Uri}
 
 import java.time.LocalDate
 
@@ -56,6 +57,9 @@ object VaccineClient {
   private def request[F[_]](date: LocalDate): Request[F] =
     Request[F](
       method = GET,
+      headers = Headers.of(
+        `User-Agent`(AgentProduct("covid-vaccine-stats.uk"))
+      ),
       uri = uri
         .withQueryParam("structure", structure.asJson.noSpaces)
         .withQueryParam("filters", s"areaType=overview;date=$date")

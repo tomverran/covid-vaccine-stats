@@ -1,4 +1,5 @@
 package io.tvc.vaccines
+package vaccines
 
 import io.circe.Codec
 import io.circe.generic.semiauto.deriveCodec
