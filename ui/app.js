@@ -14,6 +14,10 @@ function formatDateStr(str) {
   return dateFns.format(new Date(str), 'Do MMM');
 }
 
+function formatLongDateStr(str) {
+  return dateFns.format(new Date(str), 'Do of MMMM');
+}
+
 /**
  * Fill in the headings with the daily total
  * and the percent / absolute change since the day before
@@ -34,6 +38,22 @@ function populateHeadings(statistics) {
   addClass(".difference-updown, .difference-percent", isUp ? "text-success" : "text-danger");
   setText(".difference-gtlt", isUp ? "more" : "fewer");
   setText(".difference-updown", isUp ? "Up" : "Down");
+}
+
+/**
+ * Project when all vulnerable groups will have received a dose
+ * by extrapolating from the last day's data
+ */
+function projectCompletion(statistics) {
+  const firstFour = 14600000
+  const allSix = 31800000
+
+  const latest = statistics[0];
+  const firstFourDays = Math.ceil((firstFour - latest.total.firstDose) / latest.today.firstDose)
+  const allSixDays = Math.ceil((allSix - latest.total.firstDose) / latest.today.firstDose)
+
+  setText('.projected-first-four', formatLongDateStr(dateFns.addDays(new Date(), firstFourDays)))
+  setText('.projected-all-six', formatLongDateStr(dateFns.addDays(new Date(), allSixDays)))
 }
 
 /**
@@ -94,6 +114,7 @@ function graph(statistics, selector, accessor) {
 
     populateDetails(statistics);
     populateHeadings(statistics);
+    projectCompletion(statistics);
     document.querySelectorAll('.loading').forEach(e => e.classList.remove('loading'));
   }
 )()
