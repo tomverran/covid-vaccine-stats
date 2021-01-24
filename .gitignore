@@ -10,4 +10,6 @@ project/plugins/project/
 .idea/
 **/.terraform/*
 **/.terraform*
+**/node_modules/
+**/package-lock.json
 .bsp/
