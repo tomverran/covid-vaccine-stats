@@ -18,6 +18,10 @@ function formatLongDateStr(str) {
   return dateFns.format(new Date(str), 'Do of MMMM');
 }
 
+function totalDoses(day) {
+  return day.firstDose + day.secondDose
+}
+
 /**
  * Fill in the headings with the daily total
  * and the percent / absolute change since the day before
@@ -25,12 +29,12 @@ function formatLongDateStr(str) {
 function populateHeadings(statistics) {
   const today = statistics[0].today;
   const yesterday = statistics[1].today;
-  const difference = today.firstDose - yesterday.firstDose
-  const percentChange = Math.round(difference / yesterday.firstDose * 100)
+  const difference = totalDoses(today) - totalDoses(yesterday)
+  const percentChange = Math.round(difference / totalDoses(yesterday) * 100)
   const isUp = percentChange > 0
 
   setText(".date-today", formatDateStr(statistics[0].date));
-  setText(".today", today.firstDose.toLocaleString("en-GB"));
+  setText(".today", totalDoses(today).toLocaleString("en-GB"));
 
   setText(".difference-value", Math.abs(difference).toLocaleString("en-GB"));
   setText(".difference-percent", Math.abs(percentChange) + "%");

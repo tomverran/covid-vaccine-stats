@@ -42,8 +42,8 @@ object Tweet {
    * figure out what the percent change of first doses is for the latest day vs the day before
    */
   def percentChange(dailyTotals: NonEmptyList[DailyTotals]): BigDecimal = {
-    val yesterday = dailyTotals.tail.headOption.foldMap(_.today.firstDose)
-    (dailyTotals.head.today.firstDose - yesterday) / BigDecimal(yesterday) * 100
+    val yesterday = dailyTotals.tail.headOption.foldMap(_.today.totalDoses)
+    (dailyTotals.head.today.totalDoses - yesterday) / BigDecimal(yesterday) * 100
   }
 
   /**
@@ -51,8 +51,12 @@ object Tweet {
    */
   def changeText(dailyTotals: NonEmptyList[DailyTotals]): String = {
     val change = percentChange(dailyTotals)
-    val formatted = change.setScale(1, HALF_UP)
-    if (change > 0) s"📈 Up $formatted%!" else s"📉 Down $formatted%."
+    val formatted = change.setScale(1, HALF_UP).abs
+    if (change > 0) {
+      s"Up $formatted% 📈 on the day before."
+    } else {
+      s"Down $formatted% 📉 on the day before."
+    }
   }
 
   /**
@@ -63,10 +67,12 @@ object Tweet {
       f"""
       |UK #covid19 #vaccine statistics for ${formatDate(dailyTotals.head.date)} 💉
       |
-      | 🔹 ${dailyTotals.head.today.firstDose}%,d first doses given. ${changeText(dailyTotals)}
-      | 🔹 ${dailyTotals.head.total.firstDose}%,d total first doses given so far.
+      |🔹 ${dailyTotals.head.today.firstDose}%,d first doses given.
+      |🔹 ${dailyTotals.head.today.secondDose}%,d second doses given.
+      |🔹 ${changeText(dailyTotals)}
+      |🔹 ${dailyTotals.head.total.firstDose}%,d first doses given in total.
       |
-      |More statistics available at https://covid-vaccine-stats.uk
+      |More statistics at https://covid-vaccine-stats.uk
       |""".stripMargin
     )
 }

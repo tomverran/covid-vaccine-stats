@@ -9,7 +9,10 @@ import java.time.LocalDate
 case class DoseTotals(
   firstDose: Long,
   secondDose: Long
-)
+) {
+  def totalDoses: Long =
+    firstDose + secondDose
+}
 
 object DoseTotals {
   implicit val codec: Codec[DoseTotals] = deriveCodec
