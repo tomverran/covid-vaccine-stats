@@ -59,6 +59,12 @@ object Tweet {
     }
   }
 
+  def recordText(stats: NonEmptyList[DailyTotals]): String = {
+    val totalToday = stats.head.today.totalDoses
+    val record: Long = stats.tail.dropRight(1).maxByOption(_.today.totalDoses).foldMap(_.today.totalDoses)
+    if (totalToday > record) "\n|🔹 A new record! ✨ Well done #nhs!" else ""
+  }
+
   /**
    * Format a nice emoji laden tweet conveying the latest vaccine stats.
    */
@@ -68,11 +74,11 @@ object Tweet {
       |UK #covid19 #vaccine statistics for ${formatDate(dailyTotals.head.date)} 💉
       |
       |🔹 ${dailyTotals.head.today.firstDose}%,d first doses given.
-      |🔹 ${dailyTotals.head.today.secondDose}%,d second doses given.
+      |🔹 ${dailyTotals.head.today.secondDose}%,d second doses given.${recordText(dailyTotals)}
       |🔹 ${changeText(dailyTotals)}
-      |🔹 ${dailyTotals.head.total.firstDose}%,d first doses given in total.
+      |🔹 ${dailyTotals.head.total.firstDose}%,d total first doses given.
       |
-      |More statistics at https://covid-vaccine-stats.uk
+      |See more: https://covid-vaccine-stats.uk
       |""".stripMargin
     )
 }
