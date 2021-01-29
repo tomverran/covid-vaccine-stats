@@ -12,4 +12,6 @@ project/plugins/project/
 **/.terraform*
 **/node_modules/
 **/package-lock.json
+ui/public/app.js*
+ui/public/index.html
 .bsp/
