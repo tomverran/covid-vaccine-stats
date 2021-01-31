@@ -33,15 +33,16 @@ locals {
   frontend_files = {
     "index.html" = "text/html",
     "app.js" = "application/javascript"
-    "style.css" = "text/css"
+    "app.js.LICENSE.txt" = "text/plain"
+    "main.css" = "text/css"
   }
 }
 
 resource "aws_s3_bucket_object" "frontend" {
   for_each = local.frontend_files
   bucket = aws_s3_bucket.statistics-bucket.id
-  etag = filemd5("../ui/${each.key}")
-  source =  "../ui/${each.key}"
+  etag = filemd5("../ui/public/${each.key}")
+  source =  "../ui/public/${each.key}"
   content_type = each.value
   acl = "public-read"
   key = each.key
@@ -233,6 +234,7 @@ resource "aws_cloudfront_distribution" "frontend-cloudfront" {
   enabled = true
 
   default_cache_behavior {
+    compress = true
     cached_methods = ["HEAD", "GET"]
     allowed_methods = ["HEAD", "GET"]
     viewer_protocol_policy = "redirect-to-https"
