@@ -13,5 +13,6 @@ project/plugins/project/
 **/node_modules/
 **/package-lock.json
 ui/public/app.js*
+ui/public/main.css
 ui/public/index.html
 .bsp/

@@ -3,17 +3,19 @@ import { App } from '../src/app'
 import { renderToString } from 'react-dom/server';
 import { createElement } from 'react'
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { resolve } from 'path'
 import { Compiler } from 'webpack';
+import { OriginalSource } from 'webpack-sources';
 
 export class PreRenderPlugin {
   apply(compiler: Compiler) {
-    compiler.hooks.afterEmit.tap('PreRenderPlugin', compilation => {
+    compiler.hooks.thisCompilation.tap('PreRenderPlugin', compilation => {
       const renderedComponents: string = renderToString(createElement(App));
       const dom: JSDOM = new JSDOM(readFileSync(resolve(__dirname, "index.html"), 'utf8'));
       (dom.window.document.querySelector('body div') as HTMLElement).innerHTML = renderedComponents;
-      writeFileSync(resolve(compilation.outputOptions.path ?? '../', 'index.html'), dom.serialize());
+      const toEmit: any = new OriginalSource(dom.serialize(), 'index.html');
+      compilation.emitAsset('index.html', toEmit);
     });
   }
 }
