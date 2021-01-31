@@ -1,6 +1,7 @@
 import * as React from "react";
 import { CardProps, Cards } from "./cards";
 import { DoseChart } from "./chart";
+import { DayProjection } from "./projection";
 
 export class App extends React.Component<{}, CardProps> {
 
@@ -23,8 +24,9 @@ export class App extends React.Component<{}, CardProps> {
         For daily updates follow us on <a href="https://twitter.com/stats_vaccine">Twitter</a>.
       </p>
       <Cards statistics={this.state.statistics}></Cards>
-      <DoseChart statistics={this.state.statistics} type="today"></DoseChart>
-      <DoseChart statistics={this.state.statistics} type="total"></DoseChart>
+      <DayProjection statistics={this.state.statistics} />
+      <DoseChart statistics={this.state.statistics} type="today"/>
+      <DoseChart statistics={this.state.statistics} type="total"/>
       <p className="text-center text-muted mt-4 mb-4">
         An open source project by <a href="https://tomverran.uk" rel="nofollow">Tom Verran</a>.<br />
         Source code on <a href="https://github.com/tomverran/covid-vaccine-stats">GitHub</a>.
