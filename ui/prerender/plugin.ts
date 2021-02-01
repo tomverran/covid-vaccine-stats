@@ -1,5 +1,4 @@
 import { JSDOM } from 'jsdom';
-import { App } from '../src/app'
 import { renderToString } from 'react-dom/server';
 import { createElement } from 'react'
 
@@ -11,6 +10,7 @@ import { OriginalSource } from 'webpack-sources';
 export class PreRenderPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.thisCompilation.tap('PreRenderPlugin', compilation => {
+      const { App } = require("../src/app");
       const renderedComponents: string = renderToString(createElement(App));
       const dom: JSDOM = new JSDOM(readFileSync(resolve(__dirname, "index.html"), 'utf8'));
       (dom.window.document.querySelector('body div') as HTMLElement).innerHTML = renderedComponents;

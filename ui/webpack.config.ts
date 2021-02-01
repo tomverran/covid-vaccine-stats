@@ -1,11 +1,13 @@
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 import { PreRenderPlugin } from './prerender/plugin'
 import { resolve } from 'path'
 
 module.exports = {  
   mode: "production",
+  optimization: { usedExports: true },
   entry: resolve(__dirname, "src", "boot.ts"),
   module: {
     rules: [
@@ -20,7 +22,7 @@ module.exports = {
       },
       {
         test: /\.svg/,
-        type: 'asset/inline'
+        use: ["file-loader"]
       }
     ],
   },

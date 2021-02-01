@@ -9,6 +9,7 @@
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/popover";
 @import "~bootstrap/scss/containers";
 @import "~bootstrap/scss/utilities/api";
 
@@ -35,16 +36,20 @@ a:link {
   }
 }
 
-#region-map {
+svg {
+  height: auto;
+  max-width: 100%;
+  display: block;
+  margin: auto;
+}
 
+.region {
   cursor: pointer;
-
-  .valid {
-    fill: green !important;
-  }
-
-  path[inkscape\:label]:hover {
-    transition: fill 1s;
-    fill: blue !important;
-  }
+  fill:lightblue;
+  fill-opacity:1;
+  stroke:#000000;
+  stroke-width: 0.264583px;
+  stroke-linecap: butt; // pardon
+  stroke-linejoin: bevel;
+  stroke-opacity: 1
 }
