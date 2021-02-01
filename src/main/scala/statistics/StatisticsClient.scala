@@ -4,6 +4,7 @@ package statistics
 import cats.effect.{Async, Blocker, ContextShift, IO}
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import io.circe.Codec
 import io.circe.parser.decode
 import io.circe.syntax._
 import io.tvc.vaccines.AWS.capture
@@ -13,9 +14,9 @@ import software.amazon.awssdk.core.internal.async.ByteArrayAsyncRequestBody
 import software.amazon.awssdk.services.s3.S3AsyncClient
 import software.amazon.awssdk.services.s3.model.{GetObjectRequest, GetObjectResponse, PutObjectRequest}
 
-trait StatisticsClient[F[_]] {
-  def fetch: F[List[DailyTotals]]
-  def put(list: List[DailyTotals]): F[Unit]
+trait StatisticsClient[F[_], A] {
+  def put(list: List[A]): F[Unit]
+  def fetch: F[List[A]]
 }
 
 /**
@@ -24,32 +25,35 @@ trait StatisticsClient[F[_]] {
  */
 object StatisticsClient {
 
-  case class Config(bucketName: String)
+  case class Config(
+    bucketName: String,
+    objectName: String
+  )
 
-  def apply[F[_]: ContextShift](
+  def apply[F[_]: ContextShift, A: Codec](
     blocker: Blocker,
     s3: S3AsyncClient,
     config: Config
-  )(implicit c: ContextShift[IO], F: Async[F]): StatisticsClient[F] =
-    new StatisticsClient[F] {
+  )(implicit c: ContextShift[IO], F: Async[F]): StatisticsClient[F, A] =
+    new StatisticsClient[F, A] {
 
       val getObj: GetObjectRequest =
-        GetObjectRequest.builder.bucket(config.bucketName).key("statistics.json").build
+        GetObjectRequest.builder.bucket(config.bucketName).key(config.objectName).build
 
       val putObj: PutObjectRequest =
         PutObjectRequest
           .builder
           .bucket(config.bucketName)
-          .key("statistics.json")
+          .key(config.objectName)
           .cacheControl("no-cache")
           .acl("public-read")
           .build
 
-      def fetch: F[List[DailyTotals]] =
+      def fetch: F[List[A]] =
         capture(s3.getObject(getObj, AsyncResponseTransformer.toBytes[GetObjectResponse]))
-          .flatMap(r => F.fromEither(decode[List[DailyTotals]](new String(r.asByteArray()))))
+          .flatMap(r => F.fromEither(decode[List[A]](new String(r.asByteArray()))))
 
-      def put(list: List[DailyTotals]): F[Unit] =
+      def put(list: List[A]): F[Unit] =
         capture(s3.putObject(putObj, new ByteArrayAsyncRequestBody(list.asJson.spaces2.getBytes))).void
     }
 }

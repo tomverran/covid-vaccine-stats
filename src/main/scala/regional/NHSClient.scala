@@ -16,7 +16,7 @@ import cats.syntax.functor._
 import java.time.format.DateTimeFormatter.ofPattern
 
 trait NHSClient[F[_]] {
-  def vaccineTotals(publishedOn: LocalDate): F[Option[RegionalData]]
+  def regionalData(publishedOn: LocalDate): F[Option[RegionalTotals]]
 }
 
 object NHSClient {
@@ -37,21 +37,47 @@ object NHSClient {
    * Extremely safe and resilient code to pull totals out of the NHS doc
    * no doubt the format will never ever change and this will always just be fine
    */
-  private def parseWorkbook[F[_]: Sync](is: InputStream): F[RegionalData] =
+  private def parseWorkbook[F[_]: Sync](date: LocalDate)(is: InputStream): F[RegionalTotals] =
     Sync[F].delay {
 
       val workbook = new XSSFWorkbook(is)
       val sheet = workbook.getSheet("Vaccinations by ICS STP & Age")
 
-      ???
-
+      RegionalTotals(
+        date = date,
+        statistics = (15 to 56).toList.map(sheet.getRow).flatMap { row =>
+          (
+            for {
+              regionName <- Option(row.getCell(3))
+              svgRegion <- Region.forName(regionName.getStringCellValue)
+              firstDoseUnder80 <- Option(row.getCell(4))
+              firstDoseOver80 <- Option(row.getCell(5))
+              firstDosePercentOfOver80 <- Option(row.getCell(6))
+              secondDoseUnder80 <- Option(row.getCell(8))
+              secondDoseOver80 <- Option(row.getCell(9))
+              secondDosePercentOfOver80 <- Option(row.getCell(10))
+            } yield svgRegion -> RegionStatistics(
+              firstDose = DosesByAge(
+                percentOver80 = firstDosePercentOfOver80.getNumericCellValue,
+                under80 = firstDoseUnder80.getNumericCellValue.toLong,
+                over80 = firstDoseOver80.getNumericCellValue.toLong,
+              ),
+              secondDose = DosesByAge(
+                percentOver80 = secondDosePercentOfOver80.getNumericCellValue,
+                under80 = secondDoseUnder80.getNumericCellValue.toLong,
+                over80 = secondDoseOver80.getNumericCellValue.toLong
+              )
+            )
+            ).toList
+        }.toMap
+      )
     }
 
   def apply[F[_]](http: Client[F])(implicit F: ConcurrentEffect[F]): NHSClient[F] =
     date =>
       http.run(Request(uri = fileUrl(date), headers = headers)).use {
         case r if r.status.isSuccess =>
-          r.body.through(toInputStream).evalMap(parseWorkbook[F]).compile.last
+          r.body.through(toInputStream).evalMap(parseWorkbook[F](date)).compile.last
         case _ =>
           F.delay(println(s"Got 404 for ${fileUrl(date)}")).as(None)
       }

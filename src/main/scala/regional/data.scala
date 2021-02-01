@@ -1,21 +1,50 @@
 package io.tvc.vaccines
 package regional
 
+import io.circe.{Codec, KeyDecoder, KeyEncoder}
+import io.circe.Decoder.decodeString
+import io.circe.Encoder.encodeString
+import io.circe.generic.semiauto.deriveCodec
+
 import java.time.LocalDate
 
 case class Region(name: String)
 
-case class RegionStatistics(
-  population: Long,
-  doses: Long
+case class DosesByAge(
+  percentOver80: Double,
+  under80: Long,
+  over80: Long
 )
 
-case class RegionalData(
+object DosesByAge {
+  implicit val codec: Codec[DosesByAge] = deriveCodec
+}
+
+case class RegionStatistics(
+  firstDose: DosesByAge,
+  secondDose: DosesByAge
+)
+
+object RegionStatistics {
+  implicit val codec: Codec[RegionStatistics] = deriveCodec
+}
+
+case class RegionalTotals(
   statistics: Map[Region, RegionStatistics],
   date: LocalDate
 )
 
+object RegionalTotals {
+  implicit val codec: Codec[RegionalTotals] = deriveCodec
+}
+
 object Region {
+
+  implicit val encoder: KeyEncoder[Region] =
+    KeyEncoder.encodeKeyString.contramap(_.name)
+
+  implicit val decoder: KeyDecoder[Region] =
+    KeyDecoder.decodeKeyString.map(Region.apply)
 
   /**
    * Map the names showing up in the NHS Breakdown by ICS/STP of residence
@@ -36,13 +65,13 @@ object Region {
       case "Suffolk and North East Essex" =>
         Some(Region("suffolk_and_north_east_essex"))
       case "East London Health and Care Partnership" =>
-        Some(Region("east_london"))
+        Some(Region("north_east_london"))
       case "North London Partners in Health and Care" =>
         Some(Region("north_central_london"))
       case "North West London Health and Care Partnership" =>
         Some(Region("north_west_london"))
       case "Our Healthier South East London" =>
-        Some(Region("south_wast_london"))
+        Some(Region("south_east_london"))
       case "South West London Health and Care Partnership" =>
         Some(Region("south_west_london"))
       case "Birmingham and Solihull" =>

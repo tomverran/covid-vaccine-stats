@@ -2,24 +2,38 @@ import * as React from "react";
 
 type State = {
   svg: string,
-  data: RegionData
+  data: RegionData[]
+}
+
+type  DosesByAge = {
+  percentOver80: number,
+  under80: number,
+  over80: number
+}
+
+type RegionStatistics = {
+  firstDose: DosesByAge,
+  secondDose: DosesByAge
 }
 
 type RegionData = {
-  [name: string]: number
+  date: string,
+  statistics: { 
+    [name: string]: RegionStatistics }
 }
+
 
 export class Regions extends React.Component<{}, State> {
 
   constructor(props: {}) {
     super(props)
-    this.state = { svg: "nope", data: { foo: 0 } }
+    this.state = { svg: "nope", data: [] }
   }
 
   async componentDidMount() {
-    const resp = await fetch('nhs.svg');
-    const data = await fetch('data.json');
-    this.setState({svg: await resp.text(), data: await data.json() as RegionData}, () => this.debug());
+    const svg = await fetch('nhs.svg');
+    let data = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional.json");
+    this.setState({svg: await svg.text(), data: await data.json() as RegionData[]}, () => this.debug());
   }
 
   shouldComponentUpdate() {
@@ -28,13 +42,13 @@ export class Regions extends React.Component<{}, State> {
 
   debug() {
 
-    const max = Object.values(this.state.data).reduce((a, b) => a + b, 0);
-    console.log(max)
+    if (!this.state.data[0]) return;
+    const max = Object.values(this.state.data[0].statistics).reduce((a, b) => Math.max(a, b.firstDose.percentOver80), 0);
 
-    Object.entries(this.state.data).forEach(([key, value]) => {
-      const opacity = (value / max)
+    Object.entries(this.state.data[0].statistics).forEach(([key, value]) => {
+      const opacity = (value.firstDose.percentOver80 / max)
       const region = document.querySelector(`path[inkscape\\:label="${key}"]`)
-      region?.setAttribute('style', `opacity:${opacity}`);
+      region?.setAttribute('style', region?.getAttribute('style') + `; fill-opacity:${opacity}`);
       region?.classList.add("valid")
     })
   }

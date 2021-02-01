@@ -12,7 +12,8 @@ import org.http4s.client.oauth1.{Consumer, Token}
 import software.amazon.awssdk.regions.Region.EU_WEST_1
 
 case class Config(
-  statistics: StatisticsClient.Config,
+  dailyStatistics: StatisticsClient.Config,
+  regionalStatistics: StatisticsClient.Config,
   scheduler: Scheduler.Config,
   twitter: TwitterConfig
 )
@@ -34,7 +35,8 @@ object Config {
   def load[F[_]: ContextShift: Async](blocker: Blocker): F[Config] =
     params(blocker, EU_WEST_1).flatMap { param =>
       (
-        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config),
+        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "statistics.json")),
+        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "regional.json")),
         env("SCHEDULER_RULE_NAME").map(Scheduler.Config),
         (consumer(param), token(param)).mapN(twitter.Config)
       ).mapN(Config.apply)
