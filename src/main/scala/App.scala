@@ -8,6 +8,7 @@ import vaccines.{DailyTotals, VaccineClient}
 import cats.Monad
 import cats.data.{Kleisli, NonEmptyList, OptionT}
 import cats.effect.{Blocker, Clock, ConcurrentEffect, ContextShift, IO, Resource, Sync}
+import io.tvc.vaccines.regional.{NHSClient, RegionalData}
 import org.http4s.client.blaze.BlazeClientBuilder
 
 import java.time.LocalDate
@@ -19,6 +20,7 @@ object App {
     twitterClient: TwitterClient[F],
     vaccineClient: VaccineClient[F],
     statisticsClient: StatisticsClient[F],
+    nhsClient: NHSClient[F],
     scheduler: Scheduler[F],
     date: LocalDate
   )
@@ -34,8 +36,9 @@ object App {
       http        <- BlazeClientBuilder[F](global).withDefaultSslContext.resource
       today       <- Resource.liftF(Sync[F].delay(LocalDate.now)) // bit OTT maybe
     } yield Dependencies[F](
-      twitterClient = TwitterClient(config.twitter, http),
+      nhsClient = NHSClient(http),
       vaccineClient = VaccineClient(http),
+      twitterClient = TwitterClient(config.twitter, http),
       statisticsClient = StatisticsClient(block, s3, config.statistics),
       scheduler = Scheduler(eventBridge, config.scheduler),
       date = today.minusDays(1)
@@ -57,6 +60,9 @@ object App {
 
   def waitUntilTomorrow[F[_]: Monad]: Operation[F, Unit] =
     Kleisli(d => OptionT.liftF(d.scheduler.stopUntilTomorrow))
+
+  def fetchRegionalData[F[_]: Monad]: Operation[F, RegionalData] = ???
+
 
   def application[F[_]: Monad]: Operation[F, Unit] =
     for {

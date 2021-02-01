@@ -38,13 +38,13 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
+  "org.apache.poi" % "poi-ooxml" % "4.1.2",
 
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
   "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
   "software.amazon.awssdk" % "eventbridge" % awsSdkVersion,
   "software.amazon.awssdk" % "s3" % awsSdkVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-
   "is.cir" %% "ciris" % "1.2.1",
   "com.ovoenergy" %% "ciris-aws-ssm" % "2.0.0"
 )

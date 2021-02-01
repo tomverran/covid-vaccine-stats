@@ -33,3 +33,17 @@ a:link {
     -webkit-transition: opacity 1s;
   }
 }
+
+#region-map {
+
+  cursor: pointer;
+
+  .valid {
+    fill: green !important;
+  }
+
+  path[inkscape\:label]:hover {
+    transition: fill 1s;
+    fill: blue !important;
+  }
+}
