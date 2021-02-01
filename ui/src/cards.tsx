@@ -30,11 +30,11 @@ const DailyDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
         <LightText>{doseName(props.dose)} doses given on {today}</LightText>
       </div>
       <div className="pt-1">
-        <h4 className={`${difference.className} mb-0`}>
+        <h4 className={`${difference.value > 0 ? "text-success" : "text-danger"} mb-0`}>
           {difference.value > 0 ? 'An increase ' : 'A decrease'} of {difference.percent}%
         </h4>
         <p className="mb-0 text-muted">
-          {difference.value.toLocaleString('en-GB')}
+          {Math.abs(difference.value).toLocaleString('en-GB')}
           {difference.value > 0 ? ' more ' : ' fewer '}
            doses than {prevDay}
         </p>

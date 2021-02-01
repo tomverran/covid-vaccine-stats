@@ -13,9 +13,7 @@ export type DailyTotal = {
 }
 
 export type Differences = {
-  className: string,
   percent: number,
-  symbol: string,
   value: number
 }
 
@@ -41,9 +39,7 @@ export function dailyDifference(statistics: DailyTotal[], dose: keyof DoseTotal)
   const difference = today - yesterday;
 
   return {
-    value: Math.abs(difference),
-    symbol: difference > 0 ? '▲' : '▼',
-    className: difference > 0 ? 'text-success' : 'text-danger',
+    value: difference,
     percent: Math.abs(Math.round(difference / yesterday * 100)),
   } 
 }
