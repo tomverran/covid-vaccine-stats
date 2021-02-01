@@ -21,6 +21,8 @@ object DosesByAge {
 }
 
 case class RegionStatistics(
+  name: String,
+  population: Long,
   firstDose: DosesByAge,
   secondDose: DosesByAge
 )
