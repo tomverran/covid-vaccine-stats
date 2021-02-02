@@ -36,7 +36,7 @@ object Tweet {
     }
 
   private def formatDate(date: LocalDate): String =
-    date.format(ofPattern("EEEE dd'_' MMMM YYYY")).replace("_", suffix(date.getDayOfMonth))
+    date.format(ofPattern("EEEE d'_' MMMM YYYY")).replace("_", suffix(date.getDayOfMonth))
 
   /**
    * figure out what the percent change of first doses is for the latest day vs the day before

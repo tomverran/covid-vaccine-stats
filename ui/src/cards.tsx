@@ -23,7 +23,7 @@ const DailyDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
   props => {
     const difference = dailyDifference(props.statistics, props.dose)
     const prevDay = props.statistics[1] ? format(new Date(props.statistics[1].date), 'EEEE') : 'Mon'
-    const today = props.statistics[0] ? format(new Date(props.statistics[0].date), 'EEEE Do MMM') : 'Blah'
+    const today = props.statistics[0] ? format(new Date(props.statistics[0].date), 'EEEE do MMM') : 'Blah'
     return <Card loaded={props.statistics.length > 0}>
       <div className="mb-1 pb-2 border-bottom">
         <h1 className="mb-0"> {props.statistics[0]?.today[props.dose].toLocaleString("en-GB") || "0"}</h1>
