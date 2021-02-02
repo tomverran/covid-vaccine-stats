@@ -9,7 +9,7 @@
 @import "~bootstrap/scss/type";
 @import "~bootstrap/scss/grid";
 @import "~bootstrap/scss/alert";
-@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/tables";
 @import "~bootstrap/scss/containers";
 @import "~bootstrap/scss/utilities/api";
 
@@ -43,12 +43,18 @@ svg {
   margin: auto;
 }
 
+.region:hover {
+  fill: lightyellow;
+}
+
 .region {
   cursor: pointer;
   fill:lightblue;
   fill-opacity:1;
   stroke:#000000;
   stroke-width: 0.264583px;
+  transition: fill 0.25s;
+  -webkit-transition: fill 0.25s;
   stroke-linecap: butt; // pardon
   stroke-linejoin: bevel;
   stroke-opacity: 1
