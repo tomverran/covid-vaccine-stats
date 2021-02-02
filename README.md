@@ -6,8 +6,8 @@ You can see the stats at [https://covid-vaccine-stats.uk/](https://covid-vaccine
 
 ### Lambda
 
-The data powering the app is obtained from https://api.coronavirus.data.gov.uk with a Scala lambda that polls the API and relays the data to S3 & Twitter.
+The data powering the app is obtained from https://api.coronavirus.data.gov.uk (for the daily data) and https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/ (for the weekly England only data) with a Scala lambda that polls the API and relays the data to S3 & Twitter.
 
 ### Frontend
 
-The frontend is just plain JS + HTML, using Bootstrap because I was absolutely prioritising speed here.
+The frontend is a React app, partially rendered at build time with a wonky webpack plugin of my own making.
