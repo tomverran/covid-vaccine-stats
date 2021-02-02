@@ -16,7 +16,7 @@ object Handler extends IOApp {
     App.load[IO].use { deps =>
       (
         App.daily[IO].run(deps).value,
-        App.regional[IO].run(deps).value
+        App.regional[IO].run(deps).value.attempt
       ).parTupled.as(ExitCode.Success)
     }
 }
