@@ -20,7 +20,7 @@ function makeChart(statistics: DailyTotal[], chartType: "total" | "today"): Char
   return new Chart(ctx, {
     type: 'line',
     data: {
-      labels: data.map(d => format(new Date(d.date), 'Do MMM')),
+      labels: data.map(d => format(new Date(d.date), 'do MMM')),
       datasets: [
         { 
           label: 'First Dose', 
