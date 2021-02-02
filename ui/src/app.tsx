@@ -18,6 +18,9 @@ export class App extends React.Component<{}, CardProps> {
 
   render() {
     return <div className="container">
+      <div className="alert mt-2 mb-0 alert-info">
+        <strong>Update:</strong> Weekly regional data for England <a href="#regional">now available.</a>
+      </div>
       <h1 className="mb-1 mt-1 mx-auto px-2 py-2">UK COVID-19 Vaccine Tracker</h1>
       <p className="px-2 mb-3 text-muted">
         Data obtained from the <a href="https://coronavirus.data.gov.uk/">GOV.UK API</a>.
@@ -29,7 +32,7 @@ export class App extends React.Component<{}, CardProps> {
       <DoseChart statistics={this.state.statistics} type="today"/>
       <DoseChart statistics={this.state.statistics} type="total"/>
       <Regions></Regions>
-      <p className="text-center text-muted mt-4 mb-4">
+      <p className="text-center text-muted mt-2 mb-2">
         An open source project by <a href="https://tomverran.uk" rel="nofollow">Tom Verran</a>.<br />
         Source code on <a href="https://github.com/tomverran/covid-vaccine-stats">GitHub</a>.
       </p>

@@ -108,7 +108,7 @@ export class Regions extends React.Component<{}, State> {
   render() {
     return <div className="bg-white border shadow-sm p-4">
       <div className="alert alert-info text-center">Available for England only and updated weekly. Last updated {this.updated()} ago.</div>
-      <h5 className="mb-0 text-center">Percent of adults recieving one dose by Region</h5>
+      <h5 className="mb-0 text-center" id="regional">Percent of adults with one dose by Region</h5>
       <p className="text-muted text-center mb-4">Hover over / tap the regions to see the statistics.</p>
       <Map opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({...this.state, hoverRegion})}></Map>
       {this.table.call(this)}
