@@ -57,7 +57,7 @@ object XSLXParser {
           cell <- row.cellIterator.asScala
           txt <- Try(cell.getStringCellValue).toOption.iterator if txt == name
         } yield context.copy(cell = cell)
-        ).nextOption.toRight(s"Cannot jump to cell containing '$name'")
+      ).nextOption.toRight(s"Cannot jump to cell containing '$name'")
     }
 
   /**
@@ -86,12 +86,12 @@ object XSLXParser {
    * until we either find a cell or reach `max`
    */
   def downOrSkip(max: Int): Op[Unit] =
-    Monad[Op].tailRecM(1) { num =>
+    Monad[Op].tailRecM[Int, OrError[Unit]](1) { num =>
       MonadError[Op, String].attempt(move("down", x = 0, y = num)).map {
         case Left(_) if num < max => Left(num + 1)
         case other => Right(other)
       }
-    }
+    }.flatMapF(identity)
 
   /**
    * Move one unit along X
