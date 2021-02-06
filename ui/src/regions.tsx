@@ -54,12 +54,12 @@ export class Regions extends React.Component<{}, State> {
   async componentDidMount() {
     const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional.json");
     const data: RegionalData[] = await resp.json() as RegionalData[];
-    const percentages = data[0] ? calculatePercentages(data[0]) : []
+    const percentages = data[1] ? calculatePercentages(data[1]) : []
     this.setState({ data, percentages })
   }
 
   opacity(id: string): number {
-    if (!this.state || !this.state.data[0]) return 0;
+    if (!this.state || !this.state.data[1]) return 0;
     const max = this.state.percentages.reduce((a, b) => Math.max(a, b.percent), 0);
     const min = this.state.percentages.reduce((a, b) => Math.min(a, b.percent), 100);
     return ((this.state.percentages.find(e => id == e.id)?.percent || max) - min) / (max - min)
@@ -67,11 +67,11 @@ export class Regions extends React.Component<{}, State> {
 
   updated() {
     if (!this.state.data[0]) return '';
-    return formatDistanceToNow(new Date(this.state.data[0].date))
+    return formatDistanceToNow(new Date(this.state.data[1].date))
   }
 
   table(): React.ReactElement {
-    const region = this.state.hoverRegion ? this.state.data[0]?.statistics[this.state.hoverRegion] : null
+    const region = this.state.hoverRegion ? this.state.data[1]?.statistics[this.state.hoverRegion] : null
     if (region) {
       return <div className="text-center">
         <div className="mt-4 d-inline-block mx-auto">

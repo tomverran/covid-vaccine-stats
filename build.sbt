@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "org.apache.poi" % "poi-ooxml" % "4.1.2",
-
+  "org.scalatest" %% "scalatest" % "3.2.2" % Test,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
   "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
   "software.amazon.awssdk" % "eventbridge" % awsSdkVersion,

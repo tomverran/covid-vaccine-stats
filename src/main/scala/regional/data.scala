@@ -1,34 +1,31 @@
 package io.tvc.vaccines
 package regional
 
-import io.circe.{Codec, KeyDecoder, KeyEncoder}
-import io.circe.Decoder.decodeString
-import io.circe.Encoder.encodeString
 import io.circe.generic.semiauto.deriveCodec
+import io.circe.{Codec, KeyDecoder, KeyEncoder}
 
 import java.time.LocalDate
 
 case class Region(name: String)
 
-case class DosesByAge(
-  percentOver80: Double,
-  under80: Long,
-  over80: Long
-)
 
-object DosesByAge {
-  implicit val codec: Codec[DosesByAge] = deriveCodec
+sealed trait ByAge[A]
+
+object ByAge {
+  implicit def codec[A: Codec]: Codec[ByAge[A]] = deriveCodec
+  case class Over80s[A](under80: A, `80+`: A) extends ByAge[A]
+  case class Over70s[A](under70: A, `70-74`: A, `75-79`: A, `80+`: A) extends ByAge[A]
 }
 
 case class RegionStatistics(
   name: String,
-  population: Long,
-  firstDose: DosesByAge,
-  secondDose: DosesByAge
+  population: ByAge[Long],
+  firstDose: ByAge[Long],
+  secondDose: ByAge[Long]
 )
 
 object RegionStatistics {
-  implicit val codec: Codec[RegionStatistics] = deriveCodec
+  implicit val codec: Codec[RegionStatistics] = ???
 }
 
 case class RegionalTotals(
