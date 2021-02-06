@@ -1,6 +1,8 @@
 package io.tvc.vaccines
 package regional
 
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.deriveConfiguredCodec
 import io.circe.generic.semiauto.deriveCodec
 import io.circe.{Codec, KeyDecoder, KeyEncoder}
 
@@ -12,9 +14,11 @@ case class Region(name: String)
 sealed trait ByAge[A]
 
 object ByAge {
-  implicit def codec[A: Codec]: Codec[ByAge[A]] = deriveCodec
-  case class Over80s[A](under80: A, `80+`: A) extends ByAge[A]
-  case class Over70s[A](under70: A, `70-74`: A, `75-79`: A, `80+`: A) extends ByAge[A]
+  implicit val cfg: Configuration = Configuration.default.withDiscriminator("type")
+  implicit val codec: Codec[ByAge[Long]] = deriveConfiguredCodec
+
+  case class Over80s[A](`16-79`: A, `80+`: A) extends ByAge[A]
+  case class Over70s[A](`16-69`: A, `70-74`: A, `75-79`: A, `80+`: A) extends ByAge[A]
 }
 
 case class RegionStatistics(
@@ -25,7 +29,7 @@ case class RegionStatistics(
 )
 
 object RegionStatistics {
-  implicit val codec: Codec[RegionStatistics] = ???
+  implicit val codec: Codec[RegionStatistics] = deriveCodec
 }
 
 case class RegionalTotals(

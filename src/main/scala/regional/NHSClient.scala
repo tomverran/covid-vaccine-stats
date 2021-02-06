@@ -1,8 +1,10 @@
 package io.tvc.vaccines
 package regional
 
+import regional.RegionParser.regionStatistics
+import regional.XSLXParser.create
+
 import cats.effect.{ConcurrentEffect, Sync}
-import cats.syntax.flatMap._
 import cats.syntax.functor._
 import fs2.io.toInputStream
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -37,35 +39,16 @@ object NHSClient {
     )
 
   /**
-    * Parse populations from the relevant sheet
-    * we include populations + names in every day's data just in case they're changed
-    */
-  private def parsePopulations[F[_]: Sync](
-    workbook: XSSFWorkbook
-  ): F[Map[Region, Long]] =
-    Sync[F].catchNonFatal {
-      (15 to 56).toList
-        .map(workbook.getSheet("Population estimates").getRow)
-        .flatMap { row =>
-          (
-            for {
-              regionName <- Option(row.getCell(9))
-              name <- Region.forName(regionName.getStringCellValue)
-              population <- Option(row.getCell(12))
-            } yield name -> population.getNumericCellValue.toLong
-          ).toList
-        }
-        .toMap
-    }
-
-  /**
     * Extremely safe and resilient code to pull totals out of the NHS doc
     * no doubt the format will never ever change and this will always just be fine
-    */
-  private def parseWorkbook[F[_]: Sync](
-    date: LocalDate
-  )(wb: XSSFWorkbook): F[RegionalTotals] =
-    ???
+   */
+  private def parseWorkbook[F[_]: Sync](date: LocalDate)(wb: XSSFWorkbook): F[RegionalTotals] =
+    Sync[F].fromEither(
+      create(wb)
+        .flatMap(regionStatistics.runA)
+        .map(stats => RegionalTotals(stats, date))
+        .left.map(error => new Exception(s"Failed to parse xlsx: $error"))
+    )
 
   def apply[F[_]](
     http: Client[F]

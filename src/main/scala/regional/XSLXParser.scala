@@ -15,7 +15,7 @@ import scala.util.Try
  * A StateT based parser for XLSX documents with Apache POI
  * provides basic utilities to move around & extract values
  */
-object Parser {
+object XSLXParser {
 
   case class Context(
     workbook: XSSFWorkbook,
@@ -104,11 +104,7 @@ object Parser {
    * Will fail if the value in the cell isn't a string at all
    */
   def contains(expected: String): Op[Boolean] =
-    StateT.inspectF { ctx =>
-      Try(ctx.cell.getStringCellValue).toOption
-        .toRight(s"${ctx.cell.getAddress} does not contain a string")
-        .map(_ == expected)
-    }
+    string.map(_ == expected)
 
   /**
    * Verify that a cell contains an expected value
@@ -146,6 +142,16 @@ object Parser {
    */
   def isEmpty: Op[Boolean] =
     StateT.inspect(ctx => ctx.cell.getCellType == CellType.BLANK)
+
+  /**
+   * Fail the given operation if the cell is empty
+   * this guards against accidentally parsing blank strings etc
+   */
+  def nonEmpty[A](op: Op[A]): Op[A] =
+    Monad[Op].ifM(isEmpty)(
+      ifTrue = StateT.inspectF(d => Left(s"${d.cell.getAddress} is empty")),
+      ifFalse = op
+    )
 
   /**
    * Run the parsing operation for each row (including the one we're on)

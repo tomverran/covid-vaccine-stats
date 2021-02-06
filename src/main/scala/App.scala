@@ -51,8 +51,7 @@ object App {
         vaccineClient = VaccineClient(http),
         twitterClient = TwitterClient(config.twitter, http),
         dailyStatsClient = StatisticsClient(block, s3, config.dailyStatistics),
-        regionalStatsClient =
-          StatisticsClient(block, s3, config.regionalStatistics),
+        regionalStatsClient = StatisticsClient(block, s3, config.regionalStatistics),
         scheduler = Scheduler(eventBridge, config.scheduler),
         date = today.minusDays(1)
       )
@@ -108,7 +107,7 @@ object App {
 
   def regional[F[_]: Monad]: Operation[F, Unit] =
     for {
-//      _       <- skipIfNotRegionalPublishDay
+      _       <- skipIfNotRegionalPublishDay
       old <- fetchPastRegionalStats
       today <- fetchNewRegionalStats
       updated = NonEmptyList(today, old)

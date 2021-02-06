@@ -12,7 +12,7 @@ import io.tvc.vaccines.vaccines.DailyTotals
 import software.amazon.awssdk.core.async.AsyncResponseTransformer
 import software.amazon.awssdk.core.internal.async.ByteArrayAsyncRequestBody
 import software.amazon.awssdk.services.s3.S3AsyncClient
-import software.amazon.awssdk.services.s3.model.{GetObjectRequest, GetObjectResponse, PutObjectRequest}
+import software.amazon.awssdk.services.s3.model.{GetObjectRequest, GetObjectResponse, NoSuchKeyException, PutObjectRequest}
 
 trait StatisticsClient[F[_], A] {
   def put(list: List[A]): F[Unit]
@@ -50,8 +50,15 @@ object StatisticsClient {
           .build
 
       def fetch: F[List[A]] =
-        capture(s3.getObject(getObj, AsyncResponseTransformer.toBytes[GetObjectResponse]))
-          .flatMap(r => F.fromEither(decode[List[A]](new String(r.asByteArray()))))
+        F.recoverWith(
+          capture(s3.getObject(getObj, AsyncResponseTransformer.toBytes[GetObjectResponse]))
+            .flatMap(r => F.fromEither(decode[List[A]](new String(r.asByteArray()))))
+        ) {
+          case e if Option(e.getCause).exists(_.isInstanceOf[NoSuchKeyException]) =>
+            F.pure(List.empty)
+          case o =>
+            F.raiseError(o)
+        }
 
       def put(list: List[A]): F[Unit] =
         capture(s3.putObject(putObj, new ByteArrayAsyncRequestBody(list.asJson.spaces2.getBytes))).void
