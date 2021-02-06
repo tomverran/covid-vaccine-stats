@@ -29,14 +29,10 @@ object NHSClient {
     Headers.of(`User-Agent`(AgentProduct("https://covid-vaccine-stats.uk/")))
 
   private def fileName(date: LocalDate): String =
-    ofPattern(
-      "yyyy/MM/'COVID-19-weekly-announced-vaccinations-'d-MMMM-yyyy'.xlsx'"
-    ).format(date)
+    ofPattern("yyyy/MM/'COVID-19-weekly-announced-vaccinations-'d-MMMM-yyyy'.xlsx'").format(date)
 
   private def fileUrl(date: LocalDate): Uri =
-    unsafeFromString(
-      s"$host/statistics/wp-content/uploads/sites/2/${fileName(date)}"
-    )
+    unsafeFromString(s"$host/statistics/wp-content/uploads/sites/2/${fileName(date)}")
 
   /**
     * Extremely safe and resilient code to pull totals out of the NHS doc
@@ -50,9 +46,7 @@ object NHSClient {
         .left.map(error => new Exception(s"Failed to parse xlsx: $error"))
     )
 
-  def apply[F[_]](
-    http: Client[F]
-  )(implicit F: ConcurrentEffect[F]): NHSClient[F] =
+  def apply[F[_]](http: Client[F])(implicit F: ConcurrentEffect[F]): NHSClient[F] =
     date =>
       http.run(Request(uri = fileUrl(date), headers = headers)).use {
         case r if r.status.isSuccess =>
