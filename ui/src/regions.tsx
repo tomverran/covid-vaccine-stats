@@ -4,42 +4,61 @@ import { Map } from './map'
 
 type State = {
   data: RegionalData[],
-  percentages: RegionPercentage[]
+  percentages: RegionPercentage
   hoverRegion?: string
 }
 
-type  DosesByAge = {
-  percentOver80: number,
-  under80: number,
-  over80: number
+type ByAge = {
+  type: string,
+  "16-69"?: number,
+  "16-79"?: number,
+  "70-74"?: number,
+  "75-79"?: number,
+  "80+": number
 }
 
 type RegionInfo = {
   name: string,
-  population: number,
-  firstDose: DosesByAge,
-  secondDose: DosesByAge
+  population: ByAge,
+  firstDose:  ByAge,
+  secondDose: ByAge
 }
 
 type RegionalData = {
   date: string,
-  statistics: {
-    [name: string]: RegionInfo
-  }
+  statistics: { [name: string]: RegionInfo }
 }
 
 type RegionPercentage = {
-  id: string,
-  name: string,
-  percent: number
+  [id: string]: number
 }
 
-function calculatePercentages(rd: RegionalData): RegionPercentage[] {
-  return Object.entries(rd.statistics).map(([id, region]) => {
-    const vaccinated = region.firstDose.under80 + region.firstDose.over80
-    return { id, name: region.name, percent: vaccinated / region.population * 100 }
-  })
+function total(ba: ByAge): number {
+  return (ba["16-69"] || 0) +
+         (ba["16-79"] || 0) +
+         (ba["70-74"] || 0) +
+         (ba["75-79"] || 0) +
+         (ba["80+"])
 }
+
+function calculatePercentages(rd: RegionalData): RegionPercentage {
+  return Object.entries(rd.statistics).reduce((obj, [id, region]) => {
+    const percent = total(region.firstDose) / total(region.population) * 100
+    return { ...obj, [id]: percent }
+  }, {})
+}
+
+const TableRow: React.FunctionComponent<{ value: string | number | undefined }> =
+  (props) => {
+    if (!props.value) {
+      return <React.Fragment></React.Fragment>
+    } else {
+      return <tr>
+        <th>{props.children}</th>
+        <td className="text-end">{props.value.toLocaleString("en-gb")}</td>
+      </tr>
+    }
+  }
 
 export class Regions extends React.Component<{}, State> {
 
@@ -47,31 +66,31 @@ export class Regions extends React.Component<{}, State> {
     super(props)
     this.state = { 
       data: [],
-      percentages: []
+      percentages: {}
     }
   }
 
   async componentDidMount() {
-    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional.json");
+    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v2.json");
     const data: RegionalData[] = await resp.json() as RegionalData[];
-    const percentages = data[1] ? calculatePercentages(data[1]) : []
+    const percentages = data[0] ? calculatePercentages(data[0]) : {}
     this.setState({ data, percentages })
   }
 
   opacity(id: string): number {
-    if (!this.state || !this.state.data[1]) return 0;
-    const max = this.state.percentages.reduce((a, b) => Math.max(a, b.percent), 0);
-    const min = this.state.percentages.reduce((a, b) => Math.min(a, b.percent), 100);
-    return ((this.state.percentages.find(e => id == e.id)?.percent || max) - min) / (max - min)
+    const max = Object.values(this.state.percentages).reduce((a, b) => Math.max(a, b), 0);
+    const min = Object.values(this.state.percentages).reduce((a, b) => Math.min(a, b), 100);
+    return ((this.state.percentages[id] || max) - min) / (max - min)
   }
 
   updated() {
     if (!this.state.data[0]) return '';
-    return formatDistanceToNow(new Date(this.state.data[1].date))
+    return formatDistanceToNow(new Date(this.state.data[0].date))
   }
 
   table(): React.ReactElement {
-    const region = this.state.hoverRegion ? this.state.data[1]?.statistics[this.state.hoverRegion] : null
+    const region = this.state.hoverRegion ? this.state.data[0]?.statistics[this.state.hoverRegion] : null
+    const percent = this.state.hoverRegion ? this.state.percentages[this.state.hoverRegion] : 0
     if (region) {
       return <div className="text-center">
         <div className="mt-4 d-inline-block mx-auto">
@@ -80,28 +99,19 @@ export class Regions extends React.Component<{}, State> {
               <tr><th colSpan={3}>{region.name}</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <th>Approx. adult population</th>
-                <td className="text-end">{region.population.toLocaleString("en-gb")}</td>
-              </tr>
-              <tr>
-                <th>First doses: Over 80s</th>
-                <td className="text-end">{region.firstDose.over80.toLocaleString("en-gb")}</td>
-              </tr>
-              <tr>
-                <th>First doses: Under 80s</th>
-                <td className="text-end">{region.firstDose.under80.toLocaleString("en-gb")}</td>
-              </tr>
-              <tr>
-                <th>Percent with one dose</th>
-                <td className="text-end">{this.state.percentages.find(p => p.id == this.state.hoverRegion)?.percent?.toFixed(2)}%</td>
-              </tr>
+              <TableRow value={total(region.population)}>Approx. adult population</TableRow>
+              <TableRow value={region.firstDose["16-69"]}>First doses: Under 70s</TableRow>
+              <TableRow value={region.firstDose["16-79"]}>First doses: Under 80s</TableRow>
+              <TableRow value={region.firstDose["70-74"]}>First doses: Aged 70-74</TableRow>
+              <TableRow value={region.firstDose["75-79"]}>First doses: Aged 75-79</TableRow>
+              <TableRow value={region.firstDose["80+"]}>First doses: Aged 80+</TableRow>
+              <TableRow value={percent.toFixed(2) + "%"}>Percent with one dose</TableRow>
             </tbody>
           </table>
         </div>
       </div>
     } else {
-      return <React.Fragment/>
+      return <React.Fragment />
     }
   }
 
