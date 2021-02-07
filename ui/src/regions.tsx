@@ -213,17 +213,17 @@ const RegionTable: React.FunctionComponent<RegionData> =
           <table className="table table-bordered w-100">
             <thead>
               <tr>
-                <th></th>
+                <th>Age</th>
                 <th>First&nbsp;dose</th>
                 <th>Second&nbsp;dose</th>
               </tr>
             </thead>
             <tbody>
               <TableRow region={region} group={"80+"}>Over&nbsp;80s</TableRow>
-              <TableRow region={region} group={"75-79"}>Aged&nbsp;75-79</TableRow>
-              <TableRow region={region} group={"70-74"}>Aged&nbsp;70-74</TableRow>
-              <TableRow region={region} group={"16-79"}>Under&nbsp;80s</TableRow>
-              <TableRow region={region} group={"16-69"}>Under&nbsp;70s</TableRow>
+              <TableRow region={region} group={"75-79"}>&nbsp;75-79</TableRow>
+              <TableRow region={region} group={"70-74"}>&nbsp;70-74</TableRow>
+              <TableRow region={region} group={"16-79"}>Under&nbsp;80</TableRow>
+              <TableRow region={region} group={"16-69"}>Under&nbsp;70</TableRow>
             </tbody>
           </table>
         </div>
