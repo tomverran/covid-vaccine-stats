@@ -3,13 +3,12 @@ import * as React from "react";
 import { Map } from './map'
 
 type State = {
-  data: RegionalData[],
-  percentages: RegionPercentage
-  hoverRegion?: string
+  mapMode: MapMode
+  hoverRegion?: string,
+  mapValues?: WeeklyRegionData
 }
 
 type ByAge = {
-  type: string,
   "16-69"?: number,
   "16-79"?: number,
   "70-74"?: number,
@@ -17,22 +16,65 @@ type ByAge = {
   "80+": number
 }
 
-type RegionInfo = {
+type WithType = {
+  type: string
+}
+
+/**
+ * These two types are the data as it comes from the server
+ * we then transform them into the other types below
+ */
+type RawRegionData = {
   name: string,
-  population: ByAge,
-  firstDose:  ByAge,
-  secondDose: ByAge
+  population: ByAge & WithType,
+  firstDose:  ByAge & WithType,
+  secondDose: ByAge & WithType
 }
 
-type RegionalData = {
+type WeeklyRawRegionData = {
   date: string,
-  statistics: { [name: string]: RegionInfo }
+  statistics: {
+    [name: string]: RawRegionData
+  }
 }
 
-type RegionPercentage = {
-  [id: string]: number
+/**
+ * Transformed data to make it easier
+ * to display all the information on the map
+ */
+type RegionData = {
+  name: string,
+  population: number,
+  totalDoses: number,
+  firstDosesLastWeek: number,
+  secondDosesLastWeek: number,
+  percentFirstDoses: ByAge
+  percentSecondDoses: ByAge
 }
 
+type WeeklyRegionData = {
+  lastUpdated: Date,
+  minTotalDoses: number,
+  maxTotalDoses: number,
+  minDosesLastWeek: number,
+  maxDosesLastWeek: number,
+  regions: { [id: string]: RegionData }
+}
+
+/**
+ * Viewing modes available for the map - 
+ * influence what we use to decide which colour each region is
+ */
+type MapMode =
+  { type: "OverallDoses" } |
+  { type: "DosesLastWeek" } |
+  { type: "OverallPercent" } |
+  { type: "ByAgePercent", age: keyof ByAge }
+
+/**
+ * Total up data that is broken down into age groups
+ * to end up with a single value
+ */
 function total(ba: ByAge): number {
   return (ba["16-69"] || 0) +
          (ba["16-79"] || 0) +
@@ -41,88 +83,275 @@ function total(ba: ByAge): number {
          (ba["80+"])
 }
 
-function calculatePercentages(rd: RegionalData): RegionPercentage {
-  return Object.entries(rd.statistics).reduce((obj, [id, region]) => {
-    const percent = total(region.firstDose) / total(region.population) * 100
-    return { ...obj, [id]: percent }
-  }, {})
+/**
+ * Given two sets of data broken down by age, find the common age groups
+ * then return new grouped data by applying the given function to each 
+ * common age group from both groups in turn
+ */
+function mapByAge(ba1: ByAge, ba2: ByAge, f: (a: number, b: number) => number): ByAge {
+  const seed: ByAge = { "80+": f(ba1["80+"], ba2["80+"]) }
+  const keys = Array.from(new Set([...Object.keys(ba1), ...Object.keys(ba2)])) as (keyof ByAge)[]
+  return keys.reduce((ba, k) => ({ ...ba, [k]: f(ba1[k] || 0, ba2[k] || 0) }), seed)
 }
 
-const TableRow: React.FunctionComponent<{ value: string | number | undefined }> =
+/**
+ * Show a row in the statistics table containing the region data
+ */
+const TableRow: React.FunctionComponent<{ group: keyof ByAge, region: RegionData }> =
   (props) => {
-    if (!props.value) {
+    if (!props.region.percentFirstDoses[props.group]) {
       return <React.Fragment></React.Fragment>
     } else {
       return <tr>
         <th>{props.children}</th>
-        <td className="text-end">{props.value.toLocaleString("en-gb")}</td>
+        <td className="text-end">{(props.region.percentFirstDoses[props.group] || 0).toFixed(2)}%</td>
+        <td className="text-end">{(props.region.percentSecondDoses[props.group] || 0).toFixed(2)}%</td>
       </tr>
     }
   }
+
+/**
+ * A dropdown box component that emits MapModes when set
+ * This is pretty abominable I don't know if there's an easier way to do this
+ */
+const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMode) => void }> =
+  ({ mode, set: setValue }) => {
+
+    const set: (s: string) => MapMode =
+      s => {
+        switch (s) {
+          case "DosesLastWeek": return { type: "DosesLastWeek" }
+          case "OverallPercent": return { type: "OverallPercent" }
+          case "ByAge1669": return { type: "ByAgePercent", age: "16-69" }
+          case "ByAge7074": return { type: "ByAgePercent", age: "70-74" }
+          case "ByAge7579": return { type: "ByAgePercent", age: "75-79" }
+          case "ByAge80plus": return { type: "ByAgePercent", age: "80+" }
+          default: return { type: "OverallDoses" }
+        }
+      }
+
+    return <div className="text-center mt-2 mt-md-0">
+      <div className="form-group text-start p-2 border d-inline-block">
+        <label htmlFor="map-mode" className="text-muted small">Colour map according to</label>
+        <select id="map-mode" onChange={e => setValue(set(e.target.value))} className="form-control form-control-sm">
+          <option selected={mode.type == "OverallDoses"} value="OverallDoses">
+            Doses given: All time
+            </option>
+          <option selected={mode.type == "DosesLastWeek"} value="DosesLastWeek">
+            Doses given last week
+            </option>
+          <option selected={mode.type == "OverallPercent"} value="OverallPercent">
+            Percent first doses: All adults
+            </option>
+          <option selected={mode.type == "ByAgePercent" && mode.age == "16-69"} value="ByAge1669">
+            Percent first doses: under 70s
+            </option>
+          <option selected={mode.type == "ByAgePercent" && mode.age == "70-74"} value="ByAge7074">
+            Percent first doses: 70-74
+            </option>
+          <option selected={mode.type == "ByAgePercent" && mode.age == "75-79"} value="ByAge7579">
+            Percent first doses 75-79
+            </option>
+          <option selected={mode.type == "ByAgePercent" && mode.age == "80+"} value="ByAge80plus">
+            Percent first doses 80+
+            </option>
+        </select>
+      </div>
+    </div>
+  }
+
+/**
+ * React component to display information for a region
+ * in a series of tables, optionally in columns
+ */
+const RegionTable: React.FunctionComponent<RegionData> =
+  (region) => <div className="text-center">
+    <div className="d-inline-block">
+      <p className="text-bold mt-4 mb-2 border-bottom">{region.name}</p>
+      <div className="mt-2 text-start row">
+        <div className="col-md">
+          <table className="table table-bordered w-100 mb-2">
+            <tbody>
+              <tr>
+                <th colSpan={2}>Population</th>
+                <td className="text-end">{region.population.toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
+                <th colSpan={2}>1st doses last week</th>
+                <td className="text-end">{region.firstDosesLastWeek.toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
+                <th colSpan={2}>2nd doses last week</th>
+                <td className="text-end">{region.secondDosesLastWeek.toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
+                <th colSpan={2}>Total doses given</th>
+                <td className="text-end">{region.totalDoses.toLocaleString("en-gb")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="col-md">
+          <table className="table table-bordered w-100">
+            <thead>
+              <tr>
+                <th></th>
+                <th>1st&nbsp;dose</th>
+                <th>2nd&nbsp;dose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <TableRow region={region} group={"80+"}>Over&nbsp;80s</TableRow>
+              <TableRow region={region} group={"75-79"}>Aged&nbsp;75-79</TableRow>
+              <TableRow region={region} group={"70-74"}>Aged&nbsp;70-74</TableRow>
+              <TableRow region={region} group={"16-79"}>Under&nbsp;80s</TableRow>
+              <TableRow region={region} group={"16-69"}>Under&nbsp;70s</TableRow>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+/**
+ * Given raw regional data for this week and optionally for last week too
+ * produce a nicely transformed RegionData that summarises all the info we need
+ */
+function transformRegion(region: RawRegionData, lastWeek?: RawRegionData): RegionData {
+
+  const firstDoses = total(region.firstDose)
+  const secondDoses = total(region.secondDose)
+  const secondDoseLastWeek = lastWeek ? total(lastWeek.secondDose) : 0
+  const firstDoseLastWeek = lastWeek ? total(lastWeek.firstDose) : 0
+
+  return {
+    name: region.name,
+    totalDoses: firstDoses + secondDoses,
+    population: total(region.population),
+    firstDosesLastWeek: firstDoses - firstDoseLastWeek,
+    secondDosesLastWeek: secondDoses - secondDoseLastWeek,
+    percentFirstDoses: mapByAge(region.firstDose, region.population, (a, b) => (a / b) * 100),
+    percentSecondDoses: mapByAge(region.secondDose, region.population, (a, b) => (a / b) * 100)
+  }
+}
+
+/**
+ * Find the maximum value we could plot onto the map for the given map mode
+ * for percentages we display everything relative to 100%, for other totals
+ * we display relative to the maximum of that total
+ */
+function maxValue(td: WeeklyRegionData, mm: MapMode): number {
+  switch (mm.type) {
+    case "OverallDoses": return td.maxTotalDoses
+    case "DosesLastWeek": return td.maxDosesLastWeek
+    default: return 100;
+  }
+}
+
+/**
+ * Find the maximum value we could plot onto the map for the given map mode
+ * Same as the above function
+ */
+function minValue(td: WeeklyRegionData, mm: MapMode): number {
+  switch (mm.type) {
+    case "OverallDoses": return td.minTotalDoses
+    case "DosesLastWeek": return td.minDosesLastWeek
+    default: return 0;
+  }
+}
+
+/**
+ * Given a mapmode and the weekly region data extract the value
+ * we want to plot onto the map
+ */
+function currValue(td: RegionData, mm: MapMode): number {
+  switch(mm.type) {
+    case "OverallDoses": return td.totalDoses
+    case "ByAgePercent": return td.percentFirstDoses[mm.age] || 0
+    case "OverallPercent": return (td.totalDoses / td.population) * 100
+    case "DosesLastWeek": return td.firstDosesLastWeek + td.secondDosesLastWeek
+  }
+}
+
+/**
+ * Given a list of weekly regional data, transform it into the data we need for the map,
+ * we aggregate totals as we go along to avoid repeatedly iterating the data
+ */
+function transformWeeklyRegionData(region: WeeklyRawRegionData[]): WeeklyRegionData | undefined {
+
+  if (!region[0]) return undefined
+  const thisWeek: WeeklyRawRegionData = region[0]
+  const lastWeek: WeeklyRawRegionData | undefined = region[1]
+
+  return Object
+    .entries(thisWeek.statistics)
+    .reduce((prev, [id, region]) => {
+      const thisRegion = transformRegion(region, lastWeek?.statistics[id])
+      return {
+        ...prev,
+        maxTotalDoses: Math.max(prev.maxTotalDoses, thisRegion.totalDoses),
+        minTotalDoses: Math.min(prev.minTotalDoses, thisRegion.totalDoses),
+        maxDosesLastWeek: Math.max(prev.maxDosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
+        minDosesLastWeek: Math.min(prev.minDosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
+        regions: { ...prev.regions, [id]: thisRegion }
+      }
+    }, {
+      maxTotalDoses: 0,
+      maxDosesLastWeek: 0,
+      minTotalDoses: Number.MAX_SAFE_INTEGER,
+      minDosesLastWeek: Number.MAX_SAFE_INTEGER,
+      lastUpdated: new Date(thisWeek.date),
+      regions: {}
+    })
+}
+
 
 export class Regions extends React.Component<{}, State> {
 
   constructor(props: {}) {
     super(props)
-    this.state = { 
-      data: [],
-      percentages: {}
-    }
+    this.state = { mapMode: { type: "DosesLastWeek" } }
   }
 
   async componentDidMount() {
     const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v2.json");
-    const data: RegionalData[] = await resp.json() as RegionalData[];
-    const percentages = data[0] ? calculatePercentages(data[0]) : {}
-    this.setState({ data, percentages })
+    const regionalData: WeeklyRawRegionData[] = await resp.json() as WeeklyRawRegionData[];
+    this.setState({ ...this.state, mapValues: transformWeeklyRegionData(regionalData) })
+  }
+
+  setMapMode(mode: MapMode) {
+    this.setState({ ...this.state, mapMode: mode })
   }
 
   opacity(id: string): number {
-    const max = Object.values(this.state.percentages).reduce((a, b) => Math.max(a, b), 0);
-    const min = Object.values(this.state.percentages).reduce((a, b) => Math.min(a, b), 100);
-    return ((this.state.percentages[id] || max) - min) / (max - min)
+    if (!this.state.mapValues) return 0;
+    const region = this.state.mapValues.regions[id] || 0
+    const min = minValue(this.state.mapValues, this.state.mapMode)
+    const max = maxValue(this.state.mapValues, this.state.mapMode)
+    return (currValue(region, this.state.mapMode) - min) / (max - min)
   }
 
   updated() {
-    if (!this.state.data[0]) return '';
-    return formatDistanceToNow(new Date(this.state.data[0].date))
+    if (!this.state.mapValues) return '';
+    return formatDistanceToNow(new Date(this.state.mapValues.lastUpdated))
   }
 
   table(): React.ReactElement {
-    const region = this.state.hoverRegion ? this.state.data[0]?.statistics[this.state.hoverRegion] : null
-    const percent = this.state.hoverRegion ? this.state.percentages[this.state.hoverRegion] : 0
-    if (region) {
-      return <div className="text-center">
-        <div className="mt-4 d-inline-block mx-auto">
-          <table className="table table-bordered w-100">
-            <thead>
-              <tr><th colSpan={3}>{region.name}</th></tr>
-            </thead>
-            <tbody>
-              <TableRow value={total(region.population)}>Approx. adult population</TableRow>
-              <TableRow value={region.firstDose["16-69"]}>First doses: Under 70s</TableRow>
-              <TableRow value={region.firstDose["16-79"]}>First doses: Under 80s</TableRow>
-              <TableRow value={region.firstDose["70-74"]}>First doses: Aged 70-74</TableRow>
-              <TableRow value={region.firstDose["75-79"]}>First doses: Aged 75-79</TableRow>
-              <TableRow value={region.firstDose["80+"]}>First doses: Aged 80+</TableRow>
-              <TableRow value={percent.toFixed(2) + "%"}>Percent with one dose</TableRow>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    } else {
-      return <React.Fragment />
-    }
+    const region = this.state.hoverRegion ? this.state.mapValues?.regions[this.state.hoverRegion] : null
+    return region ? <RegionTable {...region} /> : <React.Fragment />
   }
 
   render() {
     return <div className="bg-white border shadow-sm p-4">
-      <div className="alert alert-info text-center">Available for England only and updated weekly. Last updated {this.updated()} ago.</div>
-      <h5 className="mb-0 text-center" id="regional">Percent of adults with one dose by Region</h5>
-      <p className="text-muted text-center mb-4">Hover over / tap the regions to see the statistics.</p>
+      <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
+      <p className="text-muted text-center mt-2 mb-4">
+        Last updated {this.updated()} ago.<br />
+        Hover over / tap the map to see more.
+      </p>
       <Map opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({...this.state, hoverRegion})}></Map>
+      <MapModeSelect mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
       {this.table.call(this)}
-
       <p className="text-muted mt-4 mb-0 small">
         <strong>About the data: </strong> 
         The NHS in England is divided into either <em><a href="https://www.england.nhs.uk/integratedcare/integrated-care-systems/">Integrated Care Systems</a></em> or 
