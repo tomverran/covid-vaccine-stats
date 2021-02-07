@@ -20,6 +20,18 @@ type WithType = {
   type: string
 }
 
+type MinMax = {
+  min: number,
+  max: number
+}
+
+const emptyMinMax: MinMax =
+  { min: Number.MAX_SAFE_INTEGER, max: 0 }
+
+function add(mm: MinMax, num: number): MinMax {
+  return { min: Math.min(mm.min, num), max: Math.max(mm.max, num) }
+}
+
 /**
  * These two types are the data as it comes from the server
  * we then transform them into the other types below
@@ -44,20 +56,21 @@ type WeeklyRawRegionData = {
  */
 type RegionData = {
   name: string,
-  population: number,
-  totalDoses: number,
+  population: ByAge,
+  firstDoses: ByAge,
+  secondDoses: ByAge,
+  percentFirstDoses: ByAge,
+  percentSecondDoses: ByAge,
   firstDosesLastWeek: number,
-  secondDosesLastWeek: number,
-  percentFirstDoses: ByAge
-  percentSecondDoses: ByAge
+  secondDosesLastWeek: number
 }
 
 type WeeklyRegionData = {
   lastUpdated: Date,
-  minTotalDoses: number,
-  maxTotalDoses: number,
-  minDosesLastWeek: number,
-  maxDosesLastWeek: number,
+  firstDoses: MinMax,
+  secondDoses: MinMax,
+  overallDoses: MinMax
+  dosesLastWeek: MinMax
   regions: { [id: string]: RegionData }
 }
 
@@ -66,7 +79,7 @@ type WeeklyRegionData = {
  * influence what we use to decide which colour each region is
  */
 type MapMode =
-  { type: "OverallDoses" } |
+  { type: "DosesAllTime" } |
   { type: "DosesLastWeek" } |
   { type: "OverallPercent" } |
   { type: "ByAgePercent", age: keyof ByAge }
@@ -120,13 +133,14 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
     const set: (s: string) => MapMode =
       s => {
         switch (s) {
+          case "DosesAllTime": return { type: "DosesAllTime" }
           case "DosesLastWeek": return { type: "DosesLastWeek" }
           case "OverallPercent": return { type: "OverallPercent" }
           case "ByAge1669": return { type: "ByAgePercent", age: "16-69" }
           case "ByAge7074": return { type: "ByAgePercent", age: "70-74" }
           case "ByAge7579": return { type: "ByAgePercent", age: "75-79" }
           case "ByAge80plus": return { type: "ByAgePercent", age: "80+" }
-          default: return { type: "OverallDoses" }
+          default: return { type: "DosesAllTime" }
         }
       }
 
@@ -134,7 +148,7 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
       <div className="form-group text-start p-2 border d-inline-block">
         <label htmlFor="map-mode" className="text-muted small">Colour map according to</label>
         <select id="map-mode" onChange={e => setValue(set(e.target.value))} className="form-control form-control-sm">
-          <option selected={mode.type == "OverallDoses"} value="OverallDoses">
+          <option selected={mode.type == "DosesAllTime"} value="DosesAllTime">
             Doses given: All time
             </option>
           <option selected={mode.type == "DosesLastWeek"} value="DosesLastWeek">
@@ -154,7 +168,7 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
             </option>
           <option selected={mode.type == "ByAgePercent" && mode.age == "80+"} value="ByAge80plus">
             Percent first doses 80+
-            </option>
+          </option>
         </select>
       </div>
     </div>
@@ -168,36 +182,40 @@ const RegionTable: React.FunctionComponent<RegionData> =
   (region) => <div className="text-center">
     <div className="d-inline-block">
       <p className="text-bold mt-4 mb-2 border-bottom">{region.name}</p>
-      <div className="mt-2 text-start row">
-        <div className="col-md">
+      <div className="mt-2 text-start row g-0">
+        <div className="col-md me-md-1">
           <table className="table table-bordered w-100 mb-2">
             <tbody>
               <tr>
-                <th colSpan={2}>Population</th>
-                <td className="text-end">{region.population.toLocaleString("en-gb")}</td>
+                <th>Population</th>
+                <td className="text-end">{total(region.population).toLocaleString("en-gb")}</td>
               </tr>
               <tr>
-                <th colSpan={2}>1st doses last week</th>
+                <th>First doses last week</th>
                 <td className="text-end">{region.firstDosesLastWeek.toLocaleString("en-gb")}</td>
               </tr>
               <tr>
-                <th colSpan={2}>2nd doses last week</th>
+                <th>Second doses last week</th>
                 <td className="text-end">{region.secondDosesLastWeek.toLocaleString("en-gb")}</td>
               </tr>
               <tr>
-                <th colSpan={2}>Total doses given</th>
-                <td className="text-end">{region.totalDoses.toLocaleString("en-gb")}</td>
+                <th>Total first doses</th>
+                <td className="text-end">{total(region.firstDoses).toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
+                <th>Total second doses</th>
+                <td className="text-end">{total(region.secondDoses).toLocaleString("en-gb")}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div className="col-md">
+        <div className="col-md ms-md-1">
           <table className="table table-bordered w-100">
             <thead>
               <tr>
                 <th></th>
-                <th>1st&nbsp;dose</th>
-                <th>2nd&nbsp;dose</th>
+                <th>First&nbsp;dose</th>
+                <th>Second&nbsp;dose</th>
               </tr>
             </thead>
             <tbody>
@@ -227,8 +245,9 @@ function transformRegion(region: RawRegionData, lastWeek?: RawRegionData): Regio
 
   return {
     name: region.name,
-    totalDoses: firstDoses + secondDoses,
-    population: total(region.population),
+    firstDoses: region.firstDose,
+    secondDoses: region.secondDose,
+    population: region.population, 
     firstDosesLastWeek: firstDoses - firstDoseLastWeek,
     secondDosesLastWeek: secondDoses - secondDoseLastWeek,
     percentFirstDoses: mapByAge(region.firstDose, region.population, (a, b) => (a / b) * 100),
@@ -243,8 +262,8 @@ function transformRegion(region: RawRegionData, lastWeek?: RawRegionData): Regio
  */
 function maxValue(td: WeeklyRegionData, mm: MapMode): number {
   switch (mm.type) {
-    case "OverallDoses": return td.maxTotalDoses
-    case "DosesLastWeek": return td.maxDosesLastWeek
+    case "DosesAllTime": return td.overallDoses.max
+    case "DosesLastWeek": return td.dosesLastWeek.max
     default: return 100;
   }
 }
@@ -255,8 +274,8 @@ function maxValue(td: WeeklyRegionData, mm: MapMode): number {
  */
 function minValue(td: WeeklyRegionData, mm: MapMode): number {
   switch (mm.type) {
-    case "OverallDoses": return td.minTotalDoses
-    case "DosesLastWeek": return td.minDosesLastWeek
+    case "DosesAllTime": return td.overallDoses.min
+    case "DosesLastWeek": return td.dosesLastWeek.min
     default: return 0;
   }
 }
@@ -267,10 +286,10 @@ function minValue(td: WeeklyRegionData, mm: MapMode): number {
  */
 function currValue(td: RegionData, mm: MapMode): number {
   switch(mm.type) {
-    case "OverallDoses": return td.totalDoses
     case "ByAgePercent": return td.percentFirstDoses[mm.age] || 0
-    case "OverallPercent": return (td.totalDoses / td.population) * 100
+    case "DosesAllTime": return total(td.firstDoses) + total(td.secondDoses)
     case "DosesLastWeek": return td.firstDosesLastWeek + td.secondDosesLastWeek
+    case "OverallPercent": return (total(td.firstDoses) / total(td.population)) * 100
   }
 }
 
@@ -290,17 +309,17 @@ function transformWeeklyRegionData(region: WeeklyRawRegionData[]): WeeklyRegionD
       const thisRegion = transformRegion(region, lastWeek?.statistics[id])
       return {
         ...prev,
-        maxTotalDoses: Math.max(prev.maxTotalDoses, thisRegion.totalDoses),
-        minTotalDoses: Math.min(prev.minTotalDoses, thisRegion.totalDoses),
-        maxDosesLastWeek: Math.max(prev.maxDosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
-        minDosesLastWeek: Math.min(prev.minDosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
+        firstDoses: add(prev.firstDoses, total(thisRegion.firstDoses)),
+        secondDoses: add(prev.secondDoses, total(thisRegion.secondDoses)),
+        overallDoses: add(prev.overallDoses, total(thisRegion.firstDoses) + total(thisRegion.secondDoses)),
+        dosesLastWeek: add(prev.dosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
         regions: { ...prev.regions, [id]: thisRegion }
       }
     }, {
-      maxTotalDoses: 0,
-      maxDosesLastWeek: 0,
-      minTotalDoses: Number.MAX_SAFE_INTEGER,
-      minDosesLastWeek: Number.MAX_SAFE_INTEGER,
+      firstDoses: emptyMinMax,
+      secondDoses: emptyMinMax,
+      overallDoses: emptyMinMax,
+      dosesLastWeek: emptyMinMax,
       lastUpdated: new Date(thisWeek.date),
       regions: {}
     })
