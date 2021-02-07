@@ -334,7 +334,7 @@ export class Regions extends React.Component<{}, State> {
   }
 
   async componentDidMount() {
-    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v2.json");
+    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v3.json");
     const regionalData: WeeklyRawRegionData[] = await resp.json() as WeeklyRawRegionData[];
     this.setState({ ...this.state, mapValues: transformWeeklyRegionData(regionalData) })
   }
@@ -365,8 +365,8 @@ export class Regions extends React.Component<{}, State> {
     return <div className="bg-white border shadow-sm p-4">
       <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
       <p className="text-muted text-center mt-2 mb-4">
-        Last updated {this.updated()} ago.<br />
-        Hover over / tap the map to see more.
+        Hover over / tap the map to see more.<br/>
+        Last updated {this.updated()} ago.
       </p>
       <Map opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({...this.state, hoverRegion})}></Map>
       <MapModeSelect mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
