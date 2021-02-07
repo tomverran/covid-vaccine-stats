@@ -81,7 +81,7 @@ object RegionParser {
    */
   private val jumpToFirstRegion: Op[Unit] =
     jumpTo("ICS/STP of Residence") >>
-    until(string.map(_.startsWith("Bed")))(downOrSkip(max = 2))
+    until(string.map(s => s.headOption.exists(_.isLetter) && !s.startsWith("ICS")))(downOrSkip(max = 2))
 
   /**
    * Parse populations from the XLSX document

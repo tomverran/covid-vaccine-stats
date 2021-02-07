@@ -15,12 +15,12 @@ class RegionParserTest extends AnyWordSpec with Matchers {
 
     "parse January format docs" in {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/28-January-2021.xlsx"))
-      create(book).flatMap(regionStatistics.runA) should matchPattern { case Right(_) => }
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
     }
 
     "parse February format docs" in {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/4-February-2021.xlsx"))
-      create(book).flatMap(regionStatistics.runA) should matchPattern { case Right(_) => }
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
     }
   }
 }
