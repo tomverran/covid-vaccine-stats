@@ -37,6 +37,8 @@ object XSLXParser {
       col   <- Option(row.getCell(row.getFirstCellNum)).toRight("Cannot move to first cell")
     } yield Context(wb, sheet, col)
 
+  def fail[A](why: String): Op[A] =
+    StateT.liftF(Left(why))
 
   def sheet(name: String): Op[Unit] =
     StateT.modifyF { context =>
@@ -49,7 +51,7 @@ object XSLXParser {
    * Jump to the first cell containing a particular string value
    * useful for moving to table headers
    */
-  def jumpTo(name: String): Op[Unit] =
+  def jumpTo(name: String, skip: Int = 0): Op[Unit] =
     StateT.modifyF { context =>
       (
         for {
@@ -57,7 +59,7 @@ object XSLXParser {
           cell <- row.cellIterator.asScala
           txt <- Try(cell.getStringCellValue).toOption.iterator if txt == name
         } yield context.copy(cell = cell)
-      ).nextOption.toRight(s"Cannot jump to cell containing '$name'")
+      ).drop(skip).nextOption().toRight(s"Cannot jump to cell containing '$name'")
     }
 
   /**
@@ -79,6 +81,16 @@ object XSLXParser {
    */
   def down: Op[Unit] =
     move("down", x = 0, y = 1)
+
+  /**
+   * Repeat an operation a certain number of times
+   * and accumulate the results
+   */
+  def times[A](count: Int)(op: Op[A]): Op[Vector[A]] =
+    Monad[Op].tailRecM(0 -> Vector.empty[A]) {
+      case (n, l) if n < count => op.map(r => Left(n + 1 -> (l :+ r)))
+      case (n, l) => StateT.pure(Right(l))
+    }
 
   /**
    * Move one unit along Y,
@@ -131,10 +143,17 @@ object XSLXParser {
    */
   def long: Op[Long] =
     StateT.inspectF { c =>
-      Option(c.cell.getNumericCellValue)
-        .flatMap(d => Try(d.toLong).toOption)
+      Try(Option(c.cell.getNumericCellValue)).toOption
+        .flatten.flatMap(d => Try(d.toLong).toOption)
         .toRight(s"${c.cell.getAddress} does not contain a long")
     }
+
+  /**
+   * Return whether the given op succeeds
+   * useful for turning a string/long op into a predicate
+   */
+  def succeeds[A](op: Op[A]): Op[Boolean] =
+    MonadError[Op, String].recover(op.as(true)) { case _ => false }
 
   /**
    * Find out if the cell is blank,
@@ -152,6 +171,12 @@ object XSLXParser {
       ifTrue = StateT.inspectF(d => Left(s"${d.cell.getAddress} is empty")),
       ifFalse = op
     )
+
+  /**
+   * Print the cell address for debugging
+   */
+  val whereAmI: Op[Unit] =
+    StateT.inspect(s => println(s.cell.getAddress))
 
   /**
    * Run the parsing operation for each row (including the one we're on)
@@ -174,10 +199,10 @@ object XSLXParser {
    * useful for moving along cells until we find a particular value
    */
   def until(op: Op[Boolean])(run: Op[Unit]): Op[Unit] =
-    Monad[Op].tailRecM(())(_ =>
+    Monad[Op].tailRecM(0)(count =>
       Monad[Op].ifM(op)(
         ifTrue = Monad[Op].pure(Right(())),
-        ifFalse = run.map(Left(_))
+        ifFalse = if (count < 100) run.as(Left(count + 1)) else fail("Until tried >100 times")
       )
     )
 

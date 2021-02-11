@@ -4,9 +4,12 @@ package regional
 import regional.ByAge.{Over70s, Over80s}
 import regional.XSLXParser._
 
+import cats.Monad
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import cats.syntax.traverse._
+import cats.instances.list._
 
 object RegionParser {
 
@@ -60,37 +63,50 @@ object RegionParser {
       )
 
   /**
-   * Same as above but for population headers
-   * which have slightly different names of course
+   * Parse populations from the XLSX document
+   * This is then joined onto region information below
    */
-  private val verifyPopulationHeaders: Op[Unit] =
-    sheet("Population estimates") >>
-      jumpTo("ICS/STP of Residence") >> right >> down >>
-      orElse(
-        a = consumeL(expect("16-69 estimated population")) >>
-          consumeL(expect("70-74 estimated population")) >>
-          consumeL(expect("75-79 estimated population")) >>
-          consumeL(expect("80+ estimated population")),
-        b = consumeL(expect("16-79 estimated population")) >>
-          consumeL(expect("80+ estimated population"))
-      )
+  val populations: Op[Map[Region, ByAge[Long]]] =
+    orElse(
+      sheet("Population estimates"),
+      sheet("Vaccinations by ICS STP & Age")
+    ) >>
+    (
+      jumpTo("ICS/STP of Residence") >>
+      until(succeeds(region))(downOrSkip(max = 1)) >>
+      eachRow(region)
+    ).flatMap { regions =>
+      List(
+        "16-69 estimated population",
+        "16-79 estimated population",
+        "70-74 estimated population",
+        "75-79 estimated population",
+        "80+ estimated population"
+      ).traverse { col =>
+        orElse(
+          orElse(jumpTo(col, skip = 1), jumpTo(col)) >>
+          times(3)(downOrSkip(max = 1)) >>
+          eachRow(long.map(Option(_))),
+          Monad[Op].pure(regions.as[Option[Long]](None))
+        )
+      }.flatMap { l =>
+        l.transpose.zip(regions).traverse[Op, (Region, ByAge[Long])] {
+          case (Some(a) :: None :: Some(b) :: Some(c) :: Some(d) :: Nil, region) =>
+            Monad[Op].pure(region -> ByAge.Over70s(a, b, c, d))
+          case (None :: Some(a) :: None :: None :: Some(d) :: Nil, region) =>
+            Monad[Op].pure(region -> ByAge.Over80s(a, d))
+          case (others, region) =>
+            fail(s"Dodgy population data in $region: $others")
+        }
+      }.map(_.toMap)
+    }
 
   /**
    * Go to the ICS/STP of Residence column then scan down
    * until we get to the first region directly below the heading
    */
   private val jumpToFirstRegion: Op[Unit] =
-    jumpTo("ICS/STP of Residence") >>
-    until(string.map(s => s.headOption.exists(_.isLetter) && !s.startsWith("ICS")))(downOrSkip(max = 2))
-
-  /**
-   * Parse populations from the XLSX document
-   * This is then joined onto region information below
-   */
-  private val populations: Op[Map[Region, ByAge[Long]]] =
-    verifyPopulationHeaders >>
-    jumpToFirstRegion >>
-    eachRow((consumeL(region), byAge(long)).tupled).map(_.toMap)
+    jumpTo("ICS/STP of Residence") >> until(succeeds(region))(downOrSkip(max = 2))
 
   /**
    * Put everything together to parse region statistics from the given XLSX document
