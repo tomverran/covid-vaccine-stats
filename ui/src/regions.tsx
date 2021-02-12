@@ -39,7 +39,7 @@ function add(mm: MinMax, num: number): MinMax {
 type RawRegionData = {
   name: string,
   population: ByAge & WithType,
-  firstDose:  ByAge & WithType,
+  firstDose: ByAge & WithType,
   secondDose: ByAge & WithType
 }
 
@@ -62,15 +62,17 @@ type RegionData = {
   percentFirstDoses: ByAge,
   percentSecondDoses: ByAge,
   firstDosesLastWeek: number,
-  secondDosesLastWeek: number
+  secondDosesLastWeek: number,
+  changeInDoses: number
 }
 
 type WeeklyRegionData = {
   lastUpdated: Date,
   firstDoses: MinMax,
   secondDoses: MinMax,
-  overallDoses: MinMax
-  dosesLastWeek: MinMax
+  overallDoses: MinMax,
+  dosesLastWeek: MinMax,
+  changeInDoses: MinMax
   regions: { [id: string]: RegionData }
 }
 
@@ -82,6 +84,7 @@ type MapMode =
   { type: "DosesAllTime" } |
   { type: "DosesLastWeek" } |
   { type: "OverallPercent" } |
+  { type: "ChangeInDoses" } |
   { type: "ByAgePercent", age: keyof ByAge }
 
 /**
@@ -90,10 +93,10 @@ type MapMode =
  */
 function total(ba: ByAge): number {
   return (ba["16-69"] || 0) +
-         (ba["16-79"] || 0) +
-         (ba["70-74"] || 0) +
-         (ba["75-79"] || 0) +
-         (ba["80+"])
+    (ba["16-79"] || 0) +
+    (ba["70-74"] || 0) +
+    (ba["75-79"] || 0) +
+    (ba["80+"])
 }
 
 /**
@@ -134,6 +137,7 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
       s => {
         switch (s) {
           case "DosesAllTime": return { type: "DosesAllTime" }
+          case "ChangeInDoses": return { type: "ChangeInDoses" }
           case "DosesLastWeek": return { type: "DosesLastWeek" }
           case "OverallPercent": return { type: "OverallPercent" }
           case "ByAge1669": return { type: "ByAgePercent", age: "16-69" }
@@ -148,27 +152,34 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
       <div className="form-group text-start p-2 border d-inline-block">
         <label htmlFor="map-mode" className="text-muted small">Colour map according to</label>
         <select id="map-mode" onChange={e => setValue(set(e.target.value))} className="form-control form-control-sm">
-          <option selected={mode.type == "DosesAllTime"} value="DosesAllTime">
-            Doses given: All time
+          <optgroup label="Last week">
+            <option selected={mode.type == "DosesLastWeek"} value="DosesLastWeek">
+              Doses given
             </option>
-          <option selected={mode.type == "DosesLastWeek"} value="DosesLastWeek">
-            Doses given last week
+            <option selected={mode.type == "ChangeInDoses"} value="ChangeInDoses">
+              Percent change
             </option>
-          <option selected={mode.type == "OverallPercent"} value="OverallPercent">
-            Percent first doses: All adults
+          </optgroup>
+          <optgroup label="All time">
+            <option selected={mode.type == "DosesAllTime"} value="DosesAllTime">
+              Doses given
             </option>
-          <option selected={mode.type == "ByAgePercent" && mode.age == "16-69"} value="ByAge1669">
-            Percent first doses: under 70s
+            <option selected={mode.type == "OverallPercent"} value="OverallPercent">
+              Percent first doses: All adults
             </option>
-          <option selected={mode.type == "ByAgePercent" && mode.age == "70-74"} value="ByAge7074">
-            Percent first doses: 70-74
+            <option selected={mode.type == "ByAgePercent" && mode.age == "16-69"} value="ByAge1669">
+              Percent first doses: under 70s
             </option>
-          <option selected={mode.type == "ByAgePercent" && mode.age == "75-79"} value="ByAge7579">
-            Percent first doses 75-79
+            <option selected={mode.type == "ByAgePercent" && mode.age == "70-74"} value="ByAge7074">
+              Percent first doses: 70-74
             </option>
-          <option selected={mode.type == "ByAgePercent" && mode.age == "80+"} value="ByAge80plus">
-            Percent first doses 80+
-          </option>
+            <option selected={mode.type == "ByAgePercent" && mode.age == "75-79"} value="ByAge7579">
+              Percent first doses 75-79
+            </option>
+            <option selected={mode.type == "ByAgePercent" && mode.age == "80+"} value="ByAge80plus">
+              Percent first doses 80+
+            </option>
+          </optgroup>
         </select>
       </div>
     </div>
@@ -181,30 +192,33 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
 const RegionTable: React.FunctionComponent<RegionData> =
   (region) => <div className="text-center">
     <div className="d-inline-block">
-      <p className="text-bold mt-4 mb-2 border-bottom">{region.name}</p>
+      <p className="text-bold mt-4 mb-1 border-bottom">{region.name}</p>
+      <p className="text-muted text-center small mb-2">Approximate population: {total(region.population).toLocaleString("en-gb")}</p>
       <div className="mt-2 text-start row g-0">
         <div className="col-md me-md-1">
           <table className="table table-bordered w-100 mb-2">
             <tbody>
               <tr>
-                <th>Population</th>
-                <td className="text-end">{total(region.population).toLocaleString("en-gb")}</td>
-              </tr>
-              <tr>
-                <th>First doses last week</th>
+                <th>First doses in week</th>
                 <td className="text-end">{region.firstDosesLastWeek.toLocaleString("en-gb")}</td>
-              </tr>
-              <tr>
-                <th>Second doses last week</th>
-                <td className="text-end">{region.secondDosesLastWeek.toLocaleString("en-gb")}</td>
               </tr>
               <tr>
                 <th>Total first doses</th>
                 <td className="text-end">{total(region.firstDoses).toLocaleString("en-gb")}</td>
               </tr>
               <tr>
+                <th>Second doses in week</th>
+                <td className="text-end">{region.secondDosesLastWeek.toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
                 <th>Total second doses</th>
                 <td className="text-end">{total(region.secondDoses).toLocaleString("en-gb")}</td>
+              </tr>
+              <tr>
+                <th>Change since last week</th>
+                <td className={`text-end ${region.changeInDoses > 0 ? "text-success" : "text-danger"}`}>
+                  {region.changeInDoses > 0 ? "▲" : "▼"} {Math.abs(region.changeInDoses).toFixed(2)}%
+                </td>
               </tr>
             </tbody>
           </table>
@@ -236,22 +250,31 @@ const RegionTable: React.FunctionComponent<RegionData> =
  * Given raw regional data for this week and optionally for last week too
  * produce a nicely transformed RegionData that summarises all the info we need
  */
-function transformRegion(region: RawRegionData, lastWeek?: RawRegionData): RegionData {
+function transformRegion(region: RawRegionData, previousWeeks: RawRegionData[]): RegionData {
+
+  const lastWeek: RawRegionData | undefined = previousWeeks[0]
+  const weekBeforelast: RawRegionData | undefined = previousWeeks[1]
 
   const firstDoses = total(region.firstDose)
   const secondDoses = total(region.secondDose)
   const secondDoseLastWeek = lastWeek ? total(lastWeek.secondDose) : 0
   const firstDoseLastWeek = lastWeek ? total(lastWeek.firstDose) : 0
 
+  const dosesLastWeek = firstDoseLastWeek + secondDoseLastWeek
+  const dosesWeekBeforeLast = weekBeforelast ? total(weekBeforelast.firstDose) + total(weekBeforelast.secondDose) : 0
+  const changeInDoses = ((firstDoses + secondDoses) - dosesLastWeek) - (dosesLastWeek - dosesWeekBeforeLast)
+  const percentChange = changeInDoses / dosesLastWeek * 100
+
   return {
     name: region.name,
     firstDoses: region.firstDose,
     secondDoses: region.secondDose,
-    population: region.population, 
+    population: region.population,
     firstDosesLastWeek: firstDoses - firstDoseLastWeek,
     secondDosesLastWeek: secondDoses - secondDoseLastWeek,
-    percentFirstDoses: mapByAge(region.firstDose, region.population, (a, b) => (a / b) * 100),
-    percentSecondDoses: mapByAge(region.secondDose, region.population, (a, b) => (a / b) * 100)
+    percentFirstDoses: mapByAge(region.firstDose, region.population, (a, b) => (a / Math.max(a, b)) * 100),
+    percentSecondDoses: mapByAge(region.secondDose, region.population, (a, b) => (a / Math.max(a, b)) * 100),
+    changeInDoses: percentChange
   }
 }
 
@@ -264,6 +287,7 @@ function maxValue(td: WeeklyRegionData, mm: MapMode): number {
   switch (mm.type) {
     case "DosesAllTime": return td.overallDoses.max
     case "DosesLastWeek": return td.dosesLastWeek.max
+    case "ChangeInDoses": return td.changeInDoses.max
     default: return 100;
   }
 }
@@ -276,6 +300,7 @@ function minValue(td: WeeklyRegionData, mm: MapMode): number {
   switch (mm.type) {
     case "DosesAllTime": return td.overallDoses.min
     case "DosesLastWeek": return td.dosesLastWeek.min
+    case "ChangeInDoses": return td.changeInDoses.min
     default: return 0;
   }
 }
@@ -285,11 +310,12 @@ function minValue(td: WeeklyRegionData, mm: MapMode): number {
  * we want to plot onto the map
  */
 function currValue(td: RegionData, mm: MapMode): number {
-  switch(mm.type) {
+  switch (mm.type) {
     case "ByAgePercent": return td.percentFirstDoses[mm.age] || 0
     case "DosesAllTime": return total(td.firstDoses) + total(td.secondDoses)
     case "DosesLastWeek": return td.firstDosesLastWeek + td.secondDosesLastWeek
-    case "OverallPercent": return (total(td.firstDoses) / total(td.population)) * 100
+    case "OverallPercent": return (total(td.firstDoses) / Math.max(total(td.population), total(td.firstDoses))) * 100
+    case "ChangeInDoses": return td.changeInDoses
   }
 }
 
@@ -300,19 +326,19 @@ function currValue(td: RegionData, mm: MapMode): number {
 function transformWeeklyRegionData(region: WeeklyRawRegionData[]): WeeklyRegionData | undefined {
 
   if (!region[0]) return undefined
-  const thisWeek: WeeklyRawRegionData = region[0]
-  const lastWeek: WeeklyRawRegionData | undefined = region[1]
+  const [thisWeek, ...others] = region
 
   return Object
     .entries(thisWeek.statistics)
     .reduce((prev, [id, region]) => {
-      const thisRegion = transformRegion(region, lastWeek?.statistics[id])
+      const thisRegion = transformRegion(region, [...others.map(a => a.statistics[id])])
       return {
         ...prev,
         firstDoses: add(prev.firstDoses, total(thisRegion.firstDoses)),
         secondDoses: add(prev.secondDoses, total(thisRegion.secondDoses)),
         overallDoses: add(prev.overallDoses, total(thisRegion.firstDoses) + total(thisRegion.secondDoses)),
         dosesLastWeek: add(prev.dosesLastWeek, thisRegion.firstDosesLastWeek + thisRegion.secondDosesLastWeek),
+        changeInDoses: add(prev.changeInDoses, Math.abs(thisRegion.changeInDoses)),
         regions: { ...prev.regions, [id]: thisRegion }
       }
     }, {
@@ -320,6 +346,7 @@ function transformWeeklyRegionData(region: WeeklyRawRegionData[]): WeeklyRegionD
       secondDoses: emptyMinMax,
       overallDoses: emptyMinMax,
       dosesLastWeek: emptyMinMax,
+      changeInDoses: emptyMinMax,
       lastUpdated: new Date(thisWeek.date),
       regions: {}
     })
@@ -348,7 +375,18 @@ export class Regions extends React.Component<{}, State> {
     const region = this.state.mapValues.regions[id] || 0
     const min = minValue(this.state.mapValues, this.state.mapMode)
     const max = maxValue(this.state.mapValues, this.state.mapMode)
-    return (currValue(region, this.state.mapMode) - min) / (max - min)
+    return (Math.abs(currValue(region, this.state.mapMode)) - min) / (max - min)
+  }
+
+  colour(id: string): string {
+    if (!this.state.mapValues) {
+      return ''
+    } else {
+      switch (this.state.mapMode.type) {
+        case "ChangeInDoses": return this.state.mapValues.regions[id].changeInDoses > 0 ? "#198754" : "#dc3545"
+        default: return '#17a2b8'
+      }
+    }
   }
 
   updated() {
@@ -365,15 +403,15 @@ export class Regions extends React.Component<{}, State> {
     return <div className="bg-white border shadow-sm p-4">
       <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
       <p className="text-muted text-center mt-2 mb-4">
-        Hover over / tap the map to see more.<br/>
+        Hover over / tap the map to see more.<br />
         Last updated {this.updated()} ago.
       </p>
-      <Map opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({...this.state, hoverRegion})}></Map>
+      <Map fill={this.colour.bind(this)} opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({ ...this.state, hoverRegion })}></Map>
       <MapModeSelect mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
       {this.table.call(this)}
       <p className="text-muted mt-4 mb-0 small">
-        <strong>About the data: </strong> 
-        The NHS in England is divided into either <em><a href="https://www.england.nhs.uk/integratedcare/integrated-care-systems/">Integrated Care Systems</a></em> or 
+        <strong>About the data: </strong>
+        The NHS in England is divided into either <em><a href="https://www.england.nhs.uk/integratedcare/integrated-care-systems/">Integrated Care Systems</a></em> or
         <em><a href="https://www.england.nhs.uk/integratedcare/stps/"> Sustainability and Transformation Partnerships</a>. </em>
         The data are sourced from the NHS England <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/">statistics website </a>
         and are automatically updated on Thursdays. The percentages in this data are the percentages of the <em>adult</em> population vaccinated so are not directly comparable
