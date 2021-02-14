@@ -27,13 +27,19 @@ object Tweet {
    * https://stackoverflow.com/questions/4011075/how-do-you-format-the-day-of-the-month-to-say-11th-21st-or-23rd-ordinal/4011116
    * I cannot believe there's no super obvious library to do this
    */
-  private def suffix(number: Int): String =
-    number % 10 match {
-      case 1 => "st"
-      case 2 => "nd"
-      case 3 => "rd"
-      case _ => "th"
+  private def suffix(number: Int): String = {
+    number match {
+      case 11 | 12 | 13 =>
+        "th"
+      case _ =>
+        number % 10 match {
+          case 1 => "st"
+          case 2 => "nd"
+          case 3 => "rd"
+          case _ => "th"
+        }
     }
+  }
 
   private def formatDate(date: LocalDate): String =
     date.format(ofPattern("EEEE d'_' MMMM YYYY")).replace("_", suffix(date.getDayOfMonth))
@@ -62,7 +68,7 @@ object Tweet {
   def recordText(stats: NonEmptyList[DailyTotals]): String = {
     val totalToday = stats.head.today.totalDoses
     val record: Long = stats.tail.dropRight(1).maxByOption(_.today.totalDoses).foldMap(_.today.totalDoses)
-    if (totalToday > record) "\n|🔹 A new record! ✨ Well done #nhs!" else ""
+    if (totalToday > record) "\n|🔹 New record! ✨ Well done #nhs!" else ""
   }
 
   /**
