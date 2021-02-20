@@ -25,7 +25,6 @@ export function doseName(dose: keyof DoseTotal): string {
 }
 
 export type Projection = {
-  firstFour: Date,
   firstSix: Date
 }
 
@@ -48,15 +47,12 @@ export function dailyDifference(statistics: DailyTotal[], dose: keyof DoseTotal)
  * Project when vaccinations will finish by extrapolating today's data
  */
 export function project(statistics: DailyTotal[]): Projection {
-  const firstFour = 14600000
   const allSix = 31800000
 
   const latest = statistics[0];
-  const firstFourDays = Math.ceil((firstFour - latest.total.firstDose) / latest.today.firstDose);
   const firstSixDays = Math.ceil((allSix - latest.total.firstDose) / latest.today.firstDose);
 
   return {
-    firstFour: addDays(new Date(), firstFourDays),
     firstSix: addDays(new Date(), firstSixDays),
   }
 }
