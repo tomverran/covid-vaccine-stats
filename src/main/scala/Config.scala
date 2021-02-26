@@ -36,7 +36,7 @@ object Config {
     params(blocker, EU_WEST_1).flatMap { param =>
       (
         env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "statistics.json")),
-        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "regional_v3.json")),
+        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "regional_test.json")),
         env("SCHEDULER_RULE_NAME").map(Scheduler.Config),
         (consumer(param), token(param)).mapN(twitter.Config)
       ).mapN(Config.apply)

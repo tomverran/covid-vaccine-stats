@@ -1,130 +1,138 @@
 package io.tvc.vaccines
 package regional
 
-import regional.ByAge.{Over70s, Over80s}
+import regional.ByAge.{Over65s, Over70s, Over80s}
 import regional.XSLXParser._
 
-import cats.Monad
+import cats.data.{Nested, ZipList}
+import cats.instances.int._
 import cats.syntax.apply._
 import cats.syntax.flatMap._
+import cats.syntax.foldable._
 import cats.syntax.functor._
-import cats.syntax.traverse._
-import cats.instances.list._
 
 object RegionParser {
 
-  private val region: Op[Region] =
+  private case class AgeRange(min: Int, max: Option[Int]) {
+    def rendered: String = max.fold(s"$min+")(m => s"$min-$m")
+  }
+
+  private object AgeRange {
+    def apply(min: Int, max: Int): AgeRange = AgeRange(min, Some(max))
+    def apply(min: Int): AgeRange = AgeRange(min, None)
+  }
+
+  val region: Op[Region] =
     string.flatMapF(s => Region.forName(s).toRight(s"'$s' is not a region"))
 
   /**
-   * Parse a series of columns containing data broken down
-   * as either being for ages 16-19 or 80+. This is for docs prior to February
+   * Run the given operation against each row in a column where the first few rows
+   * are things we don't care about, i.e. blank cells / a "total" row
    */
-  private def over80s[A](data: Op[A]): Op[Over80s[A]] =
+  def columnWithTotal[A](name: String)(op: Op[A]): Nested[Op, ZipList, A] =
+    Nested(
+      jumpToNext(name) >>
+      peek(
+        times(3)(downOrSkip(max = 1)) >>
+        until(succeeds(op))(downOrSkip(max = 1)) >>
+        eachRow(op).map(b => ZipList(b.toList)))
+    )
+
+  /**
+   * Do something with each row in the column of ICS/STP regions
+   * We validate the region data is correct before running the op
+   */
+  def regionColumn[A](op: Op[A]): Op[ZipList[A]] =
+    columnWithTotal("ICS/STP of Residence")(region >> op).value
+
+  /**
+   * Extract data broken down into under 80s and over 80s
+   * using the given function to figure out the column names
+   */
+  def over80s(name: AgeRange => String): Op[ZipList[Over80s]] =
     (
-      consumeL(data),
-      consumeL(data),
-    ).mapN(ByAge.Over80s.apply)
+      columnWithTotal(name(AgeRange(16, 79)))(long),
+      columnWithTotal(name(AgeRange(80)))(long)
+    ).mapN(Over80s.apply).value
 
   /**
-   * Parse a series of columns broken down into 16-69, 70-75, 75-79 and 80+
-   * this is for docs produced from February onwards
+   * Extract data broken down into under 70s and then buckets of 5 years
+   * using the given function to figure out the column names
    */
-  private def over70s[A](data: Op[A]): Op[Over70s[A]] =
+  def over70s(name: AgeRange => String): Op[ZipList[Over70s]] =
     (
-      consumeL(data),
-      consumeL(data),
-      consumeL(data),
-      consumeL(data)
-    ).mapN(ByAge.Over70s.apply)
+      columnWithTotal(name(AgeRange(16, 69)))(long),
+      columnWithTotal(name(AgeRange(70, 74)))(long),
+      columnWithTotal(name(AgeRange(75, 79)))(long),
+      columnWithTotal(name(AgeRange(80)))(long)
+    ).mapN(Over70s.apply).value
 
   /**
-   * Parse a row into data broken down into either of the available
-   * granularities of age information. We ensure none of the data is blank
-   * as that usually indicates the doc format isn't what we expect
+   * Extract data broken down into under 65s and then buckets of 5 years
+   * using the given function to figure out the column names
    */
-  private def byAge[A](parser: Op[A]): Op[ByAge[A]] =
-    orElse(over70s(nonEmpty(parser)).widen, over80s(nonEmpty(parser)).widen)
+  def over65s(name: AgeRange => String): Op[ZipList[Over65s]] =
+    (
+      columnWithTotal(name(AgeRange(16, 64)))(long),
+      columnWithTotal(name(AgeRange(65, 69)))(long),
+      columnWithTotal(name(AgeRange(70, 74)))(long),
+      columnWithTotal(name(AgeRange(75, 79)))(long),
+      columnWithTotal(name(AgeRange(80)))(long)
+    ).mapN(Over65s.apply).value
 
   /**
-   * Verify that we have all the headers we expect for data broken down
-   * by one of the two age groups we currently anticipate seeing
+   * Put all the above functions together to extract
+   * a table of data bucketed by age
    */
-  private val verifyDoseHeaders: Op[Unit] =
-    sheet("Vaccinations by ICS STP & Age") >>
-      jumpTo("ICS/STP of Residence") >> right >> down >>
-      orElse(
-        a = consumeL(expect("Under 70")) >>
-          consumeL(expect("70-74")) >>
-          consumeL(expect("75-79")) >>
-          consumeL(expect("80+")),
-        b = consumeL(expect("Under 80")) >>
-          consumeL(expect("80+"))
-      )
+  def byAge(name: AgeRange => String): Op[ZipList[ByAge]] =
+    orElse(over65s(name).map(_.widen), orElse(over70s(name).map(_.widen), over80s(name).map(_.widen)))
+
+  /**
+   * Turn the age range into the right column title format
+   * used for the population estimates tables
+   */
+  def populationColumn(ageRange: AgeRange): String =
+    s"${ageRange.rendered} estimated population"
+
+  /**
+   * Turn the age range into the right column title format
+   * used for the dose totals tables
+   */
+  def doseColumn(ageRange: AgeRange): String =
+    if (ageRange.min == 16) s"Under ${ageRange.max.foldMap(_ + 1)}" else ageRange.rendered
 
   /**
    * Parse populations from the XLSX document
    * This is then joined onto region information below
    */
-  val populations: Op[Map[Region, ByAge[Long]]] =
+  val populations: Op[ZipList[ByAge]] =
     orElse(
       sheet("Population estimates"),
       sheet("Vaccinations by ICS STP & Age")
     ) >>
-    (
-      jumpTo("ICS/STP of Residence") >>
-      until(succeeds(region))(downOrSkip(max = 1)) >>
-      eachRow(region)
-    ).flatMap { regions =>
-      List(
-        "16-69 estimated population",
-        "16-79 estimated population",
-        "70-74 estimated population",
-        "75-79 estimated population",
-        "80+ estimated population"
-      ).traverse { col =>
-        orElse(
-          orElse(jumpTo(col, skip = 1), jumpTo(col)) >>
-          times(3)(downOrSkip(max = 1)) >>
-          eachRow(long.map(Option(_))),
-          Monad[Op].pure(regions.as[Option[Long]](None))
-        )
-      }.flatMap { l =>
-        l.transpose.zip(regions).traverse[Op, (Region, ByAge[Long])] {
-          case (Some(a) :: None :: Some(b) :: Some(c) :: Some(d) :: Nil, region) =>
-            Monad[Op].pure(region -> ByAge.Over70s(a, b, c, d))
-          case (None :: Some(a) :: None :: None :: Some(d) :: Nil, region) =>
-            Monad[Op].pure(region -> ByAge.Over80s(a, d))
-          case (others, region) =>
-            fail(s"Dodgy population data in $region: $others")
-        }
-      }.map(_.toMap)
-    }
+    orElse(
+      jumpToFirst("ONS population mapped to ICS / STP"),
+      jumpToFirst("2019 ONS Population Estimates")
+    ) >>
+    byAge(populationColumn)
 
   /**
-   * Go to the ICS/STP of Residence column then scan down
-   * until we get to the first region directly below the heading
+   * Obtain regional statistics from the main table of stats
+   * we then re-scan the region column below to make a map
    */
-  private val jumpToFirstRegion: Op[Unit] =
-    jumpTo("ICS/STP of Residence") >> until(succeeds(region))(downOrSkip(max = 2))
+  val regionStats: Nested[Op, ZipList, RegionStatistics] =
+    (
+      Nested(regionColumn(string)),
+      Nested(peek(populations)),
+      Nested(jumpToNext("1st dose") >> peek(byAge(doseColumn))),
+      Nested(jumpToNext("2nd dose") >> peek(byAge(doseColumn)))
+    ).mapN(RegionStatistics.apply)
 
   /**
    * Put everything together to parse region statistics from the given XLSX document
    * We don't bother with percentage data as it can be calculated ad-hoc in the frontend
    */
   val regionStatistics: Op[Map[Region, RegionStatistics]] =
-    populations.flatMap { pops =>
-      verifyDoseHeaders >>
-      jumpToFirstRegion >>
-      eachRow(
-        region.flatMap { name =>
-          (
-            consumeL(string),
-            lift(pops.get(name).toRight(s"Cannot find population for $name")),
-            byAge(long).flatTap(_ => consumeL(until(isEmpty)(right))),
-            byAge(long)
-          ).mapN(RegionStatistics.apply).map(name -> _)
-        }
-      ).map(_.toMap)
-    }
+    sheet("Vaccinations by ICS STP & Age") >>
+    (Nested(regionColumn(region)), regionStats).tupled.value.map(_.value.toMap)
 }

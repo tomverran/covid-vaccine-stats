@@ -8,24 +8,26 @@ import io.circe.{Codec, KeyDecoder, KeyEncoder}
 
 import java.time.LocalDate
 
-case class Region(name: String)
+case class Region(name: String) extends AnyVal
 
 
-sealed trait ByAge[A]
+sealed trait ByAge
 
 object ByAge {
   implicit val cfg: Configuration = Configuration.default.withDiscriminator("type")
-  implicit val codec: Codec[ByAge[Long]] = deriveConfiguredCodec
+  implicit val codec: Codec[ByAge] = deriveConfiguredCodec
+  type L = Long
 
-  case class Over80s[A](`16-79`: A, `80+`: A) extends ByAge[A]
-  case class Over70s[A](`16-69`: A, `70-74`: A, `75-79`: A, `80+`: A) extends ByAge[A]
+  case class Over80s(`16-79`: L, `80+`: L) extends ByAge
+  case class Over70s(`16-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
+  case class Over65s(`16-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
 }
 
 case class RegionStatistics(
   name: String,
-  population: ByAge[Long],
-  firstDose: ByAge[Long],
-  secondDose: ByAge[Long]
+  population: ByAge,
+  firstDose: ByAge,
+  secondDose: ByAge
 )
 
 object RegionStatistics {

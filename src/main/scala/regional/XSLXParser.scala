@@ -5,7 +5,7 @@ import cats.data.StateT
 import cats.syntax.flatMap._
 import cats.syntax.functor._
 import cats.{Monad, MonadError}
-import org.apache.poi.ss.usermodel.{Cell, CellType}
+import org.apache.poi.ss.usermodel.{Cell, CellType, Sheet}
 import org.apache.poi.xssf.usermodel.{XSSFSheet, XSSFWorkbook}
 
 import scala.jdk.CollectionConverters._
@@ -17,49 +17,87 @@ import scala.util.Try
  */
 object XSLXParser {
 
-  case class Context(
-    workbook: XSSFWorkbook,
-    sheet: XSSFSheet,
-    cell: Cell
-  )
-
   type OrError[A] = Either[String, A]
-  type Op[A]= StateT[OrError, Context, A]
+  type Op[A]= StateT[OrError, Cell, A]
+
+  /**
+   * Given a sheet return the top left cell
+   */
+  private def firstCell(sheet: Sheet): OrError[Cell] =
+    for {
+      row   <- Option(sheet.getRow(sheet.getFirstRowNum)).toRight("Cannot move to first row")
+      col   <- Option(row.getCell(row.getFirstCellNum)).toRight("Cannot move to first cell")
+    } yield col
 
   /**
    * Create the state for the parser to work with -
    * we try to find a sheet them move to the first cell
    */
-  def create(wb: XSSFWorkbook): OrError[Context] =
+  def create(wb: XSSFWorkbook): OrError[Cell] =
     for {
       sheet <- Option(wb.getSheetAt(wb.getActiveSheetIndex)).toRight("Can't find any sheets")
-      row   <- Option(sheet.getRow(sheet.getFirstRowNum)).toRight("Cannot move to first row")
-      col   <- Option(row.getCell(row.getFirstCellNum)).toRight("Cannot move to first cell")
-    } yield Context(wb, sheet, col)
+      first <- firstCell(sheet)
+    } yield first
 
+  /**
+   * Run the given operation
+   * without moving the current context
+   */
+  def peek[A](op: Op[A]): Op[A] =
+    StateT.inspectF(op.runA)
+
+  /**
+   * Fail the parsing operation with a given reason
+   */
   def fail[A](why: String): Op[A] =
     StateT.liftF(Left(why))
 
+  def print[A](a: A): Op[A] = {
+    println(a)
+    StateT.pure(a)
+  }
+
+  /**
+   * Switch to a different sheet in the workbook
+   * and move to the top left cell within the sheet
+   */
   def sheet(name: String): Op[Unit] =
     StateT.modifyF { context =>
-      Option(context.workbook.getSheet(name))
+      Option(context.getSheet.getWorkbook.getSheet(name))
         .toRight(s"Cannot find sheet named '$name'")
-        .map(s => context.copy(sheet = s))
+        .flatMap(firstCell)
     }
 
   /**
-   * Jump to the first cell containing a particular string value
-   * useful for moving to table headers
+   * Jump to the first cell containing a particular string value -
+   * we scan from the top left of the sheet moving right and down
    */
-  def jumpTo(name: String, skip: Int = 0): Op[Unit] =
+  def jumpToFirst(name: String): Op[Unit] =
     StateT.modifyF { context =>
       (
         for {
-          row <- context.sheet.rowIterator.asScala
+          row <- context.getSheet.rowIterator.asScala
           cell <- row.cellIterator.asScala
           txt <- Try(cell.getStringCellValue).toOption.iterator if txt == name
-        } yield context.copy(cell = cell)
-      ).drop(skip).nextOption().toRight(s"Cannot jump to cell containing '$name'")
+        } yield cell
+      ).nextOption().toRight(s"Cannot jump to cell containing '$name'")
+    }
+
+  /**
+   * Starting at the current cell, find the next cell containing a string value
+   * scanning to the right and then down
+   */
+  def jumpToNext(name: String): Op[Unit] =
+    StateT.modifyF { ctx =>
+      (
+        for {
+          row <- ctx.getSheet.rowIterator.asScala
+          col <- row.cellIterator.asScala
+          if Try(col.getStringCellValue).toOption.contains(name)
+          if col.getColumnIndex >= ctx.getColumnIndex
+          if row.getRowNum >= ctx.getRow.getRowNum
+        } yield col
+      ).nextOption().toRight(s"Cannot jump from ${ctx.getAddress} to cell containing '$name'")
     }
 
   /**
@@ -70,10 +108,10 @@ object XSLXParser {
     StateT.modifyF { context =>
       (
         for {
-          row <- Option(context.sheet.getRow(context.cell.getRowIndex + y))
-          col <- Option(row.getCell(context.cell.getColumnIndex + x))
-        } yield context.copy(cell = col)
-      ).toRight(s"Could not move $name from ${context.cell.getAddress}")
+          row <- Option(context.getSheet.getRow(context.getRowIndex + y))
+          col <- Option(row.getCell(context.getColumnIndex + x))
+        } yield col
+      ).toRight(s"Could not move $name from ${context.getAddress}")
     }
 
   /**
@@ -133,8 +171,8 @@ object XSLXParser {
    */
   def string: Op[String] =
     StateT.inspectF { c =>
-      Option(c.cell.getStringCellValue)
-        .toRight(s"${c.cell.getAddress} does not contain a string")
+      Option(c.getStringCellValue)
+        .toRight(s"${c.getAddress} does not contain a string")
     }
 
   /**
@@ -143,9 +181,9 @@ object XSLXParser {
    */
   def long: Op[Long] =
     StateT.inspectF { c =>
-      Try(Option(c.cell.getNumericCellValue)).toOption
+      Try(Option(c.getNumericCellValue)).toOption
         .flatten.flatMap(d => Try(d.toLong).toOption)
-        .toRight(s"${c.cell.getAddress} does not contain a long")
+        .toRight(s"${c.getAddress} does not contain a long")
     }
 
   /**
@@ -160,7 +198,7 @@ object XSLXParser {
    * useful for detecting the ends of datasets
    */
   def isEmpty: Op[Boolean] =
-    StateT.inspect(ctx => ctx.cell.getCellType == CellType.BLANK)
+    StateT.inspect(ctx => ctx.getCellType == CellType.BLANK)
 
   /**
    * Fail the given operation if the cell is empty
@@ -168,7 +206,7 @@ object XSLXParser {
    */
   def nonEmpty[A](op: Op[A]): Op[A] =
     Monad[Op].ifM(isEmpty)(
-      ifTrue = StateT.inspectF(d => Left(s"${d.cell.getAddress} is empty")),
+      ifTrue = StateT.inspectF(d => Left(s"${d.getAddress} is empty")),
       ifFalse = op
     )
 
@@ -176,19 +214,17 @@ object XSLXParser {
    * Print the cell address for debugging
    */
   val whereAmI: Op[Unit] =
-    StateT.inspect(s => println(s.cell.getAddress))
+    StateT.inspect(s => println(s.getAddress))
 
   /**
    * Run the parsing operation for each row (including the one we're on)
-   * until we find a row that begins with a blank cell or has no cell. After parsing a row
-   * the position of the parser automatically returns to the first cell in the row
+   * until we find a row that begins with a blank cell or has no cell.
    */
-  def eachRow[A](parser: StateT[OrError, Context, A]): StateT[OrError, Context, Vector[A]] = {
+  def eachRow[A](parser: StateT[OrError, Cell, A]): StateT[OrError, Cell, Vector[A]] = {
     Monad[Op].tailRecM[Vector[A], Vector[A]](Vector.empty) { values =>
       Monad[Op].ifM(isEmpty)(
         ifTrue = Monad[Op].pure(Right(values)),
-        ifFalse = StateT
-          .inspectF(parser.map[Either[Vector[A], Vector[A]]](r => Left(values :+ r)).runA)
+        ifFalse = parser.map[Either[Vector[A], Vector[A]]](r => Left(values :+ r))
           .flatMap(res => MonadError[Op, String].recover(down.as(res)) { case _ => res.swap })
       )
     }

@@ -14,6 +14,7 @@ import org.http4s.client.blaze.BlazeClientBuilder
 import java.time.DayOfWeek.THURSDAY
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.global
+import scala.concurrent.duration.DAYS
 
 object App {
 
@@ -49,14 +50,11 @@ object App {
 
   type Operation[F[_], A] = Kleisli[OptionT[F, *], Dependencies[F], A]
 
-  def skipIfNotRegionalPublishDay[F[_]: Applicative]: Operation[F, Unit] =
-    Kleisli(d => OptionT.fromOption(Option.when(d.date.getDayOfWeek == THURSDAY)(())))
-
   def fetchPastDailyStats[F[_]: Monad]: Operation[F, List[DailyTotals]] =
     Kleisli(d => OptionT.liftF(d.dailyStatsClient.fetch).filter(_.forall(_.date != d.date)))
 
   def fetchPastRegionalStats[F[_]: Monad]: Operation[F, List[RegionalTotals]] =
-    Kleisli(d => OptionT.liftF(d.regionalStatsClient.fetch).filter(_.forall(_.date != d.date)))
+    Kleisli(d => OptionT.liftF(d.regionalStatsClient.fetch))
 
   def fetchDailyStats[F[_]]: Operation[F, DailyTotals] =
     Kleisli(d => OptionT(d.vaccineClient.vaccineTotals(d.date)))
@@ -73,15 +71,22 @@ object App {
   def waitUntilTomorrow[F[_]: Monad]: Operation[F, Unit] =
     Kleisli(d => OptionT.liftF(d.scheduler.stopUntilTomorrow))
 
-  def fetchNewRegionalStats[F[_]: Monad]: Operation[F, RegionalTotals] =
-    Kleisli(d => OptionT(d.nhsClient.regionalData(d.date)))
+  def fetchLatestRegionalStats[F[_]: Monad]: Operation[F, RegionalTotals] =
+    Kleisli { d =>
+      val thursdayValue = THURSDAY.getValue
+      val daysSinceThurs = d.date.getDayOfWeek.getValue - thursdayValue
+      val toSubtract = if (daysSinceThurs < 0) 7 - daysSinceThurs else daysSinceThurs
+      OptionT(d.nhsClient.regionalData(d.date.minusDays(toSubtract)))
+    }
+
+  def addToList(now: RegionalTotals, old: List[RegionalTotals]): NonEmptyList[RegionalTotals] =
+    NonEmptyList(now, old.filter(_.date != now.date))
 
   def regional[F[_]: Monad]: Operation[F, Unit] =
     for {
-      _       <- skipIfNotRegionalPublishDay
       old     <- fetchPastRegionalStats
-      today   <- fetchNewRegionalStats
-      updated = NonEmptyList(today, old)
+      today   <- fetchLatestRegionalStats
+      updated = addToList(today, old)
       _       <- putRegionalStats(updated)
     } yield ()
 

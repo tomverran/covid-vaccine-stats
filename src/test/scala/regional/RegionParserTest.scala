@@ -1,7 +1,7 @@
 package io.tvc.vaccines
 package regional
 
-import regional.RegionParser.regionStatistics
+import regional.RegionParser._
 import regional.XSLXParser._
 
 import cats.instances.either._
@@ -25,6 +25,16 @@ class RegionParserTest extends AnyWordSpec with Matchers {
 
     "parse 11th February format docs" in {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/11-February-2021.xlsx"))
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
+    }
+
+    "parse 18th February format docs" in {
+      val book = new XSSFWorkbook(getClass.getResourceAsStream("/18-February-2021.xlsx"))
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
+    }
+
+    "parse 25th February format docs" in {
+      val book = new XSSFWorkbook(getClass.getResourceAsStream("/25-February-2021.xlsx"))
       create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
     }
   }
