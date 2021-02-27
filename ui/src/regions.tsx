@@ -410,7 +410,7 @@ export class Regions extends React.Component<{}, State> {
   availableAges(): AgeRange[] {
     const regions = this.state.mapValues?.regions
     const region = regions ? Object.values(regions)[0] : null
-    return (region ? Object.keys(region.firstDoses) : []) as AgeRange[]
+    return region ? ageRanges(region.firstDoses) : []
   }
 
   render() {
