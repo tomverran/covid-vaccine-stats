@@ -8,16 +8,18 @@ type State = {
   mapValues?: WeeklyRegionData
 }
 
-type ByAge = {
-  "16-69"?: number,
-  "16-79"?: number,
-  "70-74"?: number,
-  "75-79"?: number,
-  "80+": number
+enum AgeRange {
+  Aged16To64 = "16-64",
+  Aged16To69 = "16-69",
+  Aged16To79 = "16-79",
+  Aged64To69 = "64-69",
+  Aged70To74 = "70-74",
+  Aged75To79 = "75-79",
+  Aged80Plus = "80+",
 }
 
-type WithType = {
-  type: string
+type ByAge = { type: string } & {
+  [key in AgeRange]?: number
 }
 
 type MinMax = {
@@ -38,9 +40,9 @@ function add(mm: MinMax, num: number): MinMax {
  */
 type RawRegionData = {
   name: string,
-  population: ByAge & WithType,
-  firstDose: ByAge & WithType,
-  secondDose: ByAge & WithType
+  population: ByAge,
+  firstDose: ByAge,
+  secondDose: ByAge
 }
 
 type WeeklyRawRegionData = {
@@ -85,18 +87,31 @@ type MapMode =
   { type: "DosesLastWeek" } |
   { type: "OverallPercent" } |
   { type: "ChangeInDoses" } |
-  { type: "ByAgePercent", age: keyof ByAge }
+  { type: AgeRange }
+
 
 /**
  * Total up data that is broken down into age groups
  * to end up with a single value
  */
 function total(ba: ByAge): number {
-  return (ba["16-69"] || 0) +
-    (ba["16-79"] || 0) +
-    (ba["70-74"] || 0) +
-    (ba["75-79"] || 0) +
-    (ba["80+"])
+  return Object.values(ba).reduce<number>((a, b) => a + (typeof b == "number" ? b : 0), 0)
+}
+
+/**
+ * Given data bucketed by age
+ * return the buckets available as keys
+ */
+function ageRanges(ba: ByAge): AgeRange[] {
+  return Object.keys(ba).filter(t => t != "type") as AgeRange[]
+}
+
+/**
+ * Given two sets of statistics bucketed by age
+ * return the age ranges common to both
+ */
+function commonKeys(ba1: ByAge, ba2: ByAge): AgeRange[] {
+  return Array.from(new Set([...ageRanges(ba1), ...ageRanges(ba2)]));
 }
 
 /**
@@ -105,15 +120,13 @@ function total(ba: ByAge): number {
  * common age group from both groups in turn
  */
 function mapByAge(ba1: ByAge, ba2: ByAge, f: (a: number, b: number) => number): ByAge {
-  const seed: ByAge = { "80+": f(ba1["80+"], ba2["80+"]) }
-  const keys = Array.from(new Set([...Object.keys(ba1), ...Object.keys(ba2)])) as (keyof ByAge)[]
-  return keys.reduce((ba, k) => ({ ...ba, [k]: f(ba1[k] || 0, ba2[k] || 0) }), seed)
+  return commonKeys(ba1, ba2).reduce((k, v) => ({ ...k, [v]: f(ba1[v] || 0, ba2[v] || 0) }), { type: "intersection" })
 }
 
 /**
  * Show a row in the statistics table containing the region data
  */
-const TableRow: React.FunctionComponent<{ group: keyof ByAge, region: RegionData }> =
+const TableRow: React.FunctionComponent<{ group: AgeRange, region: RegionData }> =
   (props) => {
     if (!props.region.percentFirstDoses[props.group]) {
       return <React.Fragment></React.Fragment>
@@ -130,21 +143,21 @@ const TableRow: React.FunctionComponent<{ group: keyof ByAge, region: RegionData
  * A dropdown box component that emits MapModes when set
  * This is pretty abominable I don't know if there's an easier way to do this
  */
-const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMode) => void }> =
-  ({ mode, set: setValue }) => {
+const MapModeSelect: React.FunctionComponent<{ ages: AgeRange[], mode: MapMode, set: (mode: MapMode) => void }> =
+  ({ ages, mode, set: setValue }) => {
 
     const set: (s: string) => MapMode =
       s => {
-        switch (s) {
-          case "DosesAllTime": return { type: "DosesAllTime" }
-          case "ChangeInDoses": return { type: "ChangeInDoses" }
-          case "DosesLastWeek": return { type: "DosesLastWeek" }
-          case "OverallPercent": return { type: "OverallPercent" }
-          case "ByAge1669": return { type: "ByAgePercent", age: "16-69" }
-          case "ByAge7074": return { type: "ByAgePercent", age: "70-74" }
-          case "ByAge7579": return { type: "ByAgePercent", age: "75-79" }
-          case "ByAge80plus": return { type: "ByAgePercent", age: "80+" }
-          default: return { type: "DosesAllTime" }
+        if ((ages as Array<string>).includes(s)) {
+          return { type: s as AgeRange }
+        } else {
+          switch (s) {
+            case "DosesAllTime": return { type: "DosesAllTime" }
+            case "ChangeInDoses": return { type: "ChangeInDoses" }
+            case "DosesLastWeek": return { type: "DosesLastWeek" }
+            case "OverallPercent": return { type: "OverallPercent" }
+            default: return { type: "DosesAllTime" }
+          }
         }
       }
 
@@ -167,18 +180,11 @@ const MapModeSelect: React.FunctionComponent<{ mode: MapMode, set: (mode: MapMod
             <option selected={mode.type == "OverallPercent"} value="OverallPercent">
               Percent first doses: All adults
             </option>
-            <option selected={mode.type == "ByAgePercent" && mode.age == "16-69"} value="ByAge1669">
-              Percent first doses: under 70s
-            </option>
-            <option selected={mode.type == "ByAgePercent" && mode.age == "70-74"} value="ByAge7074">
-              Percent first doses: 70-74
-            </option>
-            <option selected={mode.type == "ByAgePercent" && mode.age == "75-79"} value="ByAge7579">
-              Percent first doses 75-79
-            </option>
-            <option selected={mode.type == "ByAgePercent" && mode.age == "80+"} value="ByAge80plus">
-              Percent first doses 80+
-            </option>
+            {ages.map(age => {
+              return <option selected={mode.type == age} value={age}>
+                {`Percent first doses: ${age}`}
+              </option>
+            })}
           </optgroup>
         </select>
       </div>
@@ -215,9 +221,9 @@ const RegionTable: React.FunctionComponent<RegionData> =
                 <td className="text-end">{total(region.secondDoses).toLocaleString("en-gb")}</td>
               </tr>
               <tr>
-                <th>Change since last week</th>
+                <th>Change&nbsp;since&nbsp;last&nbsp;week</th>
                 <td className={`text-end ${region.changeInDoses > 0 ? "text-success" : "text-danger"}`}>
-                  {region.changeInDoses > 0 ? "▲" : "▼"} {Math.abs(region.changeInDoses).toFixed(2)}%
+                  {region.changeInDoses > 0 ? "▲" : "▼"}&nbsp;{Math.abs(region.changeInDoses).toFixed(2)}%
                 </td>
               </tr>
             </tbody>
@@ -233,11 +239,13 @@ const RegionTable: React.FunctionComponent<RegionData> =
               </tr>
             </thead>
             <tbody>
-              <TableRow region={region} group={"80+"}>Over&nbsp;80s</TableRow>
-              <TableRow region={region} group={"75-79"}>&nbsp;75-79</TableRow>
-              <TableRow region={region} group={"70-74"}>&nbsp;70-74</TableRow>
-              <TableRow region={region} group={"16-79"}>Under&nbsp;80</TableRow>
-              <TableRow region={region} group={"16-69"}>Under&nbsp;70</TableRow>
+              <TableRow region={region} group={AgeRange.Aged80Plus}>80+</TableRow>
+              <TableRow region={region} group={AgeRange.Aged75To79}>75-79</TableRow>
+              <TableRow region={region} group={AgeRange.Aged70To74}>70-74</TableRow>
+              <TableRow region={region} group={AgeRange.Aged16To79}>16-79</TableRow>
+              <TableRow region={region} group={AgeRange.Aged16To69}>16-69</TableRow>
+              <TableRow region={region} group={AgeRange.Aged64To69}>64-69</TableRow>
+              <TableRow region={region} group={AgeRange.Aged16To64}>16-64</TableRow>
             </tbody>
           </table>
         </div>
@@ -311,11 +319,11 @@ function minValue(td: WeeklyRegionData, mm: MapMode): number {
  */
 function currValue(td: RegionData, mm: MapMode): number {
   switch (mm.type) {
-    case "ByAgePercent": return td.percentFirstDoses[mm.age] || 0
+    case "ChangeInDoses": return td.changeInDoses
     case "DosesAllTime": return total(td.firstDoses) + total(td.secondDoses)
     case "DosesLastWeek": return td.firstDosesLastWeek + td.secondDosesLastWeek
     case "OverallPercent": return (total(td.firstDoses) / Math.max(total(td.population), total(td.firstDoses))) * 100
-    case "ChangeInDoses": return td.changeInDoses
+    default: return td.percentFirstDoses[mm.type as AgeRange] || 0
   }
 }
 
@@ -399,6 +407,12 @@ export class Regions extends React.Component<{}, State> {
     return region ? <RegionTable {...region} /> : <React.Fragment />
   }
 
+  availableAges(): AgeRange[] {
+    const regions = this.state.mapValues?.regions
+    const region = regions ? Object.values(regions)[0] : null
+    return (region ? Object.keys(region.firstDoses) : []) as AgeRange[]
+  }
+
   render() {
     return <div className="bg-white border shadow-sm p-4">
       <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
@@ -407,14 +421,14 @@ export class Regions extends React.Component<{}, State> {
         Last updated {this.updated()} ago.
       </p>
       <Map fill={this.colour.bind(this)} opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({ ...this.state, hoverRegion })}></Map>
-      <MapModeSelect mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
+      <MapModeSelect ages={this.availableAges()} mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
       {this.table.call(this)}
       <p className="text-muted mt-4 mb-0 small">
         <strong>About the data: </strong>
         The NHS in England is divided into either <em><a href="https://www.england.nhs.uk/integratedcare/integrated-care-systems/">Integrated Care Systems</a></em> or
         <em><a href="https://www.england.nhs.uk/integratedcare/stps/"> Sustainability and Transformation Partnerships</a>. </em>
-        The data are sourced from the NHS England <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/">statistics website </a>
-        and are automatically updated on Thursdays. The percentages in this data are the percentages of the <em>adult</em> population vaccinated so are not directly comparable
+        The data are sourced from the NHS England <a href="https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/">statistics website </a>. 
+        The percentages in these data are the percentages of the <em>adult</em> population vaccinated so are not directly comparable
         with the whole population percentages at the top of this page. For details of how populations are approximated see the documentation on the NHS website.
       </p>
     </div>
