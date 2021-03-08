@@ -37,5 +37,10 @@ class RegionParserTest extends AnyWordSpec with Matchers {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/25-February-2021.xlsx"))
       create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
     }
+
+    "parse 4th March format docs" in {
+      val book = new XSSFWorkbook(getClass.getResourceAsStream("/4-March-2021.xlsx"))
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
+    }
   }
 }

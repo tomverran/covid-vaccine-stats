@@ -113,7 +113,7 @@ object Region {
         Some(Region("cheshire_and_merseyside"))
       case "Greater Manchester Health and Social Care Partnership" =>
         Some(Region("greater_manchester"))
-      case "Healthier Lancashire and South Cumbria" =>
+      case "Healthier Lancashire and South Cumbria" | "Lancashire and South Cumbria ICS" =>
         Some(Region("lancashire_and_south_cumbria"))
       case "Buckinghamshire, Oxfordshire and Berkshire West" =>
         Some(Region("buckinghamshire_oxfordshire_and_berkshire_west"))

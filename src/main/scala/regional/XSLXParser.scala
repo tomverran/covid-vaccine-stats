@@ -1,7 +1,7 @@
 package io.tvc.vaccines
 package regional
 
-import cats.data.StateT
+import cats.data.{NonEmptyList, StateT}
 import cats.syntax.flatMap._
 import cats.syntax.functor._
 import cats.{Monad, MonadError}
@@ -258,4 +258,10 @@ object XSLXParser {
 
   def orElse[A](a: Op[A], b: Op[A]): Op[A] =
     MonadError[Op, String].recoverWith(a) { case _ => b }
+
+  /**
+   * Try to find a sheet named any of the given names
+   */
+  def trySheets(names: NonEmptyList[String]): Op[Unit] =
+    names.tail.foldLeft(sheet(names.head)) { case (acc, name) => orElse(acc, sheet(name)) }
 }

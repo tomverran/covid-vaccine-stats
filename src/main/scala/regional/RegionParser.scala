@@ -4,7 +4,7 @@ package regional
 import regional.ByAge.{Over65s, Over70s, Over80s}
 import regional.XSLXParser._
 
-import cats.data.{Nested, ZipList}
+import cats.data.{Nested, NonEmptyList, ZipList}
 import cats.instances.int._
 import cats.syntax.apply._
 import cats.syntax.flatMap._
@@ -106,15 +106,21 @@ object RegionParser {
    * This is then joined onto region information below
    */
   val populations: Op[ZipList[ByAge]] =
-    orElse(
-      sheet("Population estimates"),
-      sheet("Vaccinations by ICS STP & Age")
+    trySheets(
+      NonEmptyList.of(
+        "Population estimates",
+        "Population estimates (ONS)",
+        "Vaccinations by ICS STP & Age"
+      )
     ) >>
     orElse(
       jumpToFirst("ONS population mapped to ICS / STP"),
       jumpToFirst("2019 ONS Population Estimates")
     ) >>
-    byAge(populationColumn)
+    orElse(
+      byAge(populationColumn),
+      byAge(_.rendered)
+    )
 
   /**
    * Obtain regional statistics from the main table of stats
@@ -133,6 +139,6 @@ object RegionParser {
    * We don't bother with percentage data as it can be calculated ad-hoc in the frontend
    */
   val regionStatistics: Op[Map[Region, RegionStatistics]] =
-    sheet("Vaccinations by ICS STP & Age") >>
+    trySheets(NonEmptyList.of("Vaccinations by ICS STP & Age", "ICS STP")) >>
     (Nested(regionColumn(region)), regionStats).tupled.value.map(_.value.toMap)
 }
