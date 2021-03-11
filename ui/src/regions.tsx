@@ -9,9 +9,11 @@ type State = {
 }
 
 enum AgeRange {
+  Aged16To59 = "16-59",
   Aged16To64 = "16-64",
   Aged16To69 = "16-69",
   Aged16To79 = "16-79",
+  Aged60To64 = "60-64",
   Aged64To69 = "64-69",
   Aged70To74 = "70-74",
   Aged75To79 = "75-79",
@@ -245,7 +247,9 @@ const RegionTable: React.FunctionComponent<RegionData> =
               <TableRow region={region} group={AgeRange.Aged16To79}>16-79</TableRow>
               <TableRow region={region} group={AgeRange.Aged16To69}>16-69</TableRow>
               <TableRow region={region} group={AgeRange.Aged64To69}>64-69</TableRow>
+              <TableRow region={region} group={AgeRange.Aged60To64}>60-64</TableRow>
               <TableRow region={region} group={AgeRange.Aged16To64}>16-64</TableRow>
+              <TableRow region={region} group={AgeRange.Aged16To59}>16-59</TableRow>
             </tbody>
           </table>
         </div>

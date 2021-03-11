@@ -73,10 +73,11 @@ object App {
 
   def fetchLatestRegionalStats[F[_]: Monad]: Operation[F, RegionalTotals] =
     Kleisli { d =>
+      val today = d.date.plusDays(1)
       val thursdayValue = THURSDAY.getValue
-      val daysSinceThurs = d.date.getDayOfWeek.getValue - thursdayValue
+      val daysSinceThurs = today.getDayOfWeek.getValue - thursdayValue
       val toSubtract = if (daysSinceThurs < 0) 7 - daysSinceThurs else daysSinceThurs
-      OptionT(d.nhsClient.regionalData(d.date.minusDays(toSubtract)))
+      OptionT(d.nhsClient.regionalData(today.minusDays(toSubtract)))
     }
 
   def addToList(now: RegionalTotals, old: List[RegionalTotals]): NonEmptyList[RegionalTotals] =

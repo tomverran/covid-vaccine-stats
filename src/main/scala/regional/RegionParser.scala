@@ -1,7 +1,7 @@
 package io.tvc.vaccines
 package regional
 
-import regional.ByAge.{Over65s, Over70s, Over80s}
+import regional.ByAge._
 import regional.XSLXParser._
 
 import cats.data.{Nested, NonEmptyList, ZipList}
@@ -80,12 +80,31 @@ object RegionParser {
       columnWithTotal(name(AgeRange(80)))(long)
     ).mapN(Over65s.apply).value
 
+  def over60s(name: AgeRange => String): Op[ZipList[Over60s]] =
+    (
+      columnWithTotal(name(AgeRange(16, 59)))(long),
+      columnWithTotal(name(AgeRange(60, 64)))(long),
+      columnWithTotal(name(AgeRange(65, 69)))(long),
+      columnWithTotal(name(AgeRange(70, 74)))(long),
+      columnWithTotal(name(AgeRange(75, 79)))(long),
+      columnWithTotal(name(AgeRange(80)))(long)
+    ).mapN(Over60s.apply).value
+
   /**
    * Put all the above functions together to extract
    * a table of data bucketed by age
    */
   def byAge(name: AgeRange => String): Op[ZipList[ByAge]] =
-    orElse(over65s(name).map(_.widen), orElse(over70s(name).map(_.widen), over80s(name).map(_.widen)))
+    orElse(
+      over60s(name).map(_.widen),
+      orElse(
+        over65s(name).map(_.widen),
+        orElse(
+          over70s(name).map(_.widen),
+          over80s(name).map(_.widen)
+        )
+      )
+    )
 
   /**
    * Turn the age range into the right column title format
