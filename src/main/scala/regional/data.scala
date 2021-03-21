@@ -22,6 +22,7 @@ object ByAge {
   case class Over70s(`16-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
   case class Over65s(`16-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
   case class Over60s(`16-59`: L, `60-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
+  case class Over55s(`16-54`: L, `55-59`: L, `60-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
 }
 
 case class RegionStatistics(

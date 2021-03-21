@@ -6,10 +6,11 @@ import regional.XSLXParser._
 
 import cats.instances.either._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.scalatest.ParallelTestExecution
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class RegionParserTest extends AnyWordSpec with Matchers {
+class RegionParserTest extends AnyWordSpec with Matchers with ParallelTestExecution {
 
   "RegionParser" should {
 
@@ -45,6 +46,11 @@ class RegionParserTest extends AnyWordSpec with Matchers {
 
     "parse 11th March format docs" in {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/11-March-2021.xlsx"))
+      create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
+    }
+
+    "parse 18th March format docs" in {
+      val book = new XSSFWorkbook(getClass.getResourceAsStream("/18-March-2021.xlsx"))
       create(book).flatMap(regionStatistics.runA).map(_.keySet.size) shouldBe Right(42)
     }
   }

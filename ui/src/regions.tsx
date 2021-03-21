@@ -9,10 +9,12 @@ type State = {
 }
 
 enum AgeRange {
+  Aged16To54 = "16-54",
   Aged16To59 = "16-59",
   Aged16To64 = "16-64",
   Aged16To69 = "16-69",
   Aged16To79 = "16-79",
+  Aged55To59 = "55-59",
   Aged60To64 = "60-64",
   Aged64To69 = "64-69",
   Aged70To74 = "70-74",
@@ -248,8 +250,10 @@ const RegionTable: React.FunctionComponent<RegionData> =
               <TableRow region={region} group={AgeRange.Aged16To69}>16-69</TableRow>
               <TableRow region={region} group={AgeRange.Aged64To69}>64-69</TableRow>
               <TableRow region={region} group={AgeRange.Aged60To64}>60-64</TableRow>
+              <TableRow region={region} group={AgeRange.Aged55To59}>55-59</TableRow>
               <TableRow region={region} group={AgeRange.Aged16To64}>16-64</TableRow>
               <TableRow region={region} group={AgeRange.Aged16To59}>16-59</TableRow>
+              <TableRow region={region} group={AgeRange.Aged16To54}>16-54</TableRow>
             </tbody>
           </table>
         </div>
@@ -373,7 +377,7 @@ export class Regions extends React.Component<{}, State> {
   }
 
   async componentDidMount() {
-    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v3.json");
+    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_test.json");
     const regionalData: WeeklyRawRegionData[] = await resp.json() as WeeklyRawRegionData[];
     this.setState({ ...this.state, mapValues: transformWeeklyRegionData(regionalData) })
   }

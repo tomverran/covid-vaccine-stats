@@ -90,21 +90,36 @@ object RegionParser {
       columnWithTotal(name(AgeRange(80)))(long)
     ).mapN(Over60s.apply).value
 
+  def over55s(name: AgeRange => String): Op[ZipList[Over55s]] =
+    (
+      columnWithTotal(name(AgeRange(16, 54)))(long),
+      columnWithTotal(name(AgeRange(55, 59)))(long),
+      columnWithTotal(name(AgeRange(60, 64)))(long),
+      columnWithTotal(name(AgeRange(65, 69)))(long),
+      columnWithTotal(name(AgeRange(70, 74)))(long),
+      columnWithTotal(name(AgeRange(75, 79)))(long),
+      columnWithTotal(name(AgeRange(80)))(long)
+    ).mapN(Over55s.apply).value
+
   /**
    * Put all the above functions together to extract
    * a table of data bucketed by age
    */
-  def byAge(name: AgeRange => String): Op[ZipList[ByAge]] =
+  def byAge(name: AgeRange => String): Op[ZipList[ByAge]] = {
     orElse(
-      over60s(name).map(_.widen),
+      over55s(name).map(_.widen),
       orElse(
-        over65s(name).map(_.widen),
+        over60s(name).map(_.widen),
         orElse(
-          over70s(name).map(_.widen),
-          over80s(name).map(_.widen)
+          over65s(name).map(_.widen),
+          orElse(
+            over70s(name).map(_.widen),
+            over80s(name).map(_.widen)
+          )
         )
       )
     )
+  }
 
   /**
    * Turn the age range into the right column title format
