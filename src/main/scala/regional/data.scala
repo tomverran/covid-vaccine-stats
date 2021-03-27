@@ -1,35 +1,45 @@
 package io.tvc.vaccines
 package regional
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.deriveConfiguredCodec
-import io.circe.generic.semiauto.deriveCodec
+import io.circe.KeyDecoder.decodeKeyString
+import io.circe.KeyEncoder.encodeKeyString
+import io.circe.generic.semiauto._
 import io.circe.{Codec, KeyDecoder, KeyEncoder}
 
 import java.time.LocalDate
 
 case class Region(name: String) extends AnyVal
 
+case class AgeRange(min: Int, max: Option[Int]) {
+  def rendered: String = max.fold(s"$min+")(m => s"$min-$m")
+}
 
-sealed trait ByAge
+object AgeRange {
 
-object ByAge {
-  implicit val cfg: Configuration = Configuration.default.withDiscriminator("type")
-  implicit val codec: Codec[ByAge] = deriveConfiguredCodec
-  type L = Long
+  def parseOpen(s: String): Either[String, AgeRange] =
+    Either.cond(s.matches("^[0-9]+\\+$"), AgeRange(s.dropRight(1).toInt), s"$s is not an open range")
 
-  case class Over80s(`16-79`: L, `80+`: L) extends ByAge
-  case class Over70s(`16-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
-  case class Over65s(`16-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
-  case class Over60s(`16-59`: L, `60-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
-  case class Over55s(`16-54`: L, `55-59`: L, `60-64`: L, `64-69`: L, `70-74`: L, `75-79`: L, `80+`: L) extends ByAge
+  def parseClosed(s: String): Either[String, AgeRange] =
+    s.split('-').toList.filter(n => n.trim.forall(_.isDigit) && n.nonEmpty) match {
+      case h :: t :: Nil => Right(AgeRange(h.toInt, Some(t.toInt)))
+      case _ => Left(s"$s is not a closed range")
+    }
+
+  implicit val keyEncoder: KeyEncoder[AgeRange] =
+    encodeKeyString.contramap(_.rendered)
+
+  implicit val keyDecoder: KeyDecoder[AgeRange] =
+    KeyDecoder.instance(s => parseOpen(s).orElse(parseClosed(s)).toOption)
+
+  def apply(min: Int, max: Int): AgeRange = AgeRange(min, Some(max))
+  def apply(min: Int): AgeRange = AgeRange(min, None)
 }
 
 case class RegionStatistics(
   name: String,
-  population: ByAge,
-  firstDose: ByAge,
-  secondDose: ByAge
+  population: Map[AgeRange, Long],
+  firstDose: Map[AgeRange, Long],
+  secondDose: Map[AgeRange, Long]
 )
 
 object RegionStatistics {
@@ -48,10 +58,10 @@ object RegionalTotals {
 object Region {
 
   implicit val encoder: KeyEncoder[Region] =
-    KeyEncoder.encodeKeyString.contramap(_.name)
+    encodeKeyString.contramap(_.name)
 
   implicit val decoder: KeyDecoder[Region] =
-    KeyDecoder.decodeKeyString.map(Region.apply)
+    decodeKeyString.map(Region.apply)
 
   /**
    * Map the names showing up in the NHS Breakdown by ICS/STP of residence

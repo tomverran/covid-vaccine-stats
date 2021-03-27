@@ -23,7 +23,7 @@ object XSLXParser {
   /**
    * Given a sheet return the top left cell
    */
-  private def firstCell(sheet: Sheet): OrError[Cell] =
+  private def findFirstCell(sheet: Sheet): OrError[Cell] =
     for {
       row   <- Option(sheet.getRow(sheet.getFirstRowNum)).toRight("Cannot move to first row")
       col   <- Option(row.getCell(row.getFirstCellNum)).toRight("Cannot move to first cell")
@@ -36,7 +36,7 @@ object XSLXParser {
   def create(wb: XSSFWorkbook): OrError[Cell] =
     for {
       sheet <- Option(wb.getSheetAt(wb.getActiveSheetIndex)).toRight("Can't find any sheets")
-      first <- firstCell(sheet)
+      first <- findFirstCell(sheet)
     } yield first
 
   /**
@@ -52,10 +52,8 @@ object XSLXParser {
   def fail[A](why: String): Op[A] =
     StateT.liftF(Left(why))
 
-  def print[A](a: A): Op[A] = {
-    println(a)
-    StateT.pure(a)
-  }
+  val firstCell: Op[Unit] =
+    StateT.modifyF(c => findFirstCell(c.getSheet))
 
   /**
    * Switch to a different sheet in the workbook
@@ -65,7 +63,7 @@ object XSLXParser {
     StateT.modifyF { context =>
       Option(context.getSheet.getWorkbook.getSheet(name))
         .toRight(s"Cannot find sheet named '$name'")
-        .flatMap(firstCell)
+        .flatMap(findFirstCell)
     }
 
   /**
@@ -84,21 +82,28 @@ object XSLXParser {
     }
 
   /**
-   * Starting at the current cell, find the next cell containing a string value
+   * Starting at the current cell, find the next cell the op succeeds on
    * scanning to the right and then down
    */
-  def jumpToNext(name: String): Op[Unit] =
-    StateT.modifyF { ctx =>
+  def jumpUntil[A](op: Op[A]): Op[A] =
+    StateT { ctx =>
       (
         for {
           row <- ctx.getSheet.rowIterator.asScala
           col <- row.cellIterator.asScala
-          if Try(col.getStringCellValue).toOption.contains(name)
+          res <- op.run(col).toOption.toList
           if col.getColumnIndex >= ctx.getColumnIndex
           if row.getRowNum >= ctx.getRow.getRowNum
-        } yield col
-      ).nextOption().toRight(s"Cannot jump from ${ctx.getAddress} to cell containing '$name'")
+        } yield res
+      ).nextOption().toRight(s"Cannot jump from ${ctx.getAddress} to cell")
     }
+
+  /**
+   * Starting at the current cell, find the next cell containing a string value
+   * scanning to the right and then down
+   */
+  def jumpToNext(name: String): Op[Unit] =
+    jumpUntil(expect(name)).void
 
   /**
    * Move by the specify X & Y amounts across the sheet
@@ -171,7 +176,7 @@ object XSLXParser {
    */
   def string: Op[String] =
     StateT.inspectF { c =>
-      Option(c.getStringCellValue)
+      Try(Option(c.getStringCellValue)).toOption.flatten
         .toRight(s"${c.getAddress} does not contain a string")
     }
 
@@ -192,6 +197,9 @@ object XSLXParser {
    */
   def succeeds[A](op: Op[A]): Op[Boolean] =
     MonadError[Op, String].recover(op.as(true)) { case _ => false }
+
+  def fails[A](op: Op[A]): Op[Boolean] =
+    succeeds(op).map(a => !a)
 
   /**
    * Find out if the cell is blank,
@@ -231,16 +239,20 @@ object XSLXParser {
   }
 
   /**
-   * Run the given operation until the condition in `op` returns true
+   * Run the given operation, accumulating results until the condition in `op` returns true
    * useful for moving along cells until we find a particular value
    */
-  def until(op: Op[Boolean])(run: Op[Unit]): Op[Unit] =
-    Monad[Op].tailRecM(0)(count =>
+  def until[A](op: Op[Boolean])(run: Op[A]): Op[Vector[A]] =
+    Monad[Op].tailRecM(0 -> Vector.empty[A]) { case (count, acc) =>
       Monad[Op].ifM(op)(
-        ifTrue = Monad[Op].pure(Right(())),
-        ifFalse = if (count < 100) run.as(Left(count + 1)) else fail("Until tried >100 times")
+        ifTrue = Monad[Op].pure(Right(acc)),
+        ifFalse = if (count < 100) {
+          run.map(r => Left(count + 1 -> (acc :+ r)))
+        } else {
+          fail("Until tried >100 times")
+        }
       )
-    )
+    }
 
   /**
    * Turn a pre-baked either into a parser op
