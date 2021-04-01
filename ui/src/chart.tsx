@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DailyTotal } from "./model";
-import { Chart } from 'chart.js'
+import { Chart, ChartConfiguration } from 'chart.js'
 import { format } from "date-fns";
 
 export type ChartProps = {
@@ -12,31 +12,61 @@ export type ChartState = {
   chart: Chart | null
 }
 
-function makeChart(statistics: DailyTotal[], chartType: "total" | "today"): Chart {
+function today(stats: DailyTotal[]): ChartConfiguration {
+  return {
+    type: 'bar',
+    options: {
+      scales: {yAxes: [{stacked: true}], xAxes: [{stacked: true}]},
+    },
+    data: {
+      labels: stats.map(d => format(new Date(d.date), 'do MMM')),
+      datasets: [
+        {
+          data: stats.map(d => d["today"].secondDose),
+          backgroundColor: "#2dbf4fdd",
+          borderColor: "#28a745",
+          label: "Second Dose",
+          borderWidth: 1
+        },
+        {
+          data: stats.map(d => d["today"].firstDose), 
+          backgroundColor: "#1ab9d2dd",
+          borderColor: "#17a2b8",
+          label: "First Dose",
+          borderWidth: 1
+        }
+      ]
+    }
+  }
+}
 
-  const data = [...statistics].reverse().slice(1)
-  const ctx = (document.querySelector(`#chart-${chartType}`) as HTMLCanvasElement).getContext('2d')!;
-
-  return new Chart(ctx, {
+function total(data: DailyTotal[]): ChartConfiguration {
+  return {
     type: 'line',
     data: {
       labels: data.map(d => format(new Date(d.date), 'do MMM')),
       datasets: [
         { 
           label: 'First Dose', 
-          data: data.map(d => d[chartType].firstDose), 
+          data: data.map(d => d["total"].firstDose), 
           backgroundColor: 'transparent',
           borderColor: '#17a2b8'
         },
         { 
           label: 'Second Dose', 
-          data: data.map(d => d[chartType].secondDose), 
+          data: data.map(d => d["total"].secondDose), 
           backgroundColor: 'transparent',
           borderColor: '#28a745'
         }
       ]
     }
-  });  
+  }
+}
+
+function makeChart(statistics: DailyTotal[], chartType: "total" | "today"): Chart {
+  const data = [...statistics].reverse().slice(1)
+  const ctx = (document.querySelector(`#chart-${chartType}`) as HTMLCanvasElement).getContext('2d')!;
+  return new Chart(ctx, chartType == "today" ? today(data) : total(data));  
 }
 
 function chartTitle(type: "today" | "total") {

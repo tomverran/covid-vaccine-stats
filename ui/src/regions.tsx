@@ -8,23 +8,11 @@ type State = {
   mapValues?: WeeklyRegionData
 }
 
-enum AgeRange {
-  Aged16To54 = "16-54",
-  Aged16To59 = "16-59",
-  Aged16To64 = "16-64",
-  Aged16To69 = "16-69",
-  Aged16To79 = "16-79",
-  Aged55To59 = "55-59",
-  Aged60To64 = "60-64",
-  Aged64To69 = "64-69",
-  Aged70To74 = "70-74",
-  Aged75To79 = "75-79",
-  Aged80Plus = "80+",
+type ByAge = {
+  [age: string]: number
 }
 
-type ByAge = { type: string } & {
-  [key in AgeRange]?: number
-}
+type AgeRange = keyof ByAge
 
 type MinMax = {
   min: number,
@@ -91,7 +79,7 @@ type MapMode =
   { type: "DosesLastWeek" } |
   { type: "OverallPercent" } |
   { type: "ChangeInDoses" } |
-  { type: AgeRange }
+  { type: keyof ByAge }
 
 
 /**
@@ -107,7 +95,9 @@ function total(ba: ByAge): number {
  * return the buckets available as keys
  */
 function ageRanges(ba: ByAge): AgeRange[] {
-  return Object.keys(ba).filter(t => t != "type") as AgeRange[]
+  const keys = Object.keys(ba) as AgeRange[]
+  keys.sort()
+  return keys
 }
 
 /**
@@ -124,7 +114,7 @@ function commonKeys(ba1: ByAge, ba2: ByAge): AgeRange[] {
  * common age group from both groups in turn
  */
 function mapByAge(ba1: ByAge, ba2: ByAge, f: (a: number, b: number) => number): ByAge {
-  return commonKeys(ba1, ba2).reduce((k, v) => ({ ...k, [v]: f(ba1[v] || 0, ba2[v] || 0) }), { type: "intersection" })
+  return commonKeys(ba1, ba2).reduce((k, v) => ({ ...k, [v]: f(ba1[v] || 0, ba2[v] || 0) }), {})
 }
 
 /**
@@ -136,7 +126,7 @@ const TableRow: React.FunctionComponent<{ group: AgeRange, region: RegionData }>
       return <React.Fragment></React.Fragment>
     } else {
       return <tr>
-        <th>{props.children}</th>
+        <th>{props.group}</th>
         <td className="text-end">{(props.region.percentFirstDoses[props.group] || 0).toFixed(2)}%</td>
         <td className="text-end">{(props.region.percentSecondDoses[props.group] || 0).toFixed(2)}%</td>
       </tr>
@@ -243,17 +233,7 @@ const RegionTable: React.FunctionComponent<RegionData> =
               </tr>
             </thead>
             <tbody>
-              <TableRow region={region} group={AgeRange.Aged80Plus}>80+</TableRow>
-              <TableRow region={region} group={AgeRange.Aged75To79}>75-79</TableRow>
-              <TableRow region={region} group={AgeRange.Aged70To74}>70-74</TableRow>
-              <TableRow region={region} group={AgeRange.Aged16To79}>16-79</TableRow>
-              <TableRow region={region} group={AgeRange.Aged16To69}>16-69</TableRow>
-              <TableRow region={region} group={AgeRange.Aged64To69}>64-69</TableRow>
-              <TableRow region={region} group={AgeRange.Aged60To64}>60-64</TableRow>
-              <TableRow region={region} group={AgeRange.Aged55To59}>55-59</TableRow>
-              <TableRow region={region} group={AgeRange.Aged16To64}>16-64</TableRow>
-              <TableRow region={region} group={AgeRange.Aged16To59}>16-59</TableRow>
-              <TableRow region={region} group={AgeRange.Aged16To54}>16-54</TableRow>
+              {ageRanges(region.population).map(r => <TableRow region={region} group={r}/>)}
             </tbody>
           </table>
         </div>
@@ -377,7 +357,7 @@ export class Regions extends React.Component<{}, State> {
   }
 
   async componentDidMount() {
-    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_test.json");
+    const resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/regional_v4.json");
     const regionalData: WeeklyRawRegionData[] = await resp.json() as WeeklyRawRegionData[];
     this.setState({ ...this.state, mapValues: transformWeeklyRegionData(regionalData) })
   }
