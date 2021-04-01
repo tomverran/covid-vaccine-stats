@@ -1,6 +1,7 @@
-import { formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import * as React from "react";
 import { Map } from './map'
+
 
 type State = {
   mapMode: MapMode
@@ -387,7 +388,7 @@ export class Regions extends React.Component<{}, State> {
 
   updated() {
     if (!this.state.mapValues) return '';
-    return formatDistanceToNow(new Date(this.state.mapValues.lastUpdated))
+    return format(new Date(this.state.mapValues.lastUpdated), 'EEEE do MMMM')
   }
 
   table(): React.ReactElement {
@@ -406,7 +407,7 @@ export class Regions extends React.Component<{}, State> {
       <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
       <p className="text-muted text-center mt-2 mb-4">
         Hover over / tap the map to see more.<br />
-        Last updated {this.updated()} ago.
+        Latest data from {this.updated()}.
       </p>
       <Map fill={this.colour.bind(this)} opacity={this.opacity.bind(this)} hover={(hoverRegion) => this.setState({ ...this.state, hoverRegion })}></Map>
       <MapModeSelect ages={this.availableAges()} mode={this.state.mapMode} set={this.setMapMode.bind(this)}></MapModeSelect>
