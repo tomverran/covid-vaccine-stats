@@ -6,15 +6,15 @@ import statistics.StatisticsClient
 import twitter.{Tweet, TwitterClient}
 import vaccines.{DailyTotals, VaccineClient}
 
+import cats.Monad
 import cats.data.{Kleisli, NonEmptyList, OptionT}
 import cats.effect.{Blocker, Clock, ConcurrentEffect, ContextShift, IO, Resource, Sync}
-import cats.{Applicative, Monad}
+import fs2.io.stdin
+import org.http4s.Uri
 import org.http4s.client.blaze.BlazeClientBuilder
 
-import java.time.DayOfWeek.THURSDAY
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.duration.DAYS
 
 object App {
 
@@ -25,8 +25,11 @@ object App {
     regionalStatsClient: StatisticsClient[F, RegionalTotals],
     nhsClient: NHSClient[F],
     scheduler: Scheduler[F],
-    date: LocalDate
-  )
+    today: LocalDate
+  ) {
+    def yesterday: LocalDate =
+      today.minusDays(1)
+  }
 
   def load[F[_]: ConcurrentEffect: ContextShift: Clock](
     implicit io: ContextShift[IO]
@@ -45,19 +48,19 @@ object App {
       dailyStatsClient = StatisticsClient(block, s3, config.dailyStatistics),
       regionalStatsClient = StatisticsClient(block, s3, config.regionalStatistics),
       scheduler = Scheduler(eventBridge, config.scheduler),
-      date = today.minusDays(1)
+      today = today
     )
 
   type Operation[F[_], A] = Kleisli[OptionT[F, *], Dependencies[F], A]
 
   def fetchPastDailyStats[F[_]: Monad]: Operation[F, List[DailyTotals]] =
-    Kleisli(d => OptionT.liftF(d.dailyStatsClient.fetch).filter(_.forall(_.date != d.date)))
+    Kleisli(d => OptionT.liftF(d.dailyStatsClient.fetch).filter(_.forall(_.date != d.yesterday)))
 
   def fetchPastRegionalStats[F[_]: Monad]: Operation[F, List[RegionalTotals]] =
     Kleisli(d => OptionT.liftF(d.regionalStatsClient.fetch))
 
   def fetchDailyStats[F[_]]: Operation[F, DailyTotals] =
-    Kleisli(d => OptionT(d.vaccineClient.vaccineTotals(d.date)))
+    Kleisli(d => OptionT(d.vaccineClient.vaccineTotals(d.yesterday)))
 
   def putDailyStats[F[_]: Monad](stats: NonEmptyList[DailyTotals]): Operation[F, Unit] =
     Kleisli(d => OptionT.liftF(d.dailyStatsClient.put(stats.toList)))
@@ -71,24 +74,40 @@ object App {
   def waitUntilTomorrow[F[_]: Monad]: Operation[F, Unit] =
     Kleisli(d => OptionT.liftF(d.scheduler.stopUntilTomorrow))
 
-  def fetchLatestRegionalStats[F[_]: Monad]: Operation[F, RegionalTotals] =
-    Kleisli { d =>
-      val today = d.date.plusDays(1)
-      val thursdayValue = THURSDAY.getValue
-      val daysSinceThurs = today.getDayOfWeek.getValue - thursdayValue
-      val toSubtract = if (daysSinceThurs < 0) 7 - daysSinceThurs else daysSinceThurs
-      OptionT(d.nhsClient.regionalData(today.minusDays(toSubtract)))
-    }
+  def putLine[F[_]: Sync](what: String): Operation[F, Unit] =
+    Kleisli.liftF(OptionT.liftF(Sync[F].delay(println(what))))
+
+  def readLine[F[_]: Sync: ContextShift]: Operation[F, String] =
+    Kleisli.liftF(
+      OptionT.liftF(
+        Blocker[F].use { block =>
+          stdin[F](bufSize = 1, block)
+            .through(fs2.text.utf8Decode[F])
+            .through(fs2.text.lines[F])
+            .take(1)
+            .compile
+            .lastOrError
+        }
+      )
+    )
+
+  def fetchRegionalTotals[F[_]: Monad](uri: Uri): Operation[F, RegionalTotals] =
+    Kleisli(d => OptionT(d.nhsClient.regionalData(uri)))
 
   def addToList(now: RegionalTotals, old: List[RegionalTotals]): NonEmptyList[RegionalTotals] =
     NonEmptyList(now, old.filter(_.date != now.date))
 
-  def regional[F[_]: Monad]: Operation[F, Unit] =
+  def regional[F[_]: Sync: ContextShift]: Operation[F, Unit] =
     for {
       old     <- fetchPastRegionalStats
-      today   <- fetchLatestRegionalStats
+      _       <- putLine(s"Latest stats: ${old.headOption.fold("None")(_.date.toString)}")
+      _       <- putLine(s"Please enter the URL to fetch stats from.")
+      file    <- readLine
+      _       <- putLine("Trying to fetch stats...")
+      today   <- fetchRegionalTotals(Uri.unsafeFromString(file))
       updated = addToList(today, old)
       _       <- putRegionalStats(updated)
+      _       <- putLine(s"Updated stats for ${today.date}")
     } yield ()
 
   def daily[F[_]: Monad]: Operation[F, Unit] =

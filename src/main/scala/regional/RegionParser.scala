@@ -7,6 +7,12 @@ import cats.data.{Nested, NonEmptyList, ZipList}
 import cats.syntax.apply._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
+import cats.syntax.traverse._
+import cats.instances.list._
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import scala.util.Try
 
 object RegionParser {
 
@@ -50,13 +56,24 @@ object RegionParser {
     string.flatMapF(s => Region.forName(s).toRight(s"'$s' is not a region"))
 
   /**
+   * Find the date that these stats are for,
+   * we take the end of the period mentioned in the sheet
+   */
+  private val statsDate: Op[LocalDate] = {
+    val fmt = DateTimeFormatter.ofPattern("d MMMM uuuu")
+    val dateCell = sheet("Contents") >> jumpToFirst("Period:") >> right >> string
+    val dateStr = dateCell.map(_.split("to ").lastOption.map(_.replaceAll("^([0-9]{1,2})\\w{2} ", "$1 ")))
+    dateStr.flatMapF(_.flatMap(d => Try(LocalDate.parse(d, fmt)).toOption).toRight("Failed to parse date"))
+  }
+
+  /**
    * Run the given operation against each row in a column where the first few rows
    * are things we don't care about, i.e. blank cells / a "total" row
    */
   private def column[A](op: Op[A]): Op[Vector[A]] =
     times(3)(downOrSkip(max = 1)) >>
-    until(succeeds(op))(downOrSkip(max = 1)) >>
-    eachRow(op)
+      until(succeeds(op))(downOrSkip(max = 1)) >>
+      eachRow(op)
 
   /**
    * Do something with each row in the column of ICS/STP regions
@@ -71,13 +88,13 @@ object RegionParser {
    */
   private val ageColumns: Op[ZipList[Map[AgeRange, Long]]] =
     jumpUntil(ageRange) >>
-    until(fails(ageRange)) {
-      for {
-        header <- ageRange
-        values <- peek(column(long))
-        _      <- orElse(right, firstCell)
-      } yield values.map(header -> _)
-    }.map(items =>ZipList(items.transpose.map(_.toMap).toList))
+      until(fails(ageRange)) {
+        for {
+          header <- ageRange
+          values <- peek(column(long))
+          _ <- orElse(right, firstCell)
+        } yield values.map(header -> _)
+      }.map(items => ZipList(items.transpose.map(_.toMap).toList))
 
   /**
    * Parse populations from the XLSX document
@@ -102,7 +119,7 @@ object RegionParser {
    * Ensure that we only include age ranges present in all the per-age data
    * This makes me a bit sad but the ranges change all the time hence this representation
    */
-  private def validateRanges(rs: RegionStatistics): RegionStatistics = {
+  private def enforceCommonRanges(rs: RegionStatistics): RegionStatistics = {
     val commonKeys = rs.firstDose.keySet ++ rs.secondDose.keySet ++ rs.population.keySet
     rs.copy(
       firstDose = rs.firstDose.view.filterKeys(commonKeys.contains).toMap,
@@ -110,6 +127,25 @@ object RegionParser {
       population = rs.population.view.filterKeys(commonKeys.contains).toMap
     )
   }
+
+  /**
+   * Given some RegionStatistics ensure all the age group ranges are contiguous,
+   * i.e. there are no gaps in the age ranges
+   */
+  private def validateRangesContiguous(rs: RegionStatistics): Either[String, RegionStatistics] = {
+    val sortedKeys = rs.firstDose.keys.toList.sortBy(_.min)
+    Either.cond(
+      sortedKeys.zip(sortedKeys.drop(1).map(Some(_)) :+ None).forall { case (key, next) =>
+        next.forall(n => key.max.contains(n.min - 1)) ||
+          (next.isEmpty && key.max.isEmpty)
+      },
+      right = rs,
+      left = s"Ranges not contiguous. Keys: ${sortedKeys.map(_.rendered).mkString(", ")}"
+    )
+  }
+
+  private def validateRegionCount(rs: Map[Region, RegionStatistics]): Either[String, Unit] =
+    Either.cond(rs.keySet.size == 42, (), "A number other than 42 regions found")
 
   /**
    * Dose age ranges just use "under 50" but what they mean is 16-50
@@ -131,16 +167,28 @@ object RegionParser {
       Nested(populations),
       Nested(jumpToNext("1st dose") >> peek(ageColumns.map(_.map(twiddleDoseAges)))),
       Nested(jumpToNext("2nd dose") >> peek(ageColumns.map(_.map(twiddleDoseAges))))
-    ).mapN(RegionStatistics.apply).map(validateRanges)
+    ).mapN(RegionStatistics.apply)
 
   /**
    * Put everything together to parse region statistics from the given XLSX document
    * We don't bother with percentage data as it can be calculated ad-hoc in the frontend
    */
-  val regionStatistics: Op[Map[Region, RegionStatistics]] =
+  private val regionStatistics: Op[Map[Region, RegionStatistics]] =
     trySheets(NonEmptyList.of("Vaccinations by ICS STP & Age", "ICS STP")) >>
-    (
-      Nested(regionColumn(region)),
-      regionStats
-    ).tupled.value.map(_.value.toMap.view.mapValues(validateRanges).toMap)
+      (
+        Nested(regionColumn(region)),
+        regionStats
+        ).tupled.value.flatMapF { stats =>
+          stats
+            .value
+            .traverse { case (k, v) => validateRangesContiguous(enforceCommonRanges(v)).map(k -> _) }
+            .map(_.toMap).flatTap(validateRegionCount)
+      }
+
+  /**
+   * Join the date and the regional statistics
+   * into some totals to be published onto the site
+   */
+  val regionalTotals: Op[RegionalTotals] =
+    (regionStatistics, statsDate).mapN(RegionalTotals.apply)
 }
