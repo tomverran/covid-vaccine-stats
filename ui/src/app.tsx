@@ -25,7 +25,6 @@ export class App extends React.Component<{}, CardProps> {
         For daily updates follow us on <a href="https://twitter.com/stats_vaccine">Twitter</a>.
       </p>
       <Cards statistics={this.state.statistics}></Cards>
-      <DayProjection statistics={this.state.statistics} />
       <DoseChart statistics={this.state.statistics} type="today"/>
       <DoseChart statistics={this.state.statistics} type="total"/>
       <Regions></Regions>
