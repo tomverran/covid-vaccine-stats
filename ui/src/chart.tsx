@@ -16,7 +16,22 @@ function today(stats: DailyTotal[]): ChartConfiguration {
   return {
     type: 'bar',
     options: {
-      scales: {yAxes: [{stacked: true, ticks: {callback: formatNumber}}], xAxes: [{stacked: true}]},
+      scales: {
+        yAxes: [
+          {
+            stacked: true, 
+            ticks: {
+              callback: formatNumber,
+              lineHeight: 2
+            },
+          }
+        ], 
+        xAxes: [
+          {
+            stacked: true
+          }
+        ]
+      },
     },
     data: {
       labels: stats.map(d => format(new Date(d.date), 'do MMM')),
@@ -42,7 +57,7 @@ function today(stats: DailyTotal[]): ChartConfiguration {
 
 function formatNumber(value: number) {
   return value == 0 ? value : (
-    value > 1_000_000 
+    value >= 1_000_000 
       ? (value / 1_000_000).toFixed(0) + 'M' 
       : (value / 1_000).toFixed(0) + 'K'
     )
@@ -73,7 +88,8 @@ function total(data: DailyTotal[]): ChartConfiguration {
         yAxes: [
           {
             ticks: {
-              callback: formatNumber
+              callback: formatNumber,
+              lineHeight: 2
             }
           }
         ]
