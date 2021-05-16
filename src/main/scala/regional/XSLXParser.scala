@@ -85,7 +85,7 @@ object XSLXParser {
    * Starting at the current cell, find the next cell the op succeeds on
    * scanning to the right and then down
    */
-  def jumpUntil[A](op: Op[A]): Op[A] =
+  def jumpUntil[A](op: Op[A], name: String): Op[A] =
     StateT { ctx =>
       (
         for {
@@ -95,7 +95,7 @@ object XSLXParser {
           if col.getColumnIndex >= ctx.getColumnIndex
           if row.getRowNum >= ctx.getRow.getRowNum
         } yield res
-      ).nextOption().toRight(s"Cannot jump from ${ctx.getAddress} to cell")
+      ).nextOption().toRight(s"Cannot jump from ${ctx.getSheet.getSheetName}:${ctx.getAddress} to $name")
     }
 
   /**
@@ -103,7 +103,7 @@ object XSLXParser {
    * scanning to the right and then down
    */
   def jumpToNext(name: String): Op[Unit] =
-    jumpUntil(expect(name)).void
+    jumpUntil(expect(name), s"cell named $name").void
 
   /**
    * Move by the specify X & Y amounts across the sheet

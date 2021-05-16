@@ -87,7 +87,7 @@ object RegionParser {
    * and produce a list where each item is a row containing a map of the column data
    */
   private val ageColumns: Op[ZipList[Map[AgeRange, Long]]] =
-    jumpUntil(ageRange) >>
+    jumpUntil(ageRange, name = "Age range") >>
       until(fails(ageRange)) {
         for {
           header <- ageRange
@@ -158,6 +158,13 @@ object RegionParser {
     }
 
   /**
+   * we have to use startsWith instead of a plain match
+   * as the data has begun to have superscript suffixes
+   */
+  private def findDose(which: String): Op[Boolean] =
+    jumpUntil(string.map(_.startsWith(s"$which dose")), name = s"$which dose")
+
+  /**
    * Obtain regional statistics from the main table of stats
    * we then re-scan the region column below to make a map
    */
@@ -165,8 +172,8 @@ object RegionParser {
     (
       Nested(regionColumn(string)),
       Nested(populations),
-      Nested(jumpToNext("1st dose") >> peek(ageColumns.map(_.map(twiddleDoseAges)))),
-      Nested(jumpToNext("2nd dose") >> peek(ageColumns.map(_.map(twiddleDoseAges))))
+      Nested(findDose("1st") >> peek(ageColumns.map(_.map(twiddleDoseAges)))),
+      Nested(findDose("2nd") >> peek(ageColumns.map(_.map(twiddleDoseAges))))
     ).mapN(RegionStatistics.apply)
 
   /**
