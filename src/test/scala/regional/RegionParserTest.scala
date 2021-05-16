@@ -6,7 +6,7 @@ import regional.XSLXParser._
 
 import cats.instances.either._
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.scalatest.ParallelTestExecution
+import org.scalatest.{Inspectors, ParallelTestExecution}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -66,7 +66,18 @@ class RegionParserTest extends AnyWordSpec with Matchers with ParallelTestExecut
 
     "parse 13th May format docs" in {
       val book = new XSSFWorkbook(getClass.getResourceAsStream("/13-May-2021.xlsx"))
-      create(book).flatMap(regionalTotals.runA).map(_.statistics.keySet.size) shouldBe Right(42)
+      val stats = create(book).flatMap(regionalTotals.runA).map(_.statistics)
+      stats.map(_.keySet.size) shouldBe Right(42)
+
+      val ranges = stats.toSeq.flatMap(_.values.flatMap(_.firstDose.keys))
+      val secondDoses = stats.toSeq.flatMap(_.values.map(_.secondDose))
+      val firstDoses = stats.toSeq.flatMap(_.values.map(_.firstDose))
+
+      Inspectors.forAll(ranges) { range =>
+        Inspectors.forAll(firstDoses.zip(secondDoses)) { case (first, second) =>
+          first.get(range) shouldNot be(second.get(range))
+        }
+      }
     }
   }
 }

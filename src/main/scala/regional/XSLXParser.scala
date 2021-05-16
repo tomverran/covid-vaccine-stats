@@ -171,6 +171,13 @@ object XSLXParser {
     }
 
   /**
+   * Fail if the given op that returns a boolean fails or
+   * if it succeeds and the value it has extracted is false
+   */
+  def failIfFalse(op: Op[Boolean], name: String): Op[Unit] =
+    op.flatMapF(r => Either.cond(r, (), s"op named '$name' returned false"))
+
+  /**
    * Extract a string value from the cell
    * will fail if the cell contains any other type of data
    */

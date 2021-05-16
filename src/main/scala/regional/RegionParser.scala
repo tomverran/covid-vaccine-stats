@@ -161,8 +161,8 @@ object RegionParser {
    * we have to use startsWith instead of a plain match
    * as the data has begun to have superscript suffixes
    */
-  private def findDose(which: String): Op[Boolean] =
-    jumpUntil(string.map(_.startsWith(s"$which dose")), name = s"$which dose")
+  private def findDose(num: String): Op[Unit] =
+    jumpUntil(failIfFalse(string.map(_.startsWith(s"$num dose")), s"$num dose"), s"$num dose")
 
   /**
    * Obtain regional statistics from the main table of stats
