@@ -15,11 +15,67 @@
 @import "~bootstrap/scss/containers";
 @import "~bootstrap/scss/utilities/api";
 
+/**
+ * The site uses so little of Bootstrap that it is easier
+ * just to override what it does use for a dark theme
+ * please forgive me
+ */ 
+@media(prefers-color-scheme: dark) {
+
+  body {
+    background-color: black !important;
+  }
+
+  .bg-card {
+    background-color: #222 !important;
+  }
+
+  .border-bottom, .border, .table-bordered {
+    border-color: black !important;
+  }
+  
+  h1, h2, h3, h4, h5 {
+    color: #ccc !important;
+  }
+
+  .text-muted, td, th {
+    color: #a0a0a0 !important;
+  }
+
+  .text-success {
+    color: lighten($success, 10) !important;
+  }
+
+  .text-danger {
+    color: lighten($danger, 10) !important;
+  }
+
+  .region {
+    stroke: #888 !important;
+  }
+}
+
+
+@include media-breakpoint-down(sm) { 
+  .site-heading {
+    font-size: 1.5rem; // fit onto one line on mobile
+  }
+}
+
+@include media-breakpoint-only(md) {
+  .stat-card p {
+    font-size: 0.95rem; // overflows on Wednesdays at 1rem
+  }
+}
 
 body {
   background-color: #f8f8f8;
   overflow-y: scroll
 }
+
+.bg-card {
+    background-color: white;
+ }
 
 .loading {
   h1, h4, p {

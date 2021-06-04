@@ -4,7 +4,7 @@ import * as React from "react";
 
 const Card: React.FunctionComponent<{loaded: boolean}> =
   (props) => {
-    return <div className={`stat-card shadow-sm bg-white border px-3 py-2 flex-grow-1 ${props.loaded ? '' : 'loading'}`}>
+    return <div className={`stat-card bg-card shadow-sm border px-3 py-2 flex-grow-1 ${props.loaded ? '' : 'loading'}`}>
       {props.children}
     </div>
   }

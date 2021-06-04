@@ -133,7 +133,7 @@ export class DoseChart extends React.Component<ChartProps, ChartState> {
   }
 
   render() {
-    return <div className="bg-white border p-2 p-sm-4 mb-2 shadow-sm">
+    return <div className="bg-card border p-2 p-sm-4 mb-2 shadow-sm">
       <h5 className="text-center mb-4 mt-sm-0 mt-2">{chartTitle(this.props.type)}</h5>
       <canvas id={`chart-${this.props.type}`}></canvas>
     </div>

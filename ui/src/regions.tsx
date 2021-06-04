@@ -403,7 +403,7 @@ export class Regions extends React.Component<{}, State> {
   }
 
   render() {
-    return <div className="bg-white border shadow-sm p-4">
+    return <div className="bg-card border shadow-sm p-4">
       <h5 className="mb-0 text-center" id="regional">Regional statistics for England</h5>
       <p className="text-muted text-center mt-2 mb-4">
         Hover over / tap the map to see more.<br />

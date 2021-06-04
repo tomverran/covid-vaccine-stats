@@ -18,7 +18,7 @@ export class App extends React.Component<{}, CardProps> {
 
   render() {
     return <div className="container">
-      <h1 className="mb-1 mt-1 mx-auto px-2 py-2">UK COVID-19 Vaccine Tracker</h1>
+      <h1 className="mb-1 mt-1 mx-auto px-2 py-2 site-heading">UK COVID-19 Vaccine Tracker</h1>
       <p className="px-2 mb-3 text-muted">
         Data obtained from the <a href="https://coronavirus.data.gov.uk/">GOV.UK API</a>.
         This site is in no way affiliated with the NHS or UK Government!
