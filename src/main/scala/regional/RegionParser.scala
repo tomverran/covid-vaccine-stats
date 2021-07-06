@@ -76,11 +76,22 @@ object RegionParser {
       eachRow(op)
 
   /**
+   * A couple of variations are used for the region column name,
+   * this operation will only succeed if we find an expected one
+   */
+  private val regionColumnHeading: Op[Unit] =
+    orElse(
+      expect("ICS/STP of Residence"),
+      expect("ICS/STP of Residence Name")
+    )
+
+  /**
    * Do something with each row in the column of ICS/STP regions
    * We validate the region data is correct before running the op
    */
   private def regionColumn[A](op: Op[A]): Op[ZipList[A]] =
-    peek(jumpToNext("ICS/STP of Residence") >> column(region >> op).map(l => ZipList(l.toList)))
+    peek(jumpUntil(regionColumnHeading, "STP column") >>
+    column(region >> op).map(l => ZipList(l.toList)))
 
   /**
    * Find consecutive columns headed by age ranges
