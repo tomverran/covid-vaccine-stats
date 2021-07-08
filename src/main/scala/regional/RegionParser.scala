@@ -117,7 +117,8 @@ object RegionParser {
         NonEmptyList.of(
           "Population estimates",
           "Population estimates (ONS)",
-          "Vaccinations by ICS STP & Age"
+          "Population estimates (ONS 2019)",
+          "Vaccinations by ICS STP & Age",
         )
       ) >>
         orElse(
