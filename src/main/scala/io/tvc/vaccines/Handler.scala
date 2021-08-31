@@ -6,9 +6,9 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 
 import java.io.{InputStream, OutputStream}
 
-class Handler(implicit rt: IORuntime) extends RequestStreamHandler {
+class Handler extends RequestStreamHandler {
   def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit =
-    Handler.runDaily.unsafeRunSync()
+    Handler.runDaily.unsafeRunSync()(IORuntime.global)
 }
 
 object Handler extends IOApp {
