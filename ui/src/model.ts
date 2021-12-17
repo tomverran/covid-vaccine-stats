@@ -3,7 +3,8 @@ import { addDays } from 'date-fns'
 
 export type DoseTotal = {
   firstDose: number,
-  secondDose: number
+  secondDose: number,
+  thirdDose: number
 }
 
 export type DailyTotal = {
@@ -21,6 +22,7 @@ export function doseName(dose: keyof DoseTotal): string {
   switch (dose) {
     case 'firstDose': return 'First'
     case 'secondDose': return 'Second'
+    case 'thirdDose': return 'Third / Booster'
   }
 }
 

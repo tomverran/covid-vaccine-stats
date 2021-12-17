@@ -37,6 +37,13 @@ function today(stats: DailyTotal[]): ChartConfiguration {
       labels: stats.map(d => format(new Date(d.date), 'do MMM')),
       datasets: [
         {
+          data: stats.map(d => d["today"].firstDose), 
+          backgroundColor: "#1ab9d2dd",
+          borderColor: "#17a2b8",
+          label: "First Dose",
+          borderWidth: 1
+        },
+        {
           data: stats.map(d => d["today"].secondDose),
           backgroundColor: "#2dbf4fdd",
           borderColor: "#28a745",
@@ -44,13 +51,13 @@ function today(stats: DailyTotal[]): ChartConfiguration {
           borderWidth: 1
         },
         {
-          data: stats.map(d => d["today"].firstDose), 
-          backgroundColor: "#1ab9d2dd",
-          borderColor: "#17a2b8",
-          label: "First Dose",
+          data: stats.map(d => d["today"].thirdDose),
+          backgroundColor: "#f5c211",
+          borderColor: "#c49a08",
+          label: "Third / Booster Dose",
           borderWidth: 1
         }
-      ]
+     ]
     }
   }
 }
@@ -80,7 +87,15 @@ function total(data: DailyTotal[]): ChartConfiguration {
           data: data.map(d => d["total"].secondDose), 
           backgroundColor: 'transparent',
           borderColor: '#28a745'
-        }
+        },
+        {
+          data: data.map(d => d["total"].thirdDose),
+          backgroundColor: 'transparent',
+          borderColor: "#f5c211",
+          label: "Third / Booster Dose",
+          borderWidth: 1
+        },
+
       ]
     },
     options: {

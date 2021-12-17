@@ -34,7 +34,7 @@ object Config {
   def load[F[_]: Async]: F[Config] =
     params(EU_WEST_1).flatMap { param =>
       (
-        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "statistics.json")),
+        env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "statistics_v2.json")),
         env("STATISTICS_BUCKET_NAME").map(StatisticsClient.Config(_, "regional_v4.json")),
         env("SCHEDULER_RULE_NAME").map(Scheduler.Config),
         (consumer(param), token(param)).mapN(twitter.Config)

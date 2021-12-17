@@ -1,7 +1,6 @@
 import * as React from "react";
 import { CardProps, Cards } from "./cards";
 import { DoseChart } from "./chart";
-import { DayProjection } from "./projection";
 import { Regions } from "./regions";
 
 export class App extends React.Component<{}, CardProps> {
@@ -12,7 +11,7 @@ export class App extends React.Component<{}, CardProps> {
   }
 
   async componentDidMount() {
-    let resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/statistics.json");
+    let resp = await fetch("https://vaccine-statistics-20210117140726225700000002.s3-eu-west-1.amazonaws.com/statistics_v2.json");
     this.setState({ statistics: await resp.json() });
   }
 

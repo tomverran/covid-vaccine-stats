@@ -7,10 +7,11 @@ import java.time.LocalDate
 
 case class DoseTotals(
   firstDose: Long,
-  secondDose: Long
+  secondDose: Long,
+  thirdDose: Long
 ) {
   def totalDoses: Long =
-    firstDose + secondDose
+    firstDose + secondDose + thirdDose
 }
 
 object DoseTotals {
@@ -37,7 +38,8 @@ object DailyTotals {
         date = date,
         today = DoseTotals(
           firstDose = today.firstDose - prev.total.firstDose,
-          secondDose = today.secondDose - prev.total.secondDose
+          secondDose = today.secondDose - prev.total.secondDose,
+          thirdDose = today.thirdDose - prev.total.thirdDose
         ),
         total = today
       )

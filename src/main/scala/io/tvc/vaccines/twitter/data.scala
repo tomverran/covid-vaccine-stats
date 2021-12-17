@@ -77,10 +77,10 @@ object Tweet {
       f"""
       |UK #covid19 #vaccine statistics for ${formatDate(dailyTotals.head.date)} 💉
       |
+      |🔹 ${dailyTotals.head.today.thirdDose}%,d third / booster doses given.
+      |🔹 ${dailyTotals.head.today.secondDose}%,d second doses given.
       |🔹 ${dailyTotals.head.today.firstDose}%,d first doses given.
-      |🔹 ${dailyTotals.head.today.secondDose}%,d second doses given.${recordText(dailyTotals)}
       |🔹 ${changeText(dailyTotals)}
-      |🔹 ${dailyTotals.head.total.firstDose}%,d total first doses given.
       |
       |See more: https://covid-vaccine-stats.uk
       |""".stripMargin

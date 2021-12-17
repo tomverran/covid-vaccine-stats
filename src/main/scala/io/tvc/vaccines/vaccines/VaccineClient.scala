@@ -25,7 +25,8 @@ object VaccineClient {
     Decoder { c =>
       (
         c.get[Long](s"${time}PeopleVaccinatedFirstDoseByPublishDate"),
-        c.get[Long](s"${time}PeopleVaccinatedSecondDoseByPublishDate")
+        c.get[Long](s"${time}PeopleVaccinatedSecondDoseByPublishDate"),
+        c.get[Option[Long]](s"${time}PeopleVaccinatedThirdInjectionByPublishDate").map(_.getOrElse(0L)),
       ).mapN(DoseTotals.apply)
     }
 
@@ -48,7 +49,9 @@ object VaccineClient {
       "cumPeopleVaccinatedFirstDoseByPublishDate",
       "newPeopleVaccinatedSecondDoseByPublishDate",
       "cumPeopleVaccinatedSecondDoseByPublishDate",
-    ).map(item => item -> item).toMap
+      "newPeopleVaccinatedThirdInjectionByPublishDate",
+      "cumPeopleVaccinatedThirdInjectionByPublishDate"
+  ).map(item => item -> item).toMap
 
   private val uri: Uri =
     uri"https://api.coronavirus.data.gov.uk/v1/data"

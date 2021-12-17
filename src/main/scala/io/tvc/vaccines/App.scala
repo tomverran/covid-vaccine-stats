@@ -4,6 +4,10 @@ import cats.Monad
 import cats.data.{Kleisli, NonEmptyList, OptionT}
 import cats.effect.kernel.Async
 import cats.effect.{Clock, Resource, Sync}
+import cats.syntax.applicativeError._
+import cats.syntax.foldable._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import fs2.io.stdin
 import io.tvc.vaccines.regional.{NHSClient, RegionalTotals}
 import io.tvc.vaccines.scheduler.Scheduler
@@ -14,7 +18,9 @@ import org.http4s.Uri
 import org.http4s.blaze.client.BlazeClientBuilder
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit.DAYS
 import scala.concurrent.ExecutionContext.global
+import scala.concurrent.duration._
 
 object App {
 
@@ -104,6 +110,21 @@ object App {
       _       <- putRegionalStats(updated)
       _       <- putLine(s"Updated stats for ${today.date}")
     } yield ()
+
+  def backfill[F[_]: Async]: Operation[F, Unit] =
+    Kleisli { data =>
+      val start = LocalDate.of(2021, 1, 12)
+      (0L to DAYS.between(start, data.today).abs).map(start.plusDays).toList.traverse { date =>
+        (
+          for {
+            stats   <- fetchPastDailyStats.attempt
+            daily   <- fetchDailyStats
+            _       <- putDailyStats(NonEmptyList(daily, stats.combineAll))
+            _       <- putLine(s"$date: $stats")
+          } yield ()
+        ).run(data.copy(today = date)).semiflatMap(_ => Async[F].sleep(2.seconds))
+      }.void
+    }
 
   def daily[F[_]: Monad]: Operation[F, Unit] =
     for {

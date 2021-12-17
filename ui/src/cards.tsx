@@ -42,6 +42,8 @@ const DailyDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
     </Card>
   }
 
+
+
 /**
  * Show the total number of people with >=1 dose
  */
@@ -50,7 +52,6 @@ const TotalDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
 
     const ukPopulation = 68000000 // the UK population is famously constant
     const percentVaccinated = props.statistics[0] ? (props.statistics[0].total[props.dose] / ukPopulation) * 100 : 0;
-    const ratioVaccinated = Math.round(1 / (percentVaccinated / 100));
 
     return <Card loaded={props.statistics.length > 0}>
       <div className="mb-1 pb-2 border-bottom">
@@ -58,8 +59,8 @@ const TotalDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
         <LightText>{doseName(props.dose)} doses given in total.</LightText>
       </div>
       <div className="pt-1">
-        <h4 className="mb-0">1 in {ratioVaccinated} people</h4>
-        <LightText>{percentVaccinated.toFixed(1)}% of the UK population. (68M people)</LightText>
+        <h4 className="mb-0">{percentVaccinated.toFixed(1)}%</h4>
+        <LightText>of the UK population. (68M people)</LightText>
       </div>
     </Card>
   }
@@ -72,11 +73,15 @@ const TotalDoses: React.FunctionComponent<CardProps & { dose: keyof DoseTotal }>
 export const Cards: React.FunctionComponent<CardProps> =
   ({ statistics }) => <React.Fragment>
     <div className="row g-0">
-      <div className="col-md me-md-1 mb-2 d-flex"><DailyDoses dose="firstDose" statistics={statistics} /></div>
-      <div className="col-md ms-md-1 mb-2 d-flex"><TotalDoses dose="firstDose" statistics={statistics} /></div>
+      <div className="col-md me-md-1 mb-2 d-flex"><DailyDoses dose="thirdDose" statistics={statistics} /></div>
+      <div className="col-md ms-md-1 mb-2 d-flex"><TotalDoses dose="thirdDose" statistics={statistics} /></div>
     </div>
     <div className="row g-0">
       <div className="col-md me-md-1 mb-2 d-flex"><DailyDoses dose="secondDose" statistics={statistics} /></div>
       <div className="col-md ms-md-1 mb-2 d-flex"><TotalDoses dose="secondDose" statistics={statistics} /></div>
+    </div>
+    <div className="row g-0">
+      <div className="col-md me-md-1 mb-2 d-flex"><DailyDoses dose="firstDose" statistics={statistics} /></div>
+      <div className="col-md ms-md-1 mb-2 d-flex"><TotalDoses dose="firstDose" statistics={statistics} /></div>
     </div>
   </React.Fragment>
