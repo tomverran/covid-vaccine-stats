@@ -1,7 +1,7 @@
 package io.tvc.vaccines
 
 import cats.Monad
-import cats.data.{Kleisli, NonEmptyList, OptionT}
+import cats.data.{Kleisli, NonEmptyList, OptionT, ReaderT}
 import cats.effect.kernel.Async
 import cats.effect.{Clock, Resource, Sync}
 import cats.syntax.applicativeError._
@@ -20,7 +20,7 @@ import org.http4s.blaze.client.BlazeClientBuilder
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit.DAYS
 import scala.concurrent.ExecutionContext.global
-import scala.concurrent.duration._
+import cats.syntax.flatMap._
 
 object App {
 
@@ -62,8 +62,21 @@ object App {
   def fetchPastRegionalStats[F[_]: Monad]: Operation[F, List[RegionalTotals]] =
     Kleisli(d => OptionT.liftF(d.regionalStatsClient.fetch))
 
-  def fetchDailyStats[F[_]]: Operation[F, DailyTotals] =
-    Kleisli(d => OptionT(d.vaccineClient.vaccineTotals(d.yesterday)))
+  def findDaysToFetch[F[_]: Monad](past: List[DailyTotals]): Operation[F, NonEmptyList[LocalDate]] =
+    Kleisli { d =>
+      val start = past.headOption.fold(LocalDate.of(2021, 1, 12))(_.date.plusDays(1))
+      val dates = (0L to DAYS.between(start, d.today).abs).map(start.plusDays).toList.reverse
+      OptionT.fromOption(NonEmptyList.fromList(dates))
+    }
+
+  def fetchDailyStats[F[_]: Monad](day: LocalDate): Operation[F, List[DailyTotals]] =
+    Kleisli(d => OptionT.liftF(d.vaccineClient.vaccineTotals(day).map(_.toList)))
+
+  def combineStats[F[_]: Monad](
+    fetched: List[DailyTotals],
+    existing: List[DailyTotals]
+  ): Operation[F, NonEmptyList[DailyTotals]] =
+    Kleisli.liftF(OptionT.fromOption(NonEmptyList.fromList(fetched ++ existing)))
 
   def putDailyStats[F[_]: Monad](stats: NonEmptyList[DailyTotals]): Operation[F, Unit] =
     Kleisli(d => OptionT.liftF(d.dailyStatsClient.put(stats.toList)))
@@ -111,28 +124,21 @@ object App {
       _       <- putLine(s"Updated stats for ${today.date}")
     } yield ()
 
-  def backfill[F[_]: Async]: Operation[F, Unit] =
+  def daily[F[_]: Monad]: Operation[F, Unit] =
     Kleisli { data =>
-      val start = LocalDate.of(2021, 1, 12)
-      (0L to DAYS.between(start, data.today).abs).map(start.plusDays).toList.traverse { date =>
+      OptionT(
         (
           for {
-            stats   <- fetchPastDailyStats.attempt
-            daily   <- fetchDailyStats
-            _       <- putDailyStats(NonEmptyList(daily, stats.combineAll))
-            _       <- putLine(s"$date: $stats")
+            past    <- fetchPastDailyStats
+            days    <- findDaysToFetch(past)
+            fetched <- days.toList.flatTraverse(fetchDailyStats[F])
+            updated <- combineStats(fetched, past)
+            _       <- putDailyStats(updated)
+            _       <- postTweet(updated)
           } yield ()
-        ).run(data.copy(today = date)).semiflatMap(_ => Async[F].sleep(2.seconds))
-      }.void
+        ).run(data).value.flatMap { _ =>
+          waitUntilTomorrow.run(data).value
+        }
+      )
     }
-
-  def daily[F[_]: Monad]: Operation[F, Unit] =
-    for {
-      stats   <- fetchPastDailyStats
-      daily   <- fetchDailyStats
-      updated = NonEmptyList(daily, stats)
-      _       <- putDailyStats(updated)
-      _       <- postTweet(updated)
-      _       <- waitUntilTomorrow
-    } yield ()
 }
