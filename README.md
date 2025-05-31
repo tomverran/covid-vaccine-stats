@@ -1,3 +1,7 @@
+This app was turned off long ago.
+
+I've put the statistics it collected in `statistics.json` and `regional.json` for posterity, but better data is no doubt available elsewhere.
+
 ## COVID Vaccine Stats
 
 An app to provide hopefully cheering statistics regarding the progress of the UK's vaccine rollout. This app was mostly made on a Sunday afternoon so please judge its quality accordingly.

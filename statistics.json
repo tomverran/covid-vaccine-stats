@@ -1,0 +1,4084 @@
+[
+  {
+    "date" : "2021-12-24",
+    "today" : {
+      "firstDose" : 10492,
+      "secondDose" : 13563,
+      "thirdDose" : 156412
+    },
+    "total" : {
+      "firstDose" : 51660188,
+      "secondDose" : 47267662,
+      "thirdDose" : 32446899
+    }
+  },
+  {
+    "date" : "2021-11-19",
+    "today" : {
+      "firstDose" : 27084,
+      "secondDose" : 21607,
+      "thirdDose" : 363884
+    },
+    "total" : {
+      "firstDose" : 50735037,
+      "secondDose" : 46130215,
+      "thirdDose" : 14630252
+    }
+  },
+  {
+    "date" : "2021-11-18",
+    "today" : {
+      "firstDose" : 28880,
+      "secondDose" : 20650,
+      "thirdDose" : 387057
+    },
+    "total" : {
+      "firstDose" : 50707953,
+      "secondDose" : 46108608,
+      "thirdDose" : 14266368
+    }
+  },
+  {
+    "date" : "2021-11-17",
+    "today" : {
+      "firstDose" : 33092,
+      "secondDose" : 22120,
+      "thirdDose" : 384421
+    },
+    "total" : {
+      "firstDose" : 50679073,
+      "secondDose" : 46087958,
+      "thirdDose" : 13879311
+    }
+  },
+  {
+    "date" : "2021-11-16",
+    "today" : {
+      "firstDose" : 31431,
+      "secondDose" : 19874,
+      "thirdDose" : 347557
+    },
+    "total" : {
+      "firstDose" : 50645981,
+      "secondDose" : 46065838,
+      "thirdDose" : 13494890
+    }
+  },
+  {
+    "date" : "2021-11-15",
+    "today" : {
+      "firstDose" : 32046,
+      "secondDose" : 18055,
+      "thirdDose" : 286582
+    },
+    "total" : {
+      "firstDose" : 50614550,
+      "secondDose" : 46045964,
+      "thirdDose" : 13147333
+    }
+  },
+  {
+    "date" : "2021-11-14",
+    "today" : {
+      "firstDose" : 22938,
+      "secondDose" : 17048,
+      "thirdDose" : 217349
+    },
+    "total" : {
+      "firstDose" : 50582504,
+      "secondDose" : 46027909,
+      "thirdDose" : 12860751
+    }
+  },
+  {
+    "date" : "2021-11-13",
+    "today" : {
+      "firstDose" : 33527,
+      "secondDose" : 24325,
+      "thirdDose" : 461985
+    },
+    "total" : {
+      "firstDose" : 50559566,
+      "secondDose" : 46010861,
+      "thirdDose" : 12643402
+    }
+  },
+  {
+    "date" : "2021-11-12",
+    "today" : {
+      "firstDose" : 34338,
+      "secondDose" : 22048,
+      "thirdDose" : 357774
+    },
+    "total" : {
+      "firstDose" : 50526039,
+      "secondDose" : 45986536,
+      "thirdDose" : 12181417
+    }
+  },
+  {
+    "date" : "2021-11-11",
+    "today" : {
+      "firstDose" : 36383,
+      "secondDose" : 22485,
+      "thirdDose" : 370989
+    },
+    "total" : {
+      "firstDose" : 50491701,
+      "secondDose" : 45964488,
+      "thirdDose" : 11823643
+    }
+  },
+  {
+    "date" : "2021-11-10",
+    "today" : {
+      "firstDose" : 119188,
+      "secondDose" : 47766,
+      "thirdDose" : 532238
+    },
+    "total" : {
+      "firstDose" : 50455318,
+      "secondDose" : 45942003,
+      "thirdDose" : 11452654
+    }
+  },
+  {
+    "date" : "2021-11-09",
+    "today" : {
+      "firstDose" : 39836,
+      "secondDose" : 21199,
+      "thirdDose" : 340294
+    },
+    "total" : {
+      "firstDose" : 50336130,
+      "secondDose" : 45894237,
+      "thirdDose" : 10920416
+    }
+  },
+  {
+    "date" : "2021-11-08",
+    "today" : {
+      "firstDose" : 33559,
+      "secondDose" : 20361,
+      "thirdDose" : 277578
+    },
+    "total" : {
+      "firstDose" : 50296294,
+      "secondDose" : 45873038,
+      "thirdDose" : 10580122
+    }
+  },
+  {
+    "date" : "2021-11-07",
+    "today" : {
+      "firstDose" : 25840,
+      "secondDose" : 14610,
+      "thirdDose" : 209885
+    },
+    "total" : {
+      "firstDose" : 50262735,
+      "secondDose" : 45852677,
+      "thirdDose" : 10302544
+    }
+  },
+  {
+    "date" : "2021-11-06",
+    "today" : {
+      "firstDose" : 36748,
+      "secondDose" : 24500,
+      "thirdDose" : 422882
+    },
+    "total" : {
+      "firstDose" : 50236895,
+      "secondDose" : 45838067,
+      "thirdDose" : 10092659
+    }
+  },
+  {
+    "date" : "2021-11-05",
+    "today" : {
+      "firstDose" : 43491,
+      "secondDose" : 22633,
+      "thirdDose" : 322703
+    },
+    "total" : {
+      "firstDose" : 50200147,
+      "secondDose" : 45813567,
+      "thirdDose" : 9669777
+    }
+  },
+  {
+    "date" : "2021-11-04",
+    "today" : {
+      "firstDose" : 43731,
+      "secondDose" : 20482,
+      "thirdDose" : 334398
+    },
+    "total" : {
+      "firstDose" : 50156656,
+      "secondDose" : 45790934,
+      "thirdDose" : 9347074
+    }
+  },
+  {
+    "date" : "2021-11-03",
+    "today" : {
+      "firstDose" : 41242,
+      "secondDose" : 17965,
+      "thirdDose" : 359834
+    },
+    "total" : {
+      "firstDose" : 50112925,
+      "secondDose" : 45770452,
+      "thirdDose" : 9012676
+    }
+  },
+  {
+    "date" : "2021-11-02",
+    "today" : {
+      "firstDose" : 46663,
+      "secondDose" : 20922,
+      "thirdDose" : 296670
+    },
+    "total" : {
+      "firstDose" : 50071683,
+      "secondDose" : 45752487,
+      "thirdDose" : 8652842
+    }
+  },
+  {
+    "date" : "2021-11-01",
+    "today" : {
+      "firstDose" : 37695,
+      "secondDose" : 19214,
+      "thirdDose" : 240943
+    },
+    "total" : {
+      "firstDose" : 50025020,
+      "secondDose" : 45731565,
+      "thirdDose" : 8356172
+    }
+  },
+  {
+    "date" : "2021-10-31",
+    "today" : {
+      "firstDose" : 27402,
+      "secondDose" : 13449,
+      "thirdDose" : 163949
+    },
+    "total" : {
+      "firstDose" : 49987325,
+      "secondDose" : 45712351,
+      "thirdDose" : 8115229
+    }
+  },
+  {
+    "date" : "2021-10-30",
+    "today" : {
+      "firstDose" : 36052,
+      "secondDose" : 25401,
+      "thirdDose" : 372414
+    },
+    "total" : {
+      "firstDose" : 49959923,
+      "secondDose" : 45698902,
+      "thirdDose" : 7951280
+    }
+  },
+  {
+    "date" : "2021-10-29",
+    "today" : {
+      "firstDose" : 40967,
+      "secondDose" : 22279,
+      "thirdDose" : 285228
+    },
+    "total" : {
+      "firstDose" : 49923871,
+      "secondDose" : 45673501,
+      "thirdDose" : 7578866
+    }
+  },
+  {
+    "date" : "2021-10-28",
+    "today" : {
+      "firstDose" : 44702,
+      "secondDose" : 23723,
+      "thirdDose" : 297656
+    },
+    "total" : {
+      "firstDose" : 49882904,
+      "secondDose" : 45651222,
+      "thirdDose" : 7293638
+    }
+  },
+  {
+    "date" : "2021-10-27",
+    "today" : {
+      "firstDose" : 44082,
+      "secondDose" : 21577,
+      "thirdDose" : 289514
+    },
+    "total" : {
+      "firstDose" : 49838202,
+      "secondDose" : 45627499,
+      "thirdDose" : 6995982
+    }
+  },
+  {
+    "date" : "2021-10-26",
+    "today" : {
+      "firstDose" : 41083,
+      "secondDose" : 23031,
+      "thirdDose" : 264468
+    },
+    "total" : {
+      "firstDose" : 49794120,
+      "secondDose" : 45605922,
+      "thirdDose" : 6706468
+    }
+  },
+  {
+    "date" : "2021-10-25",
+    "today" : {
+      "firstDose" : 37809,
+      "secondDose" : 21446,
+      "thirdDose" : 244992
+    },
+    "total" : {
+      "firstDose" : 49753037,
+      "secondDose" : 45582891,
+      "thirdDose" : 6442000
+    }
+  },
+  {
+    "date" : "2021-10-24",
+    "today" : {
+      "firstDose" : 25747,
+      "secondDose" : 18082,
+      "thirdDose" : 170505
+    },
+    "total" : {
+      "firstDose" : 49715228,
+      "secondDose" : 45561445,
+      "thirdDose" : 6197008
+    }
+  },
+  {
+    "date" : "2021-10-23",
+    "today" : {
+      "firstDose" : 40092,
+      "secondDose" : 30243,
+      "thirdDose" : 370429
+    },
+    "total" : {
+      "firstDose" : 49689481,
+      "secondDose" : 45543363,
+      "thirdDose" : 6026503
+    }
+  },
+  {
+    "date" : "2021-10-22",
+    "today" : {
+      "firstDose" : 46250,
+      "secondDose" : 26170,
+      "thirdDose" : 298685
+    },
+    "total" : {
+      "firstDose" : 49649389,
+      "secondDose" : 45513120,
+      "thirdDose" : 5656074
+    }
+  },
+  {
+    "date" : "2021-10-21",
+    "today" : {
+      "firstDose" : 48732,
+      "secondDose" : 26828,
+      "thirdDose" : 289601
+    },
+    "total" : {
+      "firstDose" : 49603139,
+      "secondDose" : 45486950,
+      "thirdDose" : 5357389
+    }
+  },
+  {
+    "date" : "2021-10-20",
+    "today" : {
+      "firstDose" : 49080,
+      "secondDose" : 26365,
+      "thirdDose" : 257094
+    },
+    "total" : {
+      "firstDose" : 49554407,
+      "secondDose" : 45460122,
+      "thirdDose" : 4745197
+    }
+  },
+  {
+    "date" : "2021-10-19",
+    "today" : {
+      "firstDose" : 42902,
+      "secondDose" : 32767,
+      "thirdDose" : 232075
+    },
+    "total" : {
+      "firstDose" : 49505327,
+      "secondDose" : 45433757,
+      "thirdDose" : 4488103
+    }
+  },
+  {
+    "date" : "2021-10-18",
+    "today" : {
+      "firstDose" : 39672,
+      "secondDose" : 23579,
+      "thirdDose" : 178205
+    },
+    "total" : {
+      "firstDose" : 49462425,
+      "secondDose" : 45400990,
+      "thirdDose" : 4256028
+    }
+  },
+  {
+    "date" : "2021-10-17",
+    "today" : {
+      "firstDose" : 17837,
+      "secondDose" : 17265,
+      "thirdDose" : 118032
+    },
+    "total" : {
+      "firstDose" : 49422753,
+      "secondDose" : 45377411,
+      "thirdDose" : 4077823
+    }
+  },
+  {
+    "date" : "2021-10-16",
+    "today" : {
+      "firstDose" : 28999,
+      "secondDose" : 33483,
+      "thirdDose" : 306200
+    },
+    "total" : {
+      "firstDose" : 49404916,
+      "secondDose" : 45360146,
+      "thirdDose" : 3959791
+    }
+  },
+  {
+    "date" : "2021-10-15",
+    "today" : {
+      "firstDose" : 40763,
+      "secondDose" : 29432,
+      "thirdDose" : 220888
+    },
+    "total" : {
+      "firstDose" : 49375917,
+      "secondDose" : 45326663,
+      "thirdDose" : 3653591
+    }
+  },
+  {
+    "date" : "2021-10-14",
+    "today" : {
+      "firstDose" : 43489,
+      "secondDose" : 27991,
+      "thirdDose" : 239017
+    },
+    "total" : {
+      "firstDose" : 49335154,
+      "secondDose" : 45297231,
+      "thirdDose" : 3432703
+    }
+  },
+  {
+    "date" : "2021-10-13",
+    "today" : {
+      "firstDose" : 38726,
+      "secondDose" : 29481,
+      "thirdDose" : 192497
+    },
+    "total" : {
+      "firstDose" : 49291665,
+      "secondDose" : 45269240,
+      "thirdDose" : 3193686
+    }
+  },
+  {
+    "date" : "2021-10-12",
+    "today" : {
+      "firstDose" : 36847,
+      "secondDose" : 26946,
+      "thirdDose" : 163318
+    },
+    "total" : {
+      "firstDose" : 49252939,
+      "secondDose" : 45239759,
+      "thirdDose" : 2731863
+    }
+  },
+  {
+    "date" : "2021-10-11",
+    "today" : {
+      "firstDose" : 29172,
+      "secondDose" : 23632,
+      "thirdDose" : 124536
+    },
+    "total" : {
+      "firstDose" : 49216092,
+      "secondDose" : 45212813,
+      "thirdDose" : 2568545
+    }
+  },
+  {
+    "date" : "2021-10-10",
+    "today" : {
+      "firstDose" : 22106,
+      "secondDose" : 19451,
+      "thirdDose" : 93476
+    },
+    "total" : {
+      "firstDose" : 49186920,
+      "secondDose" : 45189181,
+      "thirdDose" : 2444009
+    }
+  },
+  {
+    "date" : "2021-10-09",
+    "today" : {
+      "firstDose" : 31395,
+      "secondDose" : 33477,
+      "thirdDose" : 250809
+    },
+    "total" : {
+      "firstDose" : 49164814,
+      "secondDose" : 45169730,
+      "thirdDose" : 2350533
+    }
+  },
+  {
+    "date" : "2021-10-08",
+    "today" : {
+      "firstDose" : 31685,
+      "secondDose" : 29068,
+      "thirdDose" : 173928
+    },
+    "total" : {
+      "firstDose" : 49133419,
+      "secondDose" : 45136253,
+      "thirdDose" : 2099724
+    }
+  },
+  {
+    "date" : "2021-10-07",
+    "today" : {
+      "firstDose" : 33029,
+      "secondDose" : 28656,
+      "thirdDose" : 177629
+    },
+    "total" : {
+      "firstDose" : 49101734,
+      "secondDose" : 45107185,
+      "thirdDose" : 1925796
+    }
+  },
+  {
+    "date" : "2021-10-06",
+    "today" : {
+      "firstDose" : 32828,
+      "secondDose" : 28576,
+      "thirdDose" : 162097
+    },
+    "total" : {
+      "firstDose" : 49068705,
+      "secondDose" : 45078529,
+      "thirdDose" : 1748167
+    }
+  },
+  {
+    "date" : "2021-10-05",
+    "today" : {
+      "firstDose" : 41347,
+      "secondDose" : 28572,
+      "thirdDose" : 156100
+    },
+    "total" : {
+      "firstDose" : 49035877,
+      "secondDose" : 45049953,
+      "thirdDose" : 1586070
+    }
+  },
+  {
+    "date" : "2021-10-04",
+    "today" : {
+      "firstDose" : 37671,
+      "secondDose" : 29337,
+      "thirdDose" : 123877
+    },
+    "total" : {
+      "firstDose" : 48994530,
+      "secondDose" : 45021381,
+      "thirdDose" : 1429970
+    }
+  },
+  {
+    "date" : "2021-10-03",
+    "today" : {
+      "firstDose" : 24123,
+      "secondDose" : 21532,
+      "thirdDose" : 89518
+    },
+    "total" : {
+      "firstDose" : 48956859,
+      "secondDose" : 44992044,
+      "thirdDose" : 1306093
+    }
+  },
+  {
+    "date" : "2021-10-02",
+    "today" : {
+      "firstDose" : 31066,
+      "secondDose" : 34391,
+      "thirdDose" : 194461
+    },
+    "total" : {
+      "firstDose" : 48932736,
+      "secondDose" : 44970512,
+      "thirdDose" : 1216575
+    }
+  },
+  {
+    "date" : "2021-10-01",
+    "today" : {
+      "firstDose" : 38180,
+      "secondDose" : 34289,
+      "thirdDose" : 153912
+    },
+    "total" : {
+      "firstDose" : 48901670,
+      "secondDose" : 44936121,
+      "thirdDose" : 1022114
+    }
+  },
+  {
+    "date" : "2021-09-30",
+    "today" : {
+      "firstDose" : 34372,
+      "secondDose" : 34459,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48863490,
+      "secondDose" : 44901832,
+      "thirdDose" : 868202
+    }
+  },
+  {
+    "date" : "2021-09-29",
+    "today" : {
+      "firstDose" : 31539,
+      "secondDose" : 34093,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48829118,
+      "secondDose" : 44867373,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-28",
+    "today" : {
+      "firstDose" : 31853,
+      "secondDose" : 33532,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48797579,
+      "secondDose" : 44833280,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-27",
+    "today" : {
+      "firstDose" : 24919,
+      "secondDose" : 33177,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48765726,
+      "secondDose" : 44799748,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-26",
+    "today" : {
+      "firstDose" : 15984,
+      "secondDose" : 25539,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48740807,
+      "secondDose" : 44766571,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-25",
+    "today" : {
+      "firstDose" : 24296,
+      "secondDose" : 47118,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48724823,
+      "secondDose" : 44741032,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-24",
+    "today" : {
+      "firstDose" : 27617,
+      "secondDose" : 44759,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48700527,
+      "secondDose" : 44693914,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-23",
+    "today" : {
+      "firstDose" : 25083,
+      "secondDose" : 44588,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48672910,
+      "secondDose" : 44649155,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-22",
+    "today" : {
+      "firstDose" : 22679,
+      "secondDose" : 44047,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48647827,
+      "secondDose" : 44604567,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-21",
+    "today" : {
+      "firstDose" : 20384,
+      "secondDose" : 43406,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48625148,
+      "secondDose" : 44560520,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-20",
+    "today" : {
+      "firstDose" : 20150,
+      "secondDose" : 46342,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48604764,
+      "secondDose" : 44517114,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-19",
+    "today" : {
+      "firstDose" : 13840,
+      "secondDose" : 35157,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48584614,
+      "secondDose" : 44470772,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-18",
+    "today" : {
+      "firstDose" : 26198,
+      "secondDose" : 72497,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48570774,
+      "secondDose" : 44435615,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-17",
+    "today" : {
+      "firstDose" : 20778,
+      "secondDose" : 60384,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48544576,
+      "secondDose" : 44363118,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-16",
+    "today" : {
+      "firstDose" : 23051,
+      "secondDose" : 63973,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48523798,
+      "secondDose" : 44302734,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-15",
+    "today" : {
+      "firstDose" : 24402,
+      "secondDose" : 63290,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48500747,
+      "secondDose" : 44238761,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-14",
+    "today" : {
+      "firstDose" : 17645,
+      "secondDose" : 66725,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48476345,
+      "secondDose" : 44175471,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-13",
+    "today" : {
+      "firstDose" : 19428,
+      "secondDose" : 60653,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48458700,
+      "secondDose" : 44108746,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-12",
+    "today" : {
+      "firstDose" : 14955,
+      "secondDose" : 52615,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48439272,
+      "secondDose" : 44048093,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-11",
+    "today" : {
+      "firstDose" : 27913,
+      "secondDose" : 98059,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48424317,
+      "secondDose" : 43995478,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-10",
+    "today" : {
+      "firstDose" : 26064,
+      "secondDose" : 91811,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48396404,
+      "secondDose" : 43897419,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-09",
+    "today" : {
+      "firstDose" : 25774,
+      "secondDose" : 96702,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48370340,
+      "secondDose" : 43805608,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-08",
+    "today" : {
+      "firstDose" : 25131,
+      "secondDose" : 87960,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48344566,
+      "secondDose" : 43708906,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-07",
+    "today" : {
+      "firstDose" : 26624,
+      "secondDose" : 85848,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48319435,
+      "secondDose" : 43620946,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-06",
+    "today" : {
+      "firstDose" : 22698,
+      "secondDose" : 80015,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48292811,
+      "secondDose" : 43535098,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-05",
+    "today" : {
+      "firstDose" : 21795,
+      "secondDose" : 73193,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48270113,
+      "secondDose" : 43455083,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-04",
+    "today" : {
+      "firstDose" : 41054,
+      "secondDose" : 128553,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48248318,
+      "secondDose" : 43381890,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-03",
+    "today" : {
+      "firstDose" : 35266,
+      "secondDose" : 110590,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48207264,
+      "secondDose" : 43253337,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-02",
+    "today" : {
+      "firstDose" : 40002,
+      "secondDose" : 119375,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48171998,
+      "secondDose" : 43142747,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-09-01",
+    "today" : {
+      "firstDose" : 44088,
+      "secondDose" : 113385,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48131996,
+      "secondDose" : 43023372,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-31",
+    "today" : {
+      "firstDose" : 39899,
+      "secondDose" : 119402,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48087908,
+      "secondDose" : 42909987,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-30",
+    "today" : {
+      "firstDose" : 19643,
+      "secondDose" : 66648,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48048009,
+      "secondDose" : 42790585,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-29",
+    "today" : {
+      "firstDose" : 24390,
+      "secondDose" : 79440,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48028366,
+      "secondDose" : 42723937,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-28",
+    "today" : {
+      "firstDose" : 43271,
+      "secondDose" : 133688,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 48003976,
+      "secondDose" : 42644497,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-27",
+    "today" : {
+      "firstDose" : 44937,
+      "secondDose" : 131456,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47960705,
+      "secondDose" : 42510809,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-26",
+    "today" : {
+      "firstDose" : 55140,
+      "secondDose" : 144936,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47915768,
+      "secondDose" : 42379353,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-25",
+    "today" : {
+      "firstDose" : 68076,
+      "secondDose" : 161705,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47860628,
+      "secondDose" : 42234417,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-24",
+    "today" : {
+      "firstDose" : 55410,
+      "secondDose" : 130676,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47792552,
+      "secondDose" : 42072712,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-23",
+    "today" : {
+      "firstDose" : 46401,
+      "secondDose" : 131283,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47737142,
+      "secondDose" : 41942036,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-22",
+    "today" : {
+      "firstDose" : 40345,
+      "secondDose" : 116352,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47690741,
+      "secondDose" : 41810753,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-21",
+    "today" : {
+      "firstDose" : 73006,
+      "secondDose" : 194881,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47650396,
+      "secondDose" : 41694401,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-20",
+    "today" : {
+      "firstDose" : 60885,
+      "secondDose" : 167392,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47577390,
+      "secondDose" : 41499520,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-19",
+    "today" : {
+      "firstDose" : 55979,
+      "secondDose" : 175059,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47516505,
+      "secondDose" : 41332128,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-18",
+    "today" : {
+      "firstDose" : 47284,
+      "secondDose" : 169223,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47460526,
+      "secondDose" : 41157069,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-17",
+    "today" : {
+      "firstDose" : 43824,
+      "secondDose" : 145875,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47413242,
+      "secondDose" : 40987846,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-16",
+    "today" : {
+      "firstDose" : 35716,
+      "secondDose" : 138390,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47369418,
+      "secondDose" : 40841971,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-15",
+    "today" : {
+      "firstDose" : 31257,
+      "secondDose" : 126383,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47333702,
+      "secondDose" : 40703581,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-14",
+    "today" : {
+      "firstDose" : 46603,
+      "secondDose" : 199584,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47302445,
+      "secondDose" : 40577198,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-13",
+    "today" : {
+      "firstDose" : 40490,
+      "secondDose" : 171585,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47255842,
+      "secondDose" : 40377614,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-12",
+    "today" : {
+      "firstDose" : 44384,
+      "secondDose" : 192559,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47215352,
+      "secondDose" : 40206029,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-11",
+    "today" : {
+      "firstDose" : 41568,
+      "secondDose" : 173761,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47170968,
+      "secondDose" : 40013470,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-10",
+    "today" : {
+      "firstDose" : 37511,
+      "secondDose" : 151143,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47129400,
+      "secondDose" : 39839709,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-09",
+    "today" : {
+      "firstDose" : 32250,
+      "secondDose" : 137028,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47091889,
+      "secondDose" : 39688566,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-08",
+    "today" : {
+      "firstDose" : 22843,
+      "secondDose" : 122070,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47059639,
+      "secondDose" : 39551538,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-07",
+    "today" : {
+      "firstDose" : 37990,
+      "secondDose" : 213583,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 47036796,
+      "secondDose" : 39429468,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-06",
+    "today" : {
+      "firstDose" : 36976,
+      "secondDose" : 168356,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46998806,
+      "secondDose" : 39215885,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-05",
+    "today" : {
+      "firstDose" : 35500,
+      "secondDose" : 172692,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46961830,
+      "secondDose" : 39047529,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-04",
+    "today" : {
+      "firstDose" : 33334,
+      "secondDose" : 165669,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46926330,
+      "secondDose" : 38874837,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-03",
+    "today" : {
+      "firstDose" : 29290,
+      "secondDose" : 142761,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46892996,
+      "secondDose" : 38709168,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-02",
+    "today" : {
+      "firstDose" : 26092,
+      "secondDose" : 126192,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46863706,
+      "secondDose" : 38566407,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-08-01",
+    "today" : {
+      "firstDose" : 21232,
+      "secondDose" : 118044,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46837614,
+      "secondDose" : 38440215,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-31",
+    "today" : {
+      "firstDose" : 38826,
+      "secondDose" : 212014,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46816382,
+      "secondDose" : 38322171,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-30",
+    "today" : {
+      "firstDose" : 36724,
+      "secondDose" : 171096,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46777556,
+      "secondDose" : 38110157,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-29",
+    "today" : {
+      "firstDose" : 42353,
+      "secondDose" : 179918,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46740832,
+      "secondDose" : 37939061,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-28",
+    "today" : {
+      "firstDose" : 43847,
+      "secondDose" : 171173,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46698479,
+      "secondDose" : 37759143,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-27",
+    "today" : {
+      "firstDose" : 35402,
+      "secondDose" : 151650,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46654632,
+      "secondDose" : 37587970,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-26",
+    "today" : {
+      "firstDose" : 30019,
+      "secondDose" : 148936,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46619230,
+      "secondDose" : 37436320,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-25",
+    "today" : {
+      "firstDose" : 24551,
+      "secondDose" : 117956,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46589211,
+      "secondDose" : 37287384,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-24",
+    "today" : {
+      "firstDose" : 43805,
+      "secondDose" : 203886,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46564660,
+      "secondDose" : 37169428,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-23",
+    "today" : {
+      "firstDose" : 42974,
+      "secondDose" : 189341,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46520855,
+      "secondDose" : 36965542,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-22",
+    "today" : {
+      "firstDose" : 44036,
+      "secondDose" : 188297,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46477881,
+      "secondDose" : 36776201,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-21",
+    "today" : {
+      "firstDose" : 45101,
+      "secondDose" : 183338,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46433845,
+      "secondDose" : 36587904,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-20",
+    "today" : {
+      "firstDose" : 39035,
+      "secondDose" : 161279,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46388744,
+      "secondDose" : 36404566,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-19",
+    "today" : {
+      "firstDose" : 35670,
+      "secondDose" : 143560,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46349709,
+      "secondDose" : 36243287,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-18",
+    "today" : {
+      "firstDose" : 18186,
+      "secondDose" : 128878,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46314039,
+      "secondDose" : 36099727,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-17",
+    "today" : {
+      "firstDose" : 67217,
+      "secondDose" : 225214,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46295853,
+      "secondDose" : 35970849,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-16",
+    "today" : {
+      "firstDose" : 69491,
+      "secondDose" : 202314,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46228636,
+      "secondDose" : 35745635,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-15",
+    "today" : {
+      "firstDose" : 61681,
+      "secondDose" : 201893,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46159145,
+      "secondDose" : 35543321,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-14",
+    "today" : {
+      "firstDose" : 60374,
+      "secondDose" : 185661,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46097464,
+      "secondDose" : 35341428,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-13",
+    "today" : {
+      "firstDose" : 59073,
+      "secondDose" : 158276,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 46037090,
+      "secondDose" : 35155767,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-12",
+    "today" : {
+      "firstDose" : 54296,
+      "secondDose" : 125360,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45978017,
+      "secondDose" : 34997491,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-11",
+    "today" : {
+      "firstDose" : 42000,
+      "secondDose" : 107620,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45923721,
+      "secondDose" : 34872131,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-10",
+    "today" : {
+      "firstDose" : 93763,
+      "secondDose" : 211446,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45881721,
+      "secondDose" : 34764511,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-09",
+    "today" : {
+      "firstDose" : 90083,
+      "secondDose" : 178819,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45787958,
+      "secondDose" : 34553065,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-08",
+    "today" : {
+      "firstDose" : 96430,
+      "secondDose" : 175467,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45697875,
+      "secondDose" : 34374246,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-07",
+    "today" : {
+      "firstDose" : 86953,
+      "secondDose" : 171477,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45601445,
+      "secondDose" : 34198779,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-06",
+    "today" : {
+      "firstDose" : 85811,
+      "secondDose" : 153126,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45514492,
+      "secondDose" : 34027302,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-05",
+    "today" : {
+      "firstDose" : 76962,
+      "secondDose" : 147814,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45428681,
+      "secondDose" : 33874176,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-04",
+    "today" : {
+      "firstDose" : 77222,
+      "secondDose" : 111410,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45351719,
+      "secondDose" : 33726362,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-03",
+    "today" : {
+      "firstDose" : 137389,
+      "secondDose" : 196209,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45274497,
+      "secondDose" : 33614952,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-02",
+    "today" : {
+      "firstDose" : 123605,
+      "secondDose" : 177478,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45137108,
+      "secondDose" : 33418743,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-07-01",
+    "today" : {
+      "firstDose" : 152525,
+      "secondDose" : 193066,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 45013503,
+      "secondDose" : 33241265,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-30",
+    "today" : {
+      "firstDose" : 141216,
+      "secondDose" : 175749,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44860978,
+      "secondDose" : 33048199,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-29",
+    "today" : {
+      "firstDose" : 137991,
+      "secondDose" : 150688,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44719762,
+      "secondDose" : 32872450,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-28",
+    "today" : {
+      "firstDose" : 127260,
+      "secondDose" : 138016,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44581771,
+      "secondDose" : 32721762,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-27",
+    "today" : {
+      "firstDose" : 139712,
+      "secondDose" : 123555,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44454511,
+      "secondDose" : 32583746,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-26",
+    "today" : {
+      "firstDose" : 234441,
+      "secondDose" : 199505,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44314799,
+      "secondDose" : 32460191,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-25",
+    "today" : {
+      "firstDose" : 202497,
+      "secondDose" : 174770,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 44080358,
+      "secondDose" : 32260686,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-24",
+    "today" : {
+      "firstDose" : 221534,
+      "secondDose" : 177813,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 43877861,
+      "secondDose" : 32085916,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-23",
+    "today" : {
+      "firstDose" : 207647,
+      "secondDose" : 167988,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 43656327,
+      "secondDose" : 31908103,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-22",
+    "today" : {
+      "firstDose" : 299837,
+      "secondDose" : 250875,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 43448680,
+      "secondDose" : 31740115,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-21",
+    "today" : {
+      "firstDose" : 21080,
+      "secondDose" : 39325,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 43148843,
+      "secondDose" : 31489240,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-20",
+    "today" : {
+      "firstDose" : 163750,
+      "secondDose" : 109408,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 43127763,
+      "secondDose" : 31449915,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-19",
+    "today" : {
+      "firstDose" : 280241,
+      "secondDose" : 236363,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 42964013,
+      "secondDose" : 31340507,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-18",
+    "today" : {
+      "firstDose" : 223140,
+      "secondDose" : 205677,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 42683772,
+      "secondDose" : 31104144,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-17",
+    "today" : {
+      "firstDose" : 243978,
+      "secondDose" : 223260,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 42460632,
+      "secondDose" : 30898467,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-16",
+    "today" : {
+      "firstDose" : 195565,
+      "secondDose" : 234834,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 42216654,
+      "secondDose" : 30675207,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-15",
+    "today" : {
+      "firstDose" : 190033,
+      "secondDose" : 230666,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 42021089,
+      "secondDose" : 30440373,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-14",
+    "today" : {
+      "firstDose" : 132627,
+      "secondDose" : 235928,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 41831056,
+      "secondDose" : 30209707,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-13",
+    "today" : {
+      "firstDose" : 147228,
+      "secondDose" : 181121,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 41698429,
+      "secondDose" : 29973779,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-12",
+    "today" : {
+      "firstDose" : 254185,
+      "secondDose" : 320326,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 41551201,
+      "secondDose" : 29792658,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-11",
+    "today" : {
+      "firstDose" : 208531,
+      "secondDose" : 307192,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 41297016,
+      "secondDose" : 29472332,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-10",
+    "today" : {
+      "firstDose" : 201607,
+      "secondDose" : 308038,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 41088485,
+      "secondDose" : 29165140,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-09",
+    "today" : {
+      "firstDose" : 176559,
+      "secondDose" : 316258,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40886878,
+      "secondDose" : 28857102,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-08",
+    "today" : {
+      "firstDose" : 136802,
+      "secondDose" : 313482,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40710319,
+      "secondDose" : 28540844,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-07",
+    "today" : {
+      "firstDose" : 112941,
+      "secondDose" : 306068,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40573517,
+      "secondDose" : 28227362,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-06",
+    "today" : {
+      "firstDose" : 127345,
+      "secondDose" : 259941,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40460576,
+      "secondDose" : 27921294,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-05",
+    "today" : {
+      "firstDose" : 203613,
+      "secondDose" : 473378,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40333231,
+      "secondDose" : 27661353,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-04",
+    "today" : {
+      "firstDose" : 179924,
+      "secondDose" : 388031,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 40129618,
+      "secondDose" : 27187975,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-03",
+    "today" : {
+      "firstDose" : 191266,
+      "secondDose" : 377641,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39949694,
+      "secondDose" : 26799944,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-02",
+    "today" : {
+      "firstDose" : 172763,
+      "secondDose" : 349019,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39758428,
+      "secondDose" : 26422303,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-06-01",
+    "today" : {
+      "firstDose" : 108507,
+      "secondDose" : 338565,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39585665,
+      "secondDose" : 26073284,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-31",
+    "today" : {
+      "firstDose" : 93103,
+      "secondDose" : 195546,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39477158,
+      "secondDose" : 25734719,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-30",
+    "today" : {
+      "firstDose" : 124887,
+      "secondDose" : 206322,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39384055,
+      "secondDose" : 25539173,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-29",
+    "today" : {
+      "firstDose" : 183526,
+      "secondDose" : 418848,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39259168,
+      "secondDose" : 25332851,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-28",
+    "today" : {
+      "firstDose" : 204442,
+      "secondDose" : 435951,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 39075642,
+      "secondDose" : 24914003,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-27",
+    "today" : {
+      "firstDose" : 256517,
+      "secondDose" : 434096,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 38871200,
+      "secondDose" : 24478052,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-26",
+    "today" : {
+      "firstDose" : 236119,
+      "secondDose" : 427458,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 38614683,
+      "secondDose" : 24043956,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-25",
+    "today" : {
+      "firstDose" : 186147,
+      "secondDose" : 387987,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 38378564,
+      "secondDose" : 23616498,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-24",
+    "today" : {
+      "firstDose" : 122379,
+      "secondDose" : 332955,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 38192417,
+      "secondDose" : 23228511,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-23",
+    "today" : {
+      "firstDose" : 126357,
+      "secondDose" : 252139,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 38070038,
+      "secondDose" : 22895556,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-22",
+    "today" : {
+      "firstDose" : 205410,
+      "secondDose" : 556951,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 37943681,
+      "secondDose" : 22643417,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-21",
+    "today" : {
+      "firstDose" : 219657,
+      "secondDose" : 426683,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 37738271,
+      "secondDose" : 22086466,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-20",
+    "today" : {
+      "firstDose" : 268251,
+      "secondDose" : 420312,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 37518614,
+      "secondDose" : 21659783,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-19",
+    "today" : {
+      "firstDose" : 264858,
+      "secondDose" : 369018,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 37250363,
+      "secondDose" : 21239471,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-18",
+    "today" : {
+      "firstDose" : 174100,
+      "secondDose" : 324001,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36985505,
+      "secondDose" : 20870453,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-17",
+    "today" : {
+      "firstDose" : 106733,
+      "secondDose" : 259049,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36811405,
+      "secondDose" : 20546452,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-16",
+    "today" : {
+      "firstDose" : 131318,
+      "secondDose" : 183745,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36704672,
+      "secondDose" : 20287403,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-15",
+    "today" : {
+      "firstDose" : 237331,
+      "secondDose" : 391246,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36573354,
+      "secondDose" : 20103658,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-14",
+    "today" : {
+      "firstDose" : 220068,
+      "secondDose" : 393402,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36336023,
+      "secondDose" : 19712412,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-13",
+    "today" : {
+      "firstDose" : 209284,
+      "secondDose" : 428041,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 36115955,
+      "secondDose" : 19319010,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-12",
+    "today" : {
+      "firstDose" : 184210,
+      "secondDose" : 452437,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35906671,
+      "secondDose" : 18890969,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-11",
+    "today" : {
+      "firstDose" : 135113,
+      "secondDose" : 350147,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35722461,
+      "secondDose" : 18438532,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-10",
+    "today" : {
+      "firstDose" : 115053,
+      "secondDose" : 231835,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35587348,
+      "secondDose" : 18088385,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-09",
+    "today" : {
+      "firstDose" : 100626,
+      "secondDose" : 187171,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35472295,
+      "secondDose" : 17856550,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-08",
+    "today" : {
+      "firstDose" : 169027,
+      "secondDose" : 438837,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35371669,
+      "secondDose" : 17669379,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-07",
+    "today" : {
+      "firstDose" : 133001,
+      "secondDose" : 465822,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35202642,
+      "secondDose" : 17230542,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-06",
+    "today" : {
+      "firstDose" : 135470,
+      "secondDose" : 473001,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 35069641,
+      "secondDose" : 16764720,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-05",
+    "today" : {
+      "firstDose" : 139097,
+      "secondDose" : 404226,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34934171,
+      "secondDose" : 16291719,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-04",
+    "today" : {
+      "firstDose" : 127170,
+      "secondDose" : 257486,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34795074,
+      "secondDose" : 15887493,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-03",
+    "today" : {
+      "firstDose" : 72600,
+      "secondDose" : 127499,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34667904,
+      "secondDose" : 15630007,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-02",
+    "today" : {
+      "firstDose" : 89924,
+      "secondDose" : 172891,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34595304,
+      "secondDose" : 15502508,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-05-01",
+    "today" : {
+      "firstDose" : 143175,
+      "secondDose" : 372304,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34505380,
+      "secondDose" : 15329617,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-30",
+    "today" : {
+      "firstDose" : 145589,
+      "secondDose" : 421785,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34362205,
+      "secondDose" : 14957313,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-29",
+    "today" : {
+      "firstDose" : 122568,
+      "secondDose" : 491567,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34216616,
+      "secondDose" : 14535528,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-28",
+    "today" : {
+      "firstDose" : 134140,
+      "secondDose" : 462885,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 34094048,
+      "secondDose" : 14043961,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-27",
+    "today" : {
+      "firstDose" : 116328,
+      "secondDose" : 379265,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33959908,
+      "secondDose" : 13581076,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-26",
+    "today" : {
+      "firstDose" : 90695,
+      "secondDose" : 304688,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33843580,
+      "secondDose" : 13201811,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-25",
+    "today" : {
+      "firstDose" : 79695,
+      "secondDose" : 260801,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33752885,
+      "secondDose" : 12897123,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-24",
+    "today" : {
+      "firstDose" : 148767,
+      "secondDose" : 547636,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33673190,
+      "secondDose" : 12636322,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-23",
+    "today" : {
+      "firstDose" : 135786,
+      "secondDose" : 465015,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33524423,
+      "secondDose" : 12088686,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-22",
+    "today" : {
+      "firstDose" : 130986,
+      "secondDose" : 431070,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33388637,
+      "secondDose" : 11623671,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-21",
+    "today" : {
+      "firstDose" : 117909,
+      "secondDose" : 416784,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33257651,
+      "secondDose" : 11192601,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-20",
+    "today" : {
+      "firstDose" : 107622,
+      "secondDose" : 350027,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33139742,
+      "secondDose" : 10775817,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-19",
+    "today" : {
+      "firstDose" : 99672,
+      "secondDose" : 273751,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 33032120,
+      "secondDose" : 10425790,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-18",
+    "today" : {
+      "firstDose" : 83225,
+      "secondDose" : 221193,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32932448,
+      "secondDose" : 10152039,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-17",
+    "today" : {
+      "firstDose" : 139445,
+      "secondDose" : 499635,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32849223,
+      "secondDose" : 9930846,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-16",
+    "today" : {
+      "firstDose" : 135557,
+      "secondDose" : 499664,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32709778,
+      "secondDose" : 9431211,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-15",
+    "today" : {
+      "firstDose" : 129782,
+      "secondDose" : 417683,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32574221,
+      "secondDose" : 8931547,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-14",
+    "today" : {
+      "firstDose" : 117835,
+      "secondDose" : 343783,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32444439,
+      "secondDose" : 8513864,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-13",
+    "today" : {
+      "firstDose" : 76123,
+      "secondDose" : 312685,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32326604,
+      "secondDose" : 8170081,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-12",
+    "today" : {
+      "firstDose" : 59905,
+      "secondDose" : 201191,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32250481,
+      "secondDose" : 7857396,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-11",
+    "today" : {
+      "firstDose" : 69223,
+      "secondDose" : 189665,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32190576,
+      "secondDose" : 7656205,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-10",
+    "today" : {
+      "firstDose" : 111109,
+      "secondDose" : 475230,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32121353,
+      "secondDose" : 7466540,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-09",
+    "today" : {
+      "firstDose" : 106878,
+      "secondDose" : 450136,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 32010244,
+      "secondDose" : 6991310,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-08",
+    "today" : {
+      "firstDose" : 96242,
+      "secondDose" : 449269,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31903366,
+      "secondDose" : 6541174,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-07",
+    "today" : {
+      "firstDose" : 99530,
+      "secondDose" : 408396,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31807124,
+      "secondDose" : 6091905,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-06",
+    "today" : {
+      "firstDose" : 85227,
+      "secondDose" : 186793,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31707594,
+      "secondDose" : 5683509,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-05",
+    "today" : {
+      "firstDose" : 40744,
+      "secondDose" : 64590,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31622367,
+      "secondDose" : 5496716,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-04",
+    "today" : {
+      "firstDose" : 48055,
+      "secondDose" : 47708,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31581623,
+      "secondDose" : 5432126,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-03",
+    "today" : {
+      "firstDose" : 107886,
+      "secondDose" : 178913,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31533568,
+      "secondDose" : 5384418,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-02",
+    "today" : {
+      "firstDose" : 107420,
+      "secondDose" : 246631,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31425682,
+      "secondDose" : 5205505,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-04-01",
+    "today" : {
+      "firstDose" : 170818,
+      "secondDose" : 445416,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31318262,
+      "secondDose" : 4958874,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-31",
+    "today" : {
+      "firstDose" : 239434,
+      "secondDose" : 387574,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 31147444,
+      "secondDose" : 4513458,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-30",
+    "today" : {
+      "firstDose" : 225917,
+      "secondDose" : 277682,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 30908010,
+      "secondDose" : 4125884,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-29",
+    "today" : {
+      "firstDose" : 236809,
+      "secondDose" : 168230,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 30682093,
+      "secondDose" : 3848202,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-28",
+    "today" : {
+      "firstDose" : 293548,
+      "secondDose" : 147594,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 30445284,
+      "secondDose" : 3679972,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-27",
+    "today" : {
+      "firstDose" : 424301,
+      "secondDose" : 238861,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 30151736,
+      "secondDose" : 3532378,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-26",
+    "today" : {
+      "firstDose" : 411305,
+      "secondDose" : 283654,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 29727435,
+      "secondDose" : 3293517,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-25",
+    "today" : {
+      "firstDose" : 324942,
+      "secondDose" : 234382,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 29316130,
+      "secondDose" : 3009863,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-24",
+    "today" : {
+      "firstDose" : 337665,
+      "secondDose" : 242642,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 28991188,
+      "secondDose" : 2775481,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-23",
+    "today" : {
+      "firstDose" : 325650,
+      "secondDose" : 169155,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 28653523,
+      "secondDose" : 2532839,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-22",
+    "today" : {
+      "firstDose" : 329897,
+      "secondDose" : 82300,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 28327873,
+      "secondDose" : 2363684,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-21",
+    "today" : {
+      "firstDose" : 367006,
+      "secondDose" : 52612,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 27997976,
+      "secondDose" : 2281384,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-20",
+    "today" : {
+      "firstDose" : 752308,
+      "secondDose" : 91977,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 27630970,
+      "secondDose" : 2228772,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-19",
+    "today" : {
+      "firstDose" : 614930,
+      "secondDose" : 125725,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 26878662,
+      "secondDose" : 2136795,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-18",
+    "today" : {
+      "firstDose" : 528260,
+      "secondDose" : 132016,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 26263732,
+      "secondDose" : 2011070,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-17",
+    "today" : {
+      "firstDose" : 462246,
+      "secondDose" : 119609,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 25735472,
+      "secondDose" : 1879054,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-16",
+    "today" : {
+      "firstDose" : 433320,
+      "secondDose" : 95799,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 25273226,
+      "secondDose" : 1759445,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-15",
+    "today" : {
+      "firstDose" : 386685,
+      "secondDose" : 53366,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 24839906,
+      "secondDose" : 1663646,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-14",
+    "today" : {
+      "firstDose" : 257010,
+      "secondDose" : 25371,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 24453221,
+      "secondDose" : 1610280,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-13",
+    "today" : {
+      "firstDose" : 512108,
+      "secondDose" : 52155,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 24196211,
+      "secondDose" : 1584909,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-12",
+    "today" : {
+      "firstDose" : 369578,
+      "secondDose" : 87676,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 23684103,
+      "secondDose" : 1532754,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-11",
+    "today" : {
+      "firstDose" : 260809,
+      "secondDose" : 93563,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 23314525,
+      "secondDose" : 1445078,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-10",
+    "today" : {
+      "firstDose" : 243887,
+      "secondDose" : 97162,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 23053716,
+      "secondDose" : 1351515,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-09",
+    "today" : {
+      "firstDose" : 217301,
+      "secondDose" : 72922,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 22809829,
+      "secondDose" : 1254353,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-08",
+    "today" : {
+      "firstDose" : 215273,
+      "secondDose" : 38788,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 22592528,
+      "secondDose" : 1181431,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-07",
+    "today" : {
+      "firstDose" : 164143,
+      "secondDose" : 20241,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 22377255,
+      "secondDose" : 1142643,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-06",
+    "today" : {
+      "firstDose" : 416834,
+      "secondDose" : 31562,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 22213112,
+      "secondDose" : 1122402,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-05",
+    "today" : {
+      "firstDose" : 437463,
+      "secondDose" : 56772,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 21796278,
+      "secondDose" : 1090840,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-04",
+    "today" : {
+      "firstDose" : 376244,
+      "secondDose" : 70206,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 21358815,
+      "secondDose" : 1034068,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-03",
+    "today" : {
+      "firstDose" : 278956,
+      "secondDose" : 68450,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 20982571,
+      "secondDose" : 963862,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-02",
+    "today" : {
+      "firstDose" : 224996,
+      "secondDose" : 51314,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 20703615,
+      "secondDose" : 895412,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-03-01",
+    "today" : {
+      "firstDose" : 203168,
+      "secondDose" : 28282,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 20478619,
+      "secondDose" : 844098,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-28",
+    "today" : {
+      "firstDose" : 185900,
+      "secondDose" : 19684,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 20275451,
+      "secondDose" : 815816,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-27",
+    "today" : {
+      "firstDose" : 407503,
+      "secondDose" : 27322,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 20089551,
+      "secondDose" : 796132,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-26",
+    "today" : {
+      "firstDose" : 504493,
+      "secondDose" : 32773,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 19682048,
+      "secondDose" : 768810,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-25",
+    "today" : {
+      "firstDose" : 485720,
+      "secondDose" : 35319,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 19177555,
+      "secondDose" : 736037,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-24",
+    "today" : {
+      "firstDose" : 448962,
+      "secondDose" : 31613,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 18691835,
+      "secondDose" : 700718,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-23",
+    "today" : {
+      "firstDose" : 326692,
+      "secondDose" : 26317,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 18242873,
+      "secondDose" : 669105,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-22",
+    "today" : {
+      "firstDose" : 192341,
+      "secondDose" : 18463,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 17916181,
+      "secondDose" : 642788,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-21",
+    "today" : {
+      "firstDose" : 141719,
+      "secondDose" : 9177,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 17723840,
+      "secondDose" : 624325,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-20",
+    "today" : {
+      "firstDose" : 334679,
+      "secondDose" : 10263,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 17582121,
+      "secondDose" : 615148,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-19",
+    "today" : {
+      "firstDose" : 371906,
+      "secondDose" : 15294,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 17247442,
+      "secondDose" : 604885,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-18",
+    "today" : {
+      "firstDose" : 452454,
+      "secondDose" : 15867,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 16875536,
+      "secondDose" : 589591,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-17",
+    "today" : {
+      "firstDose" : 482110,
+      "secondDose" : 15147,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 16423082,
+      "secondDose" : 573724,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-16",
+    "today" : {
+      "firstDose" : 364865,
+      "secondDose" : 12412,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 15940972,
+      "secondDose" : 558577,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-15",
+    "today" : {
+      "firstDose" : 275956,
+      "secondDose" : 6535,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 15576107,
+      "secondDose" : 546165,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-14",
+    "today" : {
+      "firstDose" : 237962,
+      "secondDose" : 1915,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 15300151,
+      "secondDose" : 539630,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-13",
+    "today" : {
+      "firstDose" : 505362,
+      "secondDose" : 2846,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 15062189,
+      "secondDose" : 537715,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-12",
+    "today" : {
+      "firstDose" : 544603,
+      "secondDose" : 4775,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 14556827,
+      "secondDose" : 534869,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-11",
+    "today" : {
+      "firstDose" : 503116,
+      "secondDose" : 5647,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 14012224,
+      "secondDose" : 530094,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-10",
+    "today" : {
+      "firstDose" : 450810,
+      "secondDose" : 4894,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 13509108,
+      "secondDose" : 524447,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-09",
+    "today" : {
+      "firstDose" : 411812,
+      "secondDose" : 3161,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 13058298,
+      "secondDose" : 519553,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-08",
+    "today" : {
+      "firstDose" : 352480,
+      "secondDose" : 3811,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 12646486,
+      "secondDose" : 516392,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-07",
+    "today" : {
+      "firstDose" : 278988,
+      "secondDose" : 862,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 12294006,
+      "secondDose" : 512581,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-06",
+    "today" : {
+      "firstDose" : 549808,
+      "secondDose" : 1662,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 12015018,
+      "secondDose" : 511719,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-05",
+    "today" : {
+      "firstDose" : 494163,
+      "secondDose" : 4064,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 11465210,
+      "secondDose" : 510057,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-04",
+    "today" : {
+      "firstDose" : 480560,
+      "secondDose" : 4036,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 10971047,
+      "secondDose" : 505993,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-03",
+    "today" : {
+      "firstDose" : 469016,
+      "secondDose" : 2995,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 10490487,
+      "secondDose" : 501957,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-02",
+    "today" : {
+      "firstDose" : 374756,
+      "secondDose" : 2166,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 10021471,
+      "secondDose" : 498962,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-02-01",
+    "today" : {
+      "firstDose" : 350348,
+      "secondDose" : 2587,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 9646715,
+      "secondDose" : 496796,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-31",
+    "today" : {
+      "firstDose" : 319038,
+      "secondDose" : 3156,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 9296367,
+      "secondDose" : 494209,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-30",
+    "today" : {
+      "firstDose" : 598389,
+      "secondDose" : 10621,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 8977329,
+      "secondDose" : 491053,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-29",
+    "today" : {
+      "firstDose" : 487756,
+      "secondDose" : 2178,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 8378940,
+      "secondDose" : 480432,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-28",
+    "today" : {
+      "firstDose" : 414419,
+      "secondDose" : 1769,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 7891184,
+      "secondDose" : 478254,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-27",
+    "today" : {
+      "firstDose" : 312378,
+      "secondDose" : 2329,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 7476765,
+      "secondDose" : 476485,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-26",
+    "today" : {
+      "firstDose" : 311060,
+      "secondDose" : 1710,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 7164387,
+      "secondDose" : 474156,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-25",
+    "today" : {
+      "firstDose" : 279757,
+      "secondDose" : 1968,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 6853327,
+      "secondDose" : 472446,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-24",
+    "today" : {
+      "firstDose" : 220249,
+      "secondDose" : 818,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 6573570,
+      "secondDose" : 470478,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-23",
+    "today" : {
+      "firstDose" : 491970,
+      "secondDose" : 1043,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 6353321,
+      "secondDose" : 469660,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-22",
+    "today" : {
+      "firstDose" : 478248,
+      "secondDose" : 1821,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 5861351,
+      "secondDose" : 468617,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-21",
+    "today" : {
+      "firstDose" : 409855,
+      "secondDose" : 2760,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 5383103,
+      "secondDose" : 466796,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-20",
+    "today" : {
+      "firstDose" : 363508,
+      "secondDose" : 3411,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 4973248,
+      "secondDose" : 464036,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-19",
+    "today" : {
+      "firstDose" : 343163,
+      "secondDose" : 3759,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 4609740,
+      "secondDose" : 460625,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-18",
+    "today" : {
+      "firstDose" : 204076,
+      "secondDose" : 4565,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 4266577,
+      "secondDose" : 456866,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-17",
+    "today" : {
+      "firstDose" : 190107,
+      "secondDose" : 2239,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 4062501,
+      "secondDose" : 452301,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-16",
+    "today" : {
+      "firstDose" : 296131,
+      "secondDose" : 2620,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 3872394,
+      "secondDose" : 450062,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-15",
+    "today" : {
+      "firstDose" : 341317,
+      "secondDose" : 4208,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 3576263,
+      "secondDose" : 447442,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-14",
+    "today" : {
+      "firstDose" : 316694,
+      "secondDose" : 5257,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 3234946,
+      "secondDose" : 443234,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-13",
+    "today" : {
+      "firstDose" : 278943,
+      "secondDose" : 9745,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 2918252,
+      "secondDose" : 437977,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-12",
+    "today" : {
+      "firstDose" : 207661,
+      "secondDose" : 16065,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 2639309,
+      "secondDose" : 428232,
+      "thirdDose" : 0
+    }
+  },
+  {
+    "date" : "2021-01-11",
+    "today" : {
+      "firstDose" : 145076,
+      "secondDose" : 20768,
+      "thirdDose" : 0
+    },
+    "total" : {
+      "firstDose" : 2431648,
+      "secondDose" : 412167,
+      "thirdDose" : 0
+    }
+  }
+]
